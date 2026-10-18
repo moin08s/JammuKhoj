@@ -53,6 +53,9 @@ export const TravelloHeader: React.FC = () => {
                 src={currentUser.avatar}
                 alt={currentUser.name}
                 className="w-11 h-11 rounded-2xl object-cover border-2 border-primary/30 shadow-md"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = 'none';
+                }}
               />
             ) : (
               <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary to-[#084A50] text-white flex items-center justify-center font-bold text-base shadow-md shadow-primary/20">

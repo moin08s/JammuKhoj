@@ -778,6 +778,9 @@ export const MapPage: React.FC = () => {
                     alt={attr.name.en}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Bahu_Fort%2C_Jammu.jpg/960px-Bahu_Fort%2C_Jammu.jpg';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
                   <div className="absolute top-2 left-2 flex items-center gap-1.5">
@@ -831,6 +834,9 @@ export const MapPage: React.FC = () => {
                     src={getSpotImage(selectedPoi.data.id, selectedPoi.data.type)}
                     alt={selectedPoi.data.name?.en}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Bahu_Fort%2C_Jammu.jpg/960px-Bahu_Fort%2C_Jammu.jpg';
+                    }}
                   />
                   <span className="absolute bottom-1 right-1 bg-black/60 backdrop-blur-xs text-white text-[9px] font-bold px-1.5 py-0.2 rounded flex items-center gap-0.5">
                     <span>📷</span>

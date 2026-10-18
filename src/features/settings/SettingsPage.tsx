@@ -103,11 +103,16 @@ export const SettingsPage: React.FC = () => {
     <div className="space-y-4 animate-in fade-in duration-200">
       {/* 1. Brand Header */}
       <div className="flex items-center justify-between pt-1 pb-1">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="w-6 h-6 text-[#9E4A0C] flex items-center justify-center">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-              <path d="M12 2L2 9h3v11h14V9h3L12 2zm0 3.5l6 4.2V18H6v-8.3l6-4.2zM10 12h4v6h-4v-6z" />
-            </svg>
+        <div className="flex items-center gap-2.5 cursor-pointer apple-press" onClick={() => navigate('/')}>
+          <div className="w-8 h-8 rounded-xl overflow-hidden shadow-xs shrink-0 flex items-center justify-center bg-forest-900 border border-amber-500/30">
+            <img
+              src="/icons/icon-emblem.svg"
+              alt="JammuKhoj Emblem"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLElement).style.display = 'none';
+              }}
+            />
           </div>
           <span className="font-heading font-black text-xl tracking-tight text-[#9E4A0C]">
             JammuKhoj

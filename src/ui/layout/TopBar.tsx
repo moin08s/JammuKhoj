@@ -120,6 +120,9 @@ export const TopBar: React.FC<TopBarProps> = ({ title, showBack }) => {
                 src={currentUser.avatar}
                 alt={currentUser.name}
                 className="w-4 h-4 rounded-full object-cover shrink-0"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = 'none';
+                }}
               />
             ) : currentUser.role === 'business' ? (
               <Store size={13} />

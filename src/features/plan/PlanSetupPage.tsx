@@ -19,6 +19,7 @@ import {
   Plus,
   Bookmark,
   Check,
+  ArrowRight,
 } from 'lucide-react';
 import { db } from '@/data/db';
 import type { SavedPlan, TimelineEntry } from '@/data/types';
@@ -26,13 +27,14 @@ import { usePlanStore } from '@/stores/planStore';
 import { generatePlan } from '@/domain/planner/planner';
 import { TaxiIcon, ExpressTrainIcon, CityBusIcon } from '@/ui/icons/TransitIcons';
 import { INITIAL_PREVIOUS_PLANS } from '@/domain/offline/bundleManager';
+import { JAMMU_CURATED_SUGGESTIONS } from '@/data/jammuFullData';
 
 export const PlanSetupPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { input, setInput, setResult, setGenerating } = usePlanStore();
 
-  const [activeMode, setActiveMode] = useState<'layover' | 'previous' | 'multiday'>('layover');
+  const [activeMode, setActiveMode] = useState<'curated' | 'layover' | 'previous' | 'multiday'>('curated');
   const [selectedHub, setSelectedHub] = useState<'station_jammu' | 'airport_jammu' | 'station_katra'>('station_jammu');
   const [selectedDuration, setSelectedDuration] = useState<string>('4');
   const [trainInfo, setTrainInfo] = useState<string>('Train: 12426 Jammu Rajdhani at 19:45');
@@ -166,6 +168,76 @@ export const PlanSetupPage: React.FC = () => {
     navigate('/plan/result');
   };
 
+  const handleLaunchCuratedCircuit = (id: string) => {
+    const sugg = JAMMU_CURATED_SUGGESTIONS.find((s) => s.id === id);
+    if (!sugg) return;
+
+    let curTime = 9 * 60; // 09:00 AM
+    const timeline: TimelineEntry[] = [
+      {
+        type: 'settle',
+        start: '09:00',
+        end: '09:30',
+        minutes: 30,
+        label: `${selectedHub === 'station_katra' ? 'Katra' : 'Jammu'} Departure Hub Briefing & Token Sync`,
+      },
+    ];
+    curTime += 30;
+
+    sugg.attractionIds.forEach((attrId) => {
+      const startH = Math.floor(curTime / 60);
+      const startM = curTime % 60;
+      curTime += 25;
+      const endTravelH = Math.floor(curTime / 60);
+      const endTravelM = curTime % 60;
+      timeline.push({
+        type: 'travel',
+        start: `${String(startH).padStart(2, '0')}:${String(startM).padStart(2, '0')}`,
+        end: `${String(endTravelH).padStart(2, '0')}:${String(endTravelM).padStart(2, '0')}`,
+        minutes: 25,
+        mode: 'auto_taxi',
+      });
+
+      const visitStartH = Math.floor(curTime / 60);
+      const visitStartM = curTime % 60;
+      curTime += 60;
+      const visitEndH = Math.floor(curTime / 60);
+      const visitEndM = curTime % 60;
+      timeline.push({
+        type: 'visit',
+        attractionId: attrId,
+        start: `${String(visitStartH).padStart(2, '0')}:${String(visitStartM).padStart(2, '0')}`,
+        end: `${String(visitEndH).padStart(2, '0')}:${String(visitEndM).padStart(2, '0')}`,
+        minutes: 60,
+        label: sugg.subtitle,
+      });
+    });
+
+    timeline.push({
+      type: 'buffer',
+      start: `${String(Math.floor(curTime / 60)).padStart(2, '0')}:${String(curTime % 60).padStart(2, '0')}`,
+      end: `${String(Math.floor((curTime + 60) / 60)).padStart(2, '0')}:${String((curTime + 60) % 60).padStart(2, '0')}`,
+      minutes: 60,
+      label: 'Guaranteed Return Safety Buffer',
+    });
+
+    setResult({
+      planId: `sugg_plan_${Date.now()}`,
+      generatedAt: new Date().toISOString(),
+      bucket: sugg.duration.includes('4') ? '4h' : sugg.duration.includes('8') ? '8h' : '24h',
+      mustLeaveBy: '19:00',
+      mustBeAtDepartureBy: '19:00',
+      timeline,
+      warnings: sugg.tips,
+      explanations: [sugg.description],
+      excluded: [],
+      assumptions: { duration: sugg.duration, zone: sugg.zone },
+      totalWalkKm: 2.2,
+      usableMinutes: curTime - 9 * 60,
+    });
+    navigate('/plan/result');
+  };
+
   const handleGenerateMultiDay = async () => {
     const daysNum = parseInt(multiDays, 10);
     const titlesMap: Record<string, string> = {
@@ -243,35 +315,47 @@ export const PlanSetupPage: React.FC = () => {
         </button>
       </div>
 
-      {/* 2. MODE SELECTOR TABS (Layover, Previous Trips, Multi-Day) */}
-      <div className="flex items-center gap-1.5 bg-[#F5F5F4] p-1 rounded-2xl border border-[#E7E5E4] text-xs font-bold">
+      {/* 2. MODE SELECTOR TABS (Instant Curated, Layover, Previous Trips, Multi-Day) */}
+      <div className="flex items-center gap-1 bg-[#F5F5F4] p-1 rounded-2xl border border-[#E7E5E4] text-xs font-bold overflow-x-auto no-scrollbar">
+        <button
+          onClick={() => setActiveMode('curated')}
+          className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1 shrink-0 ${
+            activeMode === 'curated'
+              ? 'bg-[#9E4A0C] text-white shadow-xs'
+              : 'text-stone-600 hover:text-ink'
+          }`}
+        >
+          <Sparkles size={13} />
+          <span>⚡ Instant Circuits</span>
+        </button>
+
         <button
           onClick={() => setActiveMode('layover')}
-          className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+          className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1 shrink-0 ${
             activeMode === 'layover'
               ? 'bg-[#9E4A0C] text-white shadow-xs'
               : 'text-stone-600 hover:text-ink'
           }`}
         >
           <Clock size={13} />
-          <span>Safe Layover</span>
+          <span>Custom Layover</span>
         </button>
 
         <button
           onClick={() => setActiveMode('previous')}
-          className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+          className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1 shrink-0 ${
             activeMode === 'previous'
               ? 'bg-[#9E4A0C] text-white shadow-xs'
               : 'text-stone-600 hover:text-ink'
           }`}
         >
           <Bookmark size={13} />
-          <span>Previous Trips ({previousPlans.length})</span>
+          <span>Saved ({previousPlans.length})</span>
         </button>
 
         <button
           onClick={() => setActiveMode('multiday')}
-          className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+          className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1 shrink-0 ${
             activeMode === 'multiday'
               ? 'bg-[#9E4A0C] text-white shadow-xs'
               : 'text-stone-600 hover:text-ink'
@@ -281,6 +365,89 @@ export const PlanSetupPage: React.FC = () => {
           <span>Multi-Day</span>
         </button>
       </div>
+
+      {/* ============================================================== */}
+      {/* MODE 0: 1-TAP INSTANT CURATED CIRCUITS */}
+      {/* ============================================================== */}
+      {activeMode === 'curated' && (
+        <div className="space-y-3.5 animate-in fade-in">
+          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-[#FFF8F2] to-[#FEF3C7] border border-[#FDE68A] flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <span className="w-9 h-9 rounded-full bg-[#9E4A0C] text-white flex items-center justify-center shrink-0 shadow-xs font-bold text-sm">
+                ⚡
+              </span>
+              <div>
+                <h3 className="font-heading font-bold text-xs text-[#9E4A0C]">
+                  One-Tap Verified Circuits (झटपट यात्रा)
+                </h3>
+                <p className="text-[11px] text-[#78350F] leading-tight">
+                  Pre-configured with local taxi rates, temple darshan schedules, and safety buffers.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setActiveMode('layover')}
+              className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#9E4A0C] text-white shrink-0 shadow-xs apple-press"
+            >
+              Custom Layover ↗
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            {JAMMU_CURATED_SUGGESTIONS.map((sugg) => (
+              <div
+                key={sugg.id}
+                className="bg-white border border-[#E7E5E4] rounded-2xl p-4 shadow-sm hover:border-[#9E4A0C]/50 transition-all space-y-3"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded-md bg-[#FFF8F2] text-[#9E4A0C] font-bold text-[10px] border border-[#FDE68A]">
+                        {sugg.duration}
+                      </span>
+                      <span className="text-[10px] text-stone-500 font-bold uppercase tracking-wider">
+                        {sugg.zone === 'city' ? 'City Core' : sugg.zone === 'day_trip' ? 'Day Excursion' : 'Scenic Highland'}
+                      </span>
+                    </div>
+                    <h3 className="font-heading font-bold text-sm text-[#1C1917] mt-1.5">
+                      {sugg.title}
+                    </h3>
+                    <p className="text-xs text-stone-600 mt-0.5 leading-snug">
+                      {sugg.description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Highlights List */}
+                <div className="bg-[#F5F5F4] p-2.5 rounded-xl space-y-1">
+                  <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Key Stops Included:</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-stone-700">
+                    {sugg.highlights.slice(0, 3).map((h, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5">
+                        <Check size={11} className="text-[#059669] shrink-0" />
+                        <span className="truncate">{h}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-1">
+                  <span className="text-[10px] text-stone-500">
+                    {sugg.attractionIds.length} Verified Stops • Buffer Protected
+                  </span>
+                  <button
+                    onClick={() => handleLaunchCuratedCircuit(sugg.id)}
+                    className="py-2 px-3.5 rounded-xl bg-[#9E4A0C] text-white font-bold text-xs shadow-xs hover:bg-[#853E0A] transition-all flex items-center gap-1.5 apple-press"
+                  >
+                    <span>⚡ Launch Itinerary (यात्रा देखें)</span>
+                    <ArrowRight size={13} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ============================================================== */}
       {/* MODE 1: SAFE LAYOVER PLANNER (Stitch Screen 5) */}

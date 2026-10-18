@@ -79,6 +79,9 @@ export const AudioTourModal: React.FC<AudioTourModalProps> = ({
             src={spot.heroImage}
             alt={spot.spotName}
             className="w-full h-full object-cover opacity-60"
+            onError={(e) => {
+              (e.target as HTMLElement).style.display = 'none';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#1C1917] via-[#1C1917]/40 to-transparent" />
           

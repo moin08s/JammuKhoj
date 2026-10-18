@@ -131,6 +131,9 @@ export const LoginPage: React.FC = () => {
                 src={currentUser.avatar}
                 alt={currentUser.name}
                 className="w-20 h-20 rounded-full object-cover border-2 border-primary shadow-sm"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = 'none';
+                }}
               />
             ) : (
               <div className="w-20 h-20 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-2xl border-2 border-primary/30">
@@ -207,8 +210,18 @@ export const LoginPage: React.FC = () => {
   return (
     <div className="space-y-4 py-2 animate-in fade-in duration-200 max-w-md mx-auto">
       {/* Brand Header */}
-      <div className="text-center space-y-1">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-1">
+      <div className="text-center space-y-2">
+        <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-sm mx-auto flex items-center justify-center bg-forest-900 border border-amber-500/30">
+          <img
+            src="/icons/icon-emblem.svg"
+            alt="JammuKhoj Emblem"
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              (e.target as HTMLElement).style.display = 'none';
+            }}
+          />
+        </div>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold">
           <Sparkles size={14} />
           <span>JammuKhoj Unified Account</span>
         </div>

@@ -89,6 +89,9 @@ export const GiProductsSection: React.FC<GiProductsSectionProps> = ({
                   src={prod.heroImage}
                   alt={prod.name.en}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Hari_Market_Jammu.JPG/960px-Hari_Market_Jammu.JPG';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 

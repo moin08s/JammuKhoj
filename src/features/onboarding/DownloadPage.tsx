@@ -48,7 +48,17 @@ export const DownloadPage: React.FC = () => {
 
   return (
     <div className="min-h-[100dvh] bg-surface flex flex-col justify-between p-6 max-w-content mx-auto animate-in fade-in">
-      <div className="pt-4 space-y-1 text-center">
+      <div className="pt-4 space-y-2 text-center">
+        <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-sm mx-auto flex items-center justify-center bg-forest-900 border border-amber-500/30">
+          <img
+            src="/icons/icon-emblem.svg"
+            alt="JammuKhoj Emblem"
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              (e.target as HTMLElement).style.display = 'none';
+            }}
+          />
+        </div>
         <h2 className="font-heading text-2xl font-bold text-ink">
           {completed ? t('offline.download_complete') : t('offline.download_title')}
         </h2>

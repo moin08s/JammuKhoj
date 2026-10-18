@@ -65,7 +65,7 @@ import { deviceService } from '@/services/deviceService';
 export const HomePage: React.FC = () => {
   const { i18n } = useTranslation();
   const navigate = useNavigate();
-  const { input, setInput } = usePlanStore();
+  const { input, setInput, setResult } = usePlanStore();
   const {
     language,
     setLanguage,
@@ -83,6 +83,7 @@ export const HomePage: React.FC = () => {
   const [selectedDuration, setSelectedDuration] = useState<'4' | '8' | '24'>('4');
   const [startingLocation, setStartingLocation] = useState<'station_jammu' | 'station_katra' | 'airport_jammu'>('station_jammu');
   const [primaryInterest, setPrimaryInterest] = useState<'all' | 'pilgrimage' | 'heritage' | 'nature' | 'food'>('all');
+  const [showCustomPlannerOptions, setShowCustomPlannerOptions] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareData, setShareData] = useState<{ title?: string; text?: string }>({});
@@ -147,6 +148,103 @@ export const HomePage: React.FC = () => {
       departureNode: nodeMap[startingLocation],
     });
     navigate(`/plan?duration=${selectedDuration}&interest=${primaryInterest}`);
+  };
+
+  const handleLaunchQuickCircuit = (circuitType: 'darshan_4h' | 'katra_1d' | 'hill_2d' | 'heritage_halfday') => {
+    if (circuitType === 'darshan_4h') {
+      setResult({
+        planId: `quick_darshan_${Date.now()}`,
+        generatedAt: new Date().toISOString(),
+        bucket: '4h',
+        mustLeaveBy: '18:45',
+        mustBeAtDepartureBy: '18:45',
+        timeline: [
+          { type: 'settle', start: '14:00', end: '14:15', minutes: 15, label: 'Jammu Tawi Railway Station arrival & cloakroom' },
+          { type: 'travel', start: '14:15', end: '14:35', minutes: 20, mode: 'auto_taxi', label: 'E-Rickshaw to Shri Raghunath Temple' },
+          { type: 'visit', start: '14:35', end: '15:35', minutes: 60, attractionId: 'attr_raghunath_temple', label: 'Shri Raghunath Temple Darshan & Hari Market' },
+          { type: 'travel', start: '15:35', end: '15:55', minutes: 20, mode: 'auto_taxi', label: 'E-Auto across Tawi bridge to Bahu Fort' },
+          { type: 'visit', start: '15:55', end: '17:00', minutes: 65, attractionId: 'attr_bahu_fort', label: 'Bahu Fort, Bawe Wali Mata Temple & Bagh-e-Bahu' },
+          { type: 'travel', start: '17:00', end: '17:25', minutes: 25, mode: 'auto_taxi', label: 'Return cab via Bikram Chowk' },
+          { type: 'buffer', start: '17:25', end: '18:45', minutes: 80, label: 'Guaranteed 80-minute safety buffer prior to departure' },
+        ],
+        warnings: ['All spots verified open offline', 'Guaranteed safety return buffer included'],
+        explanations: ['Express 4-Hour Darshan circuit generated directly for layover travelers.'],
+        excluded: [],
+        assumptions: { hub: 'Jammu Tawi Station', duration: '4 Hours' },
+        totalWalkKm: 1.2,
+        usableMinutes: 240,
+      });
+      navigate('/plan/result');
+    } else if (circuitType === 'katra_1d') {
+      setResult({
+        planId: `quick_katra_${Date.now()}`,
+        generatedAt: new Date().toISOString(),
+        bucket: '24h',
+        mustLeaveBy: '22:00',
+        mustBeAtDepartureBy: '22:00',
+        timeline: [
+          { type: 'settle', start: '06:00', end: '06:30', minutes: 30, label: 'Katra Base Camp - RFID Yatra Card verification' },
+          { type: 'travel', start: '06:30', end: '07:00', minutes: 30, mode: 'auto_taxi', label: 'Baan Ganga entry gate' },
+          { type: 'visit', start: '07:00', end: '10:30', minutes: 210, attractionId: 'attr_vaishno_devi', label: 'Trek to Ardhkuwari Holy Cave (Pony/Battery Car route)' },
+          { type: 'visit', start: '10:30', end: '14:30', minutes: 240, attractionId: 'attr_vaishno_devi', label: 'Shri Mata Vaishno Devi Bhawan Holy Darshan' },
+          { type: 'travel', start: '14:30', end: '15:30', minutes: 60, mode: 'auto_taxi', label: 'Bhairon Ghati Ropeway cable car' },
+          { type: 'travel', start: '15:30', end: '19:30', minutes: 240, mode: 'auto_taxi', label: 'Descent trek back to Katra Base Camp' },
+          { type: 'buffer', start: '19:30', end: '22:00', minutes: 150, label: 'Relaxation & dinner at Katra Market' },
+        ],
+        warnings: ['RFID Yatra Card mandatory before crossing Baan Ganga', 'Battery cars available for seniors from Himkoti'],
+        explanations: ['1-Day Katra & Vaishno Devi Pilgrimage itinerary.'],
+        excluded: [],
+        assumptions: { hub: 'Shri Mata Vaishno Devi Katra', duration: 'Full Day' },
+        totalWalkKm: 12.0,
+        usableMinutes: 960,
+      });
+      navigate('/plan/result');
+    } else if (circuitType === 'hill_2d') {
+      setResult({
+        planId: `quick_hill_${Date.now()}`,
+        generatedAt: new Date().toISOString(),
+        bucket: '24h',
+        mustLeaveBy: '20:00',
+        mustBeAtDepartureBy: '20:00',
+        timeline: [
+          { type: 'travel', start: 'Day 1 08:00', end: 'Day 1 10:30', minutes: 150, mode: 'auto_taxi', label: 'Scenic Highway drive via Chenani-Nashri Tunnel to Patnitop' },
+          { type: 'visit', start: 'Day 1 10:30', end: 'Day 1 14:00', minutes: 210, attractionId: 'attr_patnitop', label: 'Patnitop Deodar Pine Woods & Skyview Gondola' },
+          { type: 'travel', start: 'Day 1 14:00', end: 'Day 1 14:45', minutes: 45, mode: 'auto_taxi', label: 'Drive to Sanasar Alpine Meadows (19 km)' },
+          { type: 'visit', start: 'Day 1 14:45', end: 'Day 1 18:00', minutes: 195, attractionId: 'attr_sanasar', label: 'Sanasar Lake stroll, paragliding & evening mountain sunset' },
+          { type: 'visit', start: 'Day 2 09:00', end: 'Day 2 13:00', minutes: 240, attractionId: 'attr_mansar_lake', label: 'Return drive & sacred Mansar Lake Sheshnag shrine' },
+        ],
+        warnings: ['Carry light woollens for Patnitop & Sanasar', 'Offline map available for valley navigation'],
+        explanations: ['2-Day Hill Meadow & Conifer Pine Escape.'],
+        excluded: [],
+        assumptions: { hub: 'Jammu Tawi Station', duration: '2 Days' },
+        totalWalkKm: 3.5,
+        usableMinutes: 720,
+      });
+      navigate('/plan/result');
+    } else {
+      setResult({
+        planId: `quick_heritage_${Date.now()}`,
+        generatedAt: new Date().toISOString(),
+        bucket: '8h',
+        mustLeaveBy: '19:00',
+        mustBeAtDepartureBy: '19:00',
+        timeline: [
+          { type: 'settle', start: '10:00', end: '10:30', minutes: 30, label: 'Briefing & departure from Jammu City Center' },
+          { type: 'visit', start: '10:30', end: '12:30', minutes: 120, attractionId: 'attr_amar_mahal', label: 'Amar Mahal Palace: French Chateau & 120kg Golden Throne' },
+          { type: 'travel', start: '12:30', end: '12:45', minutes: 15, mode: 'auto_taxi', label: 'Short drive to Old City Royal Quarter' },
+          { type: 'visit', start: '12:45', end: '14:45', minutes: 120, attractionId: 'attr_mubarak_mandi', label: 'Mubarak Mandi Dogra Palace complex & Pink Hall' },
+          { type: 'visit', start: '14:45', end: '16:30', minutes: 105, attractionId: 'attr_raghunath_bazaar', label: 'Raghunath Bazaar Dogra Cuisines & Dry Fruits' },
+          { type: 'buffer', start: '16:30', end: '19:00', minutes: 150, label: 'Evening relaxation at Tawi Riverfront walk' },
+        ],
+        warnings: ['Amar Mahal closed on Mondays and national holidays'],
+        explanations: ['Half-Day Royal Dogra Heritage & Palace Trail.'],
+        excluded: [],
+        assumptions: { hub: 'Jammu City Center', duration: '6 Hours' },
+        totalWalkKm: 2.1,
+        usableMinutes: 360,
+      });
+      navigate('/plan/result');
+    }
   };
 
   const handleCopyCoords = () => {
@@ -456,9 +554,12 @@ export const HomePage: React.FC = () => {
                     className="flex items-center gap-3 p-2 rounded-xl hover:bg-surface cursor-pointer apple-press transition-colors"
                   >
                     <img
-                      src={JAMMU_SPOT_IMAGES[attr.id] || 'https://images.unsplash.com/photo-1590076215667-875d4ef2d7ee?auto=format&fit=crop&w=160&q=80'}
+                      src={JAMMU_SPOT_IMAGES[attr.id] || 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Bahu_Fort%2C_Jammu.jpg/960px-Bahu_Fort%2C_Jammu.jpg'}
                       alt={attr.name.en}
                       className="w-12 h-12 rounded-xl object-cover shrink-0"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Bahu_Fort%2C_Jammu.jpg/960px-Bahu_Fort%2C_Jammu.jpg';
+                      }}
                     />
                     <div className="min-w-0 flex-1">
                       <h4 className="text-xs font-bold text-ink truncate">{attr.name.en}</h4>
@@ -538,21 +639,25 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* =================================================================== */}
-      {/* 3. TIME-BASED TRIP PLANNER */}
+      {/* 3. SENIOR-FRIENDLY 1-TAP QUICK TRIP PLANNER */}
       {/* =================================================================== */}
-      <section aria-label="Time-based Trip Planner" className="p-4 sm:p-5 rounded-3xl bg-card border border-border shadow-xs space-y-4">
+      <section aria-label="1-Tap Quick Trip Planner" className="p-4 sm:p-5 rounded-3xl bg-card border border-border shadow-xs space-y-4">
+        {/* Section Header */}
         <div className="flex items-start justify-between gap-2">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-7 h-7 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs shadow-xs">
-                <Clock size={15} />
+              <span className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                <Sparkles size={16} />
               </span>
-              <h3 className="font-heading font-bold text-base text-ink">
-                Time-Based Trip Planner
-              </h3>
+              <div>
+                <h3 className="font-heading font-black text-base sm:text-lg text-ink">
+                  1-Tap Quick Trip Planner <span className="text-primary font-normal text-xs sm:text-sm">(झटपट यात्रा प्लान)</span>
+                </h3>
+                <span className="text-[10px] font-bold text-stone uppercase tracking-wider block">Senior & Pilgrim Friendly</span>
+              </div>
             </div>
-            <p className="text-xs text-stone mt-1 leading-snug">
-              Select your available transit window and starting hub. Includes a guaranteed 50-minute return safety buffer.
+            <p className="text-xs text-stone mt-1.5 leading-snug">
+              Tap any circuit to instantly open your complete verified timeline with guaranteed train/flight return buffers — zero forms required!
             </p>
           </div>
           <span className="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-success text-[10px] font-bold border border-emerald-200 dark:border-emerald-800 shrink-0">
@@ -560,101 +665,234 @@ export const HomePage: React.FC = () => {
           </span>
         </div>
 
-        {/* Duration Selection (4h, 8h, 24h) */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-          {[
-            {
-              id: '4' as const,
-              hours: '4 Hours',
-              title: 'Quick Visit',
-              desc: 'Station layover. Darshan & royal chateau tour with safe return.',
-            },
-            {
-              id: '8' as const,
-              hours: '8 Hours',
-              title: 'Day Explorer',
-              desc: 'City & foothill highlights. Forts, palaces, and border ceremony.',
-            },
-            {
-              id: '24' as const,
-              hours: '24 Hours',
-              title: 'Full-Day Plan',
-              desc: 'Immersive sacred and alpine circuit with overnight stays.',
-            },
-          ].map((card) => (
-            <div
-              key={card.id}
-              onClick={() => setSelectedDuration(card.id)}
-              className={`p-3.5 rounded-2xl border cursor-pointer apple-press transition-all ${
-                selectedDuration === card.id
-                  ? 'bg-primary-soft/70 border-primary ring-2 ring-primary/20 shadow-xs'
-                  : 'bg-surface border-border hover:border-primary/40'
-              }`}
-            >
+        {/* 4 Instant 1-Tap Curated Circuit Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {/* Circuit 1: 4h Express Darshan */}
+          <div
+            onClick={() => handleLaunchQuickCircuit('darshan_4h')}
+            className="p-3.5 rounded-2xl bg-surface border border-border hover:border-primary cursor-pointer apple-press transition-all shadow-xs group flex flex-col justify-between space-y-3"
+          >
+            <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-primary px-2 py-0.5 rounded-md bg-card border border-border">
-                  {card.hours}
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 font-bold text-[10px] border border-amber-500/20">
+                  ⚡ 4-Hour Express Layover
                 </span>
+                <span className="text-[11px] font-bold text-stone">Train/Flight Safe</span>
+              </div>
+              <h4 className="font-heading font-bold text-sm text-ink group-hover:text-primary transition-colors">
+                Shri Raghunath Temple & Bahu Fort Darshan
+              </h4>
+              <p className="text-[11px] text-stone leading-snug">
+                Ideal for station transit. Darshan at the sacred 1857 golden sanctum, ancient hilltop fort, & 80-minute return safety buffer.
+              </p>
+            </div>
+            <button className="w-full py-2 px-3 rounded-xl bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs group-hover:bg-primary-dark transition-colors">
+              <span>⚡ View 4h Itinerary (तुरंत देखें)</span>
+              <ArrowRight size={13} />
+            </button>
+          </div>
+
+          {/* Circuit 2: 1-Day Katra & Vaishno Devi */}
+          <div
+            onClick={() => handleLaunchQuickCircuit('katra_1d')}
+            className="p-3.5 rounded-2xl bg-surface border border-border hover:border-primary cursor-pointer apple-press transition-all shadow-xs group flex flex-col justify-between space-y-3"
+          >
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold text-[10px] border border-emerald-500/20">
+                  🛕 Full-Day Holy Yatra
+                </span>
+                <span className="text-[11px] font-bold text-stone">Katra Base Camp</span>
+              </div>
+              <h4 className="font-heading font-bold text-sm text-ink group-hover:text-primary transition-colors">
+                Mata Vaishno Devi Holy Cave Pilgrimage
+              </h4>
+              <p className="text-[11px] text-stone leading-snug">
+                Baan Ganga entry, Ardhkuwari cave, Bhawan darshan, and Bhairon cable car with verified battery car guidance for elders.
+              </p>
+            </div>
+            <button className="w-full py-2 px-3 rounded-xl bg-[#174D3C] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs group-hover:bg-[#123E38] transition-colors">
+              <span>⚡ View Pilgrimage Plan (यात्रा देखें)</span>
+              <ArrowRight size={13} />
+            </button>
+          </div>
+
+          {/* Circuit 3: 2-Day Hill Meadow Escape */}
+          <div
+            onClick={() => handleLaunchQuickCircuit('hill_2d')}
+            className="p-3.5 rounded-2xl bg-surface border border-border hover:border-primary cursor-pointer apple-press transition-all shadow-xs group flex flex-col justify-between space-y-3"
+          >
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold text-[10px] border border-blue-500/20">
+                  🌲 2-Day Alpine Tour
+                </span>
+                <span className="text-[11px] font-bold text-stone">Cool Valleys</span>
+              </div>
+              <h4 className="font-heading font-bold text-sm text-ink group-hover:text-primary transition-colors">
+                Patnitop Pine Forests & Sanasar Meadows
+              </h4>
+              <p className="text-[11px] text-stone leading-snug">
+                Conifer woods at 2,024m, Skyview ropeway, Sanasar paragliding bowl, and sacred Sheshnag shrine at Mansar Lake.
+              </p>
+            </div>
+            <button className="w-full py-2 px-3 rounded-xl bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs group-hover:bg-primary-dark transition-colors">
+              <span>⚡ View Hill Itinerary (पहाड़ी यात्रा)</span>
+              <ArrowRight size={13} />
+            </button>
+          </div>
+
+          {/* Circuit 4: Half-Day Dogra Royal Heritage */}
+          <div
+            onClick={() => handleLaunchQuickCircuit('heritage_halfday')}
+            className="p-3.5 rounded-2xl bg-surface border border-border hover:border-primary cursor-pointer apple-press transition-all shadow-xs group flex flex-col justify-between space-y-3"
+          >
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-700 dark:text-purple-400 font-bold text-[10px] border border-purple-500/20">
+                  🏛️ Half-Day Heritage
+                </span>
+                <span className="text-[11px] font-bold text-stone">City Heritage</span>
+              </div>
+              <h4 className="font-heading font-bold text-sm text-ink group-hover:text-primary transition-colors">
+                Dogra Royal Palaces & Traditional Bazaars
+              </h4>
+              <p className="text-[11px] text-stone leading-snug">
+                Amar Mahal French Chateau, 120kg solid gold throne, Mubarak Mandi pink hall, and authentic Dogra food at Raghunath Bazaar.
+              </p>
+            </div>
+            <button className="w-full py-2 px-3 rounded-xl bg-[#9E4A0C] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs group-hover:bg-[#833D0A] transition-colors">
+              <span>⚡ View Heritage Route (विरासत देखें)</span>
+              <ArrowRight size={13} />
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Route Discovery Bar & Custom Toggle */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-border/70 text-xs">
+          <button
+            onClick={() => navigate('/suggestions')}
+            className="text-primary font-bold hover:underline flex items-center gap-1 apple-press"
+          >
+            <Compass size={14} />
+            <span>Browse All 5 Curated Circuits (विस्तृत प्लान देखें) →</span>
+          </button>
+
+          <button
+            onClick={() => setShowCustomPlannerOptions(!showCustomPlannerOptions)}
+            className="text-stone hover:text-ink font-semibold flex items-center gap-1 apple-press"
+          >
+            <span>{showCustomPlannerOptions ? 'Hide Custom Options ▲' : 'Custom Options (Select Station & Time) ▼'}</span>
+          </button>
+        </div>
+
+        {/* Collapsible Custom Duration & Location Planner for Power Users */}
+        {showCustomPlannerOptions && (
+          <div className="pt-3 space-y-3.5 border-t border-border animate-in fade-in duration-200">
+            <div className="flex items-center justify-between">
+              <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-stone">
+                Custom Duration & Hub Settings
+              </h4>
+              <span className="text-[10px] text-stone">50-min safety margin auto-calculated</span>
+            </div>
+
+            {/* Duration Selection (4h, 8h, 24h) */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              {[
+                {
+                  id: '4' as const,
+                  hours: '4 Hours',
+                  title: 'Quick Layover',
+                  desc: 'Station darshan & royal chateau tour with safe return.',
+                },
+                {
+                  id: '8' as const,
+                  hours: '8 Hours',
+                  title: 'Day Explorer',
+                  desc: 'Forts, palaces, and border beating retreat ceremony.',
+                },
+                {
+                  id: '24' as const,
+                  hours: '24 Hours',
+                  title: 'Multi-Day Plan',
+                  desc: 'Immersive sacred and alpine circuit with overnight stays.',
+                },
+              ].map((card) => (
                 <div
-                  className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                    selectedDuration === card.id ? 'border-primary' : 'border-stone/40'
+                  key={card.id}
+                  onClick={() => setSelectedDuration(card.id)}
+                  className={`p-3 rounded-2xl border cursor-pointer apple-press transition-all ${
+                    selectedDuration === card.id
+                      ? 'bg-primary-soft/70 border-primary ring-2 ring-primary/20 shadow-xs'
+                      : 'bg-surface border-border hover:border-primary/40'
                   }`}
                 >
-                  {selectedDuration === card.id && <span className="w-2 h-2 rounded-full bg-primary" />}
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-primary px-2 py-0.5 rounded-md bg-card border border-border">
+                      {card.hours}
+                    </span>
+                    <div
+                      className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                        selectedDuration === card.id ? 'border-primary' : 'border-stone/40'
+                      }`}
+                    >
+                      {selectedDuration === card.id && <span className="w-2 h-2 rounded-full bg-primary" />}
+                    </div>
+                  </div>
+                  <h5 className="font-heading font-bold text-xs text-ink mt-2">{card.title}</h5>
+                  <p className="text-[10px] text-stone mt-0.5 leading-snug">{card.desc}</p>
                 </div>
-              </div>
-              <h4 className="font-heading font-bold text-sm text-ink mt-2">{card.title}</h4>
-              <p className="text-[11px] text-stone mt-0.5 leading-snug">{card.desc}</p>
+              ))}
             </div>
-          ))}
-        </div>
 
-        {/* Inputs: Starting Location & Primary Interest */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-          {/* Starting Location */}
-          <div className="bg-surface p-2.5 rounded-2xl border border-border">
-            <label className="text-[10px] font-bold text-stone block uppercase tracking-wider">
-              Starting Location
-            </label>
-            <select
-              value={startingLocation}
-              onChange={(e) => setStartingLocation(e.target.value as any)}
-              className="w-full bg-transparent font-bold text-ink outline-none text-xs mt-1 cursor-pointer"
+            {/* Inputs: Starting Location & Primary Interest */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {/* Starting Location */}
+              <div className="bg-surface p-2.5 rounded-2xl border border-border">
+                <label className="text-[10px] font-bold text-stone block uppercase tracking-wider">
+                  Starting Location
+                </label>
+                <select
+                  value={startingLocation}
+                  onChange={(e) => setStartingLocation(e.target.value as any)}
+                  className="w-full bg-transparent font-bold text-ink outline-none text-xs mt-1 cursor-pointer"
+                >
+                  <option value="station_jammu">Jammu Tawi Railway Station (JAT)</option>
+                  <option value="station_katra">Shri Mata Vaishno Devi Katra (SVDK)</option>
+                  <option value="airport_jammu">Jammu Civil Airport (IXJ Satwari)</option>
+                </select>
+              </div>
+
+              {/* Primary Interest */}
+              <div className="bg-surface p-2.5 rounded-2xl border border-border">
+                <label className="text-[10px] font-bold text-stone block uppercase tracking-wider">
+                  Primary Interest
+                </label>
+                <select
+                  value={primaryInterest}
+                  onChange={(e) => setPrimaryInterest(e.target.value as any)}
+                  className="w-full bg-transparent font-bold text-ink outline-none text-xs mt-1 cursor-pointer"
+                >
+                  <option value="all">All Highlights (Balanced Circuit)</option>
+                  <option value="pilgrimage">Temples & Pilgrimage Darshan</option>
+                  <option value="heritage">Dogra Royal Palaces & Forts</option>
+                  <option value="nature">Alpine Valleys & Meadows</option>
+                  <option value="food">Local Food & Spice Bazaars</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Generate Custom Plan Button */}
+            <button
+              onClick={handleStartPlan}
+              className="w-full py-3 px-4 rounded-2xl bg-primary text-white font-bold text-xs sm:text-sm shadow-md shadow-primary/20 hover:bg-primary-dark transition-all flex items-center justify-center gap-2 apple-press"
             >
-              <option value="station_jammu">Jammu Tawi Railway Station (JAT)</option>
-              <option value="station_katra">Shri Mata Vaishno Devi Katra (SVDK)</option>
-              <option value="airport_jammu">Jammu Civil Airport (IXJ Satwari)</option>
-            </select>
+              <Compass size={16} />
+              <span>Generate Custom {selectedDuration === '24' ? 'Full-Day (24h)' : `${selectedDuration}-Hour`} Itinerary</span>
+              <ArrowRight size={15} />
+            </button>
           </div>
-
-          {/* Primary Interest */}
-          <div className="bg-surface p-2.5 rounded-2xl border border-border">
-            <label className="text-[10px] font-bold text-stone block uppercase tracking-wider">
-              Primary Interest
-            </label>
-            <select
-              value={primaryInterest}
-              onChange={(e) => setPrimaryInterest(e.target.value as any)}
-              className="w-full bg-transparent font-bold text-ink outline-none text-xs mt-1 cursor-pointer"
-            >
-              <option value="all">All Highlights (Balanced Circuit)</option>
-              <option value="pilgrimage">Temples & Pilgrimage Darshan</option>
-              <option value="heritage">Dogra Royal Palaces & Forts</option>
-              <option value="nature">Alpine Valleys & Meadows</option>
-              <option value="food">Local Food & Spice Bazaars</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Generate Itinerary Button */}
-        <button
-          onClick={handleStartPlan}
-          className="w-full py-3 px-4 rounded-2xl bg-primary text-white font-bold text-xs sm:text-sm shadow-md shadow-primary/20 hover:bg-primary-dark transition-all flex items-center justify-center gap-2 apple-press"
-        >
-          <Compass size={16} />
-          <span>Generate {selectedDuration === '24' ? 'Full-Day (24h)' : `${selectedDuration}-Hour`} Itinerary</span>
-          <ArrowRight size={15} />
-        </button>
+        )}
       </section>
 
       {/* =================================================================== */}

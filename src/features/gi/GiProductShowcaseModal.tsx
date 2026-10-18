@@ -45,6 +45,9 @@ export const GiProductShowcaseModal: React.FC<GiProductShowcaseModalProps> = ({
             src={product.heroImage}
             alt={product.name.en}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Hari_Market_Jammu.JPG/960px-Hari_Market_Jammu.JPG';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
 

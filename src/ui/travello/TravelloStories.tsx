@@ -172,6 +172,9 @@ export const TravelloStories: React.FC = () => {
               src={activeStory.coverImage}
               alt={activeStory.name}
               className="absolute inset-0 w-full h-full object-cover opacity-80"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Bahu_Fort%2C_Jammu.jpg/960px-Bahu_Fort%2C_Jammu.jpg';
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-slate-900/80 pointer-events-none" />
 

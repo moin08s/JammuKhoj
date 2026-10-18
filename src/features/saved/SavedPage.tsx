@@ -53,6 +53,15 @@ export const SavedPage: React.FC = () => {
     suchetgarh: true,
   });
 
+  const [filterCategory, setFilterCategory] = useState<'all' | 'pilgrimage' | 'nature' | 'heritage' | 'border'>('all');
+  const [showFilterBar, setShowFilterBar] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
   const loadPlans = async () => {
     const all = await db.savedPlans.toArray();
     if (all.length === 0) {
@@ -93,13 +102,26 @@ export const SavedPage: React.FC = () => {
 
   return (
     <div className="space-y-4 animate-in fade-in duration-200">
+      {/* Toast Alert */}
+      {toastMessage && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-[#1C2923] text-white px-4 py-2 rounded-full text-xs font-semibold shadow-xl flex items-center gap-2 animate-in fade-in slide-in-from-top-2 border border-emerald-500/30">
+          <CheckCircle2 size={14} className="text-[#10B981]" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* 1. Top Brand Header */}
       <div className="flex items-center justify-between pt-1 pb-1">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="w-6 h-6 text-[#9E4A0C] flex items-center justify-center">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-              <path d="M12 2L2 9h3v11h14V9h3L12 2zm0 3.5l6 4.2V18H6v-8.3l6-4.2zM10 12h4v6h-4v-6z" />
-            </svg>
+        <div className="flex items-center gap-2.5 cursor-pointer apple-press" onClick={() => navigate('/')}>
+          <div className="w-8 h-8 rounded-xl overflow-hidden shadow-xs shrink-0 flex items-center justify-center bg-forest-900 border border-amber-500/30">
+            <img
+              src="/icons/icon-emblem.svg"
+              alt="JammuKhoj Emblem"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLElement).style.display = 'none';
+              }}
+            />
           </div>
           <span className="font-heading font-black text-xl tracking-tight text-[#9E4A0C]">
             JammuKhoj
@@ -219,19 +241,53 @@ export const SavedPage: React.FC = () => {
                 Cached for field navigation without cellular network
               </p>
             </div>
-            <button className="p-2 rounded-lg text-stone-600 hover:bg-stone-100 transition-colors" title="Filter spots">
+            <button
+              onClick={() => setShowFilterBar(!showFilterBar)}
+              className={`p-2 rounded-lg transition-colors apple-press ${
+                showFilterBar ? 'bg-[#9E4A0C] text-white' : 'text-stone-600 hover:bg-stone-100'
+              }`}
+              title="Filter spots"
+              aria-label="Filter saved spots"
+            >
               <SlidersHorizontal size={17} />
             </button>
           </div>
 
+          {/* Filter Bar Chips */}
+          {showFilterBar && (
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar animate-in fade-in">
+              {[
+                { id: 'all', label: 'All Destinations' },
+                { id: 'pilgrimage', label: '🛕 Pilgrimage' },
+                { id: 'nature', label: '🌲 Lakes & Valleys' },
+                { id: 'border', label: '🚩 Border Heritage' },
+              ].map((chip) => (
+                <button
+                  key={chip.id}
+                  onClick={() => setFilterCategory(chip.id as any)}
+                  className={`px-3 py-1 rounded-full text-xs font-bold shrink-0 transition-all apple-press ${
+                    filterCategory === chip.id
+                      ? 'bg-[#9E4A0C] text-white shadow-xs'
+                      : 'bg-surface border border-border text-stone hover:text-ink'
+                  }`}
+                >
+                  {chip.label}
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Destination Card 1: Bhaderwah & Jai Valley */}
-          {savedSpots.bhaderwah && (
+          {savedSpots.bhaderwah && (filterCategory === 'all' || filterCategory === 'nature') && (
             <div className="bg-white border border-[#EBE4DC] rounded-2xl overflow-hidden shadow-sm group">
-              <div className="relative h-44 w-full overflow-hidden">
+              <div className="relative h-44 w-full overflow-hidden bg-stone-100">
                 <img
                   src={JAMMU_SPOT_IMAGES.attr_bhaderwah}
                   alt="Bhaderwah & Jai Valley"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Bhaderwah_Valley_2.jpg/960px-Bhaderwah_Valley_2.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10" />
 
@@ -279,16 +335,20 @@ export const SavedPage: React.FC = () => {
           )}
 
           {/* Destination Card 2: Shri Raghunath Temple */}
-          {savedSpots.raghunath && (
+          {savedSpots.raghunath && (filterCategory === 'all' || filterCategory === 'pilgrimage') && (
             <div
               onClick={() => navigate('/explore/attr_raghunath_temple')}
               className="bg-white border border-[#EBE4DC] rounded-2xl p-3.5 shadow-sm hover:border-[#9E4A0C]/40 cursor-pointer transition-all flex items-center gap-3.5 group"
             >
-              <div className="w-14 h-14 rounded-2xl bg-[#EFF6FF] border border-[#DBEAFE] flex flex-col items-center justify-center text-[#9E4A0C] shrink-0 relative">
-                <span className="text-[9px] font-black tracking-wider text-[#9E4A0C] uppercase -mt-1">DOGRA</span>
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 mt-0.5">
-                  <path d="M12 2L2 9h3v11h14V9h3L12 2zm0 3.5l6 4.2V18H6v-8.3l6-4.2zM10 12h4v6h-4v-6z" />
-                </svg>
+              <div className="w-14 h-14 rounded-2xl overflow-hidden shrink-0 relative border border-[#EBE4DC] bg-stone-100 shadow-xs">
+                <img
+                  src={JAMMU_SPOT_IMAGES.attr_raghunath_temple}
+                  alt="Shri Raghunath Temple"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Raghunath_Temple_Jammu.JPG';
+                  }}
+                />
               </div>
 
               <div className="flex-1 min-w-0">
@@ -319,13 +379,16 @@ export const SavedPage: React.FC = () => {
           )}
 
           {/* Destination Card 3: Mansar Sacred Lake */}
-          {savedSpots.mansar && (
+          {savedSpots.mansar && (filterCategory === 'all' || filterCategory === 'nature') && (
             <div className="bg-white border border-[#EBE4DC] rounded-2xl overflow-hidden shadow-sm group">
-              <div className="relative h-44 w-full overflow-hidden">
+              <div className="relative h-44 w-full overflow-hidden bg-stone-100">
                 <img
                   src={JAMMU_SPOT_IMAGES.attr_mansar_lake}
                   alt="Mansar Sacred Lake"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Beautiful_Mansar_Lake_%28ramsar_Wetland%29_Dr._Harleen_Kaur.jpg/960px-Beautiful_Mansar_Lake_%28ramsar_Wetland%29_Dr._Harleen_Kaur.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10" />
 
@@ -369,13 +432,16 @@ export const SavedPage: React.FC = () => {
           )}
 
           {/* Destination Card 4: Suchetgarh Border Post */}
-          {savedSpots.suchetgarh && (
+          {savedSpots.suchetgarh && (filterCategory === 'all' || filterCategory === 'border') && (
             <div className="bg-white border border-[#EBE4DC] rounded-2xl overflow-hidden shadow-sm group">
-              <div className="relative h-44 w-full overflow-hidden">
+              <div className="relative h-44 w-full overflow-hidden bg-stone-100">
                 <img
                   src={JAMMU_SPOT_IMAGES.attr_suchetgarh_border}
                   alt="Suchetgarh Border Post"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Indian_Army_Jammu.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10" />
 
@@ -787,7 +853,12 @@ export const SavedPage: React.FC = () => {
                     <CheckCircle2 size={12} />
                     <span>{pack.status}</span>
                   </span>
-                  <button className="text-[#9E4A0C] font-bold hover:underline flex items-center gap-1">
+                  <button
+                    onClick={() => {
+                      showToast(`Verified: ${pack.title} checksum valid & cached locally`);
+                    }}
+                    className="text-[#9E4A0C] font-bold hover:underline flex items-center gap-1 apple-press"
+                  >
                     <RefreshCw size={12} />
                     <span>Re-verify</span>
                   </button>

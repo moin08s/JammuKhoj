@@ -90,6 +90,9 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
                 alt={item.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 loading="lazy"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Hari_Market_Jammu.JPG/960px-Hari_Market_Jammu.JPG';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
               <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-bold text-amber-300">
@@ -130,6 +133,9 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
                 src={selectedFood.heroImage}
                 alt={selectedFood.name}
                 className="w-full h-full object-cover opacity-80"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Hari_Market_Jammu.JPG/960px-Hari_Market_Jammu.JPG';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
               <button

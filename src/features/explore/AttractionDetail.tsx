@@ -318,6 +318,9 @@ export const AttractionDetail: React.FC = () => {
                     src={item.heroImage}
                     alt={item.name.en}
                     className="w-12 h-12 rounded-xl object-cover shrink-0 group-hover:scale-105 transition-transform"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Hari_Market_Jammu.JPG/960px-Hari_Market_Jammu.JPG';
+                    }}
                   />
                   <div className="min-w-0 flex-1">
                     <span className="text-[9px] font-bold uppercase tracking-wider text-[#9E4A0C] dark:text-[#F3C969] block">
