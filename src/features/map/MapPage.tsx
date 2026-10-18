@@ -537,8 +537,15 @@ export const MapPage: React.FC = () => {
               <ArrowLeft size={18} />
             </button>
             <div className="flex items-center gap-1.5">
-              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-primary to-primary-dark text-white flex items-center justify-center font-bold text-xs shadow-xs">
-                JK
+              <div className="w-6 h-6 rounded-lg overflow-hidden bg-forest-900 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-xs">
+                <img
+                  src="/icons/icon-emblem.svg"
+                  alt="JammuKhoj Emblem"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/icons/icon-192.png';
+                  }}
+                />
               </div>
               <div>
                 <span className="font-heading font-extrabold text-sm text-ink block leading-none">

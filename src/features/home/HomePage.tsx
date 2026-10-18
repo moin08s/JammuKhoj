@@ -1162,8 +1162,15 @@ export const HomePage: React.FC = () => {
           {/* Col 1: About JammuKhoj */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs">
-                JK
+              <div className="w-7 h-7 rounded-xl overflow-hidden bg-forest-900 border border-amber-500/30 shadow-xs flex items-center justify-center shrink-0">
+                <img
+                  src="/icons/icon-emblem.svg"
+                  alt="JammuKhoj Emblem"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/icons/icon-192.png';
+                  }}
+                />
               </div>
               <h4 className="font-heading font-bold text-sm text-ink">JammuKhoj</h4>
             </div>
