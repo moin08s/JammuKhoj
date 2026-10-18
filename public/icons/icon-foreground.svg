@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="goldGradFg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="40%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="mountainGradFg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#248773"/>
+      <stop offset="100%" stop-color="#0E483D"/>
+    </linearGradient>
+    <linearGradient id="riverAzureFg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="50%" stop-color="#7DD3FC"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+    <linearGradient id="riverGoldFg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(25.6, 25.6) scale(0.9)">
+    <!-- Mountain Ridges -->
+    <path d="M70 330 L160 215 L245 295 L345 185 L442 330 Z" fill="url(#mountainGradFg)" opacity="0.9"/>
+
+    <!-- Bahu Fort Battlements -->
+    <path d="M110 330 L110 270 
+             L132 270 L132 284 L152 284 L152 270 
+             L174 270 L174 284 L194 284 L194 270 
+             L216 270 L216 284 L236 284 L236 270
+             L276 270 L276 284 L296 284 L296 270
+             L318 270 L318 284 L338 284 L338 270
+             L360 270 L360 284 L380 284 L380 270
+             L402 270 L402 330 Z" 
+          fill="#F8FAF9"/>
+
+    <!-- Temple Shikhara -->
+    <path d="M212 300 C220 220, 240 148, 256 120 C272 148, 292 220, 300 300 Z" fill="url(#goldGradFg)"/>
+
+    <path d="M228 260 Q256 250 284 260" stroke="#FFFBEB" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
+    <path d="M236 220 Q256 212 276 220" stroke="#FFFBEB" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
+    <path d="M244 175 Q256 168 268 175" stroke="#FFFBEB" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.9"/>
+
+    <!-- Sanctum Gateway -->
+    <path d="M240 330 L240 285 C240 275, 272 275, 272 285 L272 330 Z" fill="#0A362C"/>
+    <circle cx="256" cy="282" r="5" fill="#FDE047"/>
+
+    <!-- Tawi Waves -->
+    <path d="M70 380 C130 340, 200 410, 290 370 C360 335, 410 365, 442 375 L442 415 C390 395, 340 375, 280 405 C190 445, 130 380, 70 415 Z" 
+          fill="url(#riverGoldFg)"/>
+    <path d="M70 350 C140 310, 220 380, 310 340 C370 312, 415 330, 442 342 L442 372 C410 358, 365 342, 305 368 C220 405, 140 338, 70 378 Z" 
+          fill="url(#riverAzureFg)"/>
+    <path d="M95 352 C150 322, 220 375, 305 342 C355 322, 395 332, 420 344" 
+          stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+
+    <!-- Golden Kalash & Star -->
+    <ellipse cx="256" cy="118" rx="8" ry="4" fill="#FDE047"/>
+    <circle cx="256" cy="112" r="5" fill="#FDE047"/>
+
+    <!-- Khoj Star -->
+    <polygon points="256,66 261,88 284,94 261,100 256,122 251,100 228,94 251,88" fill="#FFFFFF"/>
+    <polygon points="256,76 259,91 274,94 259,97 256,112 253,97 238,94 253,91" fill="#FDE047"/>
+    <circle cx="256" cy="94" r="3" fill="#FFFFFF"/>
+  </g>
+</svg>

@@ -60,8 +60,15 @@ export const TopBar: React.FC<TopBarProps> = ({ title, showBack }) => {
           onClick={() => navigate('/')}
           className="flex items-center gap-2.5 truncate cursor-pointer group select-none"
         >
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-primary-dark text-white font-heading font-bold text-sm flex items-center justify-center shadow-sm shadow-primary/20 shrink-0 group-hover:scale-105 transition-transform">
-            JK
+          <div className="w-8 h-8 rounded-xl overflow-hidden shadow-sm shadow-primary/20 shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center bg-forest-900 border border-amber-500/30">
+            <img
+              src="/icons/icon-emblem.svg"
+              alt="JammuKhoj Emblem"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/icons/icon-192.png';
+              }}
+            />
           </div>
           <div className="min-w-0">
             <h1 className="font-heading text-lg font-bold text-ink truncate leading-tight group-hover:text-primary transition-colors">

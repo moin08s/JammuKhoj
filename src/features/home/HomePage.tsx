@@ -240,9 +240,17 @@ export const HomePage: React.FC = () => {
         <div className="flex items-center gap-2.5 min-w-0">
           <div
             onClick={() => navigate('/')}
-            className="w-9 h-9 rounded-2xl bg-gradient-to-br from-primary to-primary-dark text-white flex items-center justify-center font-heading font-bold text-sm shadow-sm shadow-primary/25 cursor-pointer apple-press shrink-0"
+            className="w-9 h-9 rounded-2xl overflow-hidden shadow-sm shadow-primary/25 cursor-pointer apple-press shrink-0 flex items-center justify-center bg-forest-900 border border-amber-500/30"
           >
-            JK
+            <img
+              src="/icons/icon-emblem.svg"
+              alt="JammuKhoj Emblem"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                // Fallback to PNG if SVG encounters any issues
+                (e.target as HTMLImageElement).src = '/icons/icon-192.png';
+              }}
+            />
           </div>
           <div className="min-w-0">
             <h1

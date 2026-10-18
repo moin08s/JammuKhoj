@@ -1,15 +1,145 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="128" fill="#0F6B73"/>
-  <!-- Decorative River Wave (Tawi) -->
-  <path d="M64 360 C 160 310, 240 400, 340 350 C 400 320, 440 340, 448 350" fill="none" stroke="#E3F0F1" stroke-width="24" stroke-linecap="round" opacity="0.6"/>
-  <path d="M64 400 C 160 350, 240 440, 340 390 C 400 360, 440 380, 448 390" fill="none" stroke="#E0A100" stroke-width="20" stroke-linecap="round" opacity="0.8"/>
-  <!-- Fort / Heritage Silhouette -->
-  <path d="M140 280 L140 180 L170 180 L170 200 L200 200 L200 180 L230 180 L230 200 L260 200 L260 180 L290 180 L290 200 L320 200 L320 180 L350 180 L350 280 Z" fill="#F6F8F8" opacity="0.95"/>
-  <!-- Central Temple Shikhara/Dome silhouette -->
-  <path d="M220 180 C235 120, 256 100, 256 90 C256 100, 277 120, 292 180 Z" fill="#E0A100"/>
-  <!-- Compass / Star of Direction -->
-  <circle cx="256" cy="235" r="14" fill="#0F6B73"/>
-  <circle cx="256" cy="90" r="6" fill="#F6F8F8"/>
-  <!-- App text initial -->
-  <text x="256" y="470" font-family="system-ui, sans-serif" font-size="44" font-weight="bold" fill="#F6F8F8" text-anchor="middle" letter-spacing="4">JAMMUKHOJ</text>
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E483D"/>
+      <stop offset="50%" stop-color="#0A362C"/>
+      <stop offset="100%" stop-color="#05221B"/>
+    </linearGradient>
+
+    <!-- Radial Glow Behind Emblem -->
+    <radialGradient id="centerGlow" cx="50%" cy="46%" r="48%">
+      <stop offset="0%" stop-color="#1B7864" stop-opacity="0.6"/>
+      <stop offset="60%" stop-color="#0E483D" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#05221B" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Gold Shikhara & Sun Gradient -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="30%" stop-color="#F59E0B"/>
+      <stop offset="80%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+
+    <!-- Mountain Ridge Gradient -->
+    <linearGradient id="mountainGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1C6656"/>
+      <stop offset="100%" stop-color="#0E3D33"/>
+    </linearGradient>
+    <linearGradient id="mountainGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#26826E"/>
+      <stop offset="100%" stop-color="#124A3D"/>
+    </linearGradient>
+
+    <!-- Tawi River Glacier Gradient -->
+    <linearGradient id="riverAzure" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="50%" stop-color="#7DD3FC"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+
+    <!-- Golden Reflection Wave -->
+    <linearGradient id="riverGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+
+    <!-- Subtle Inner Border Highlight -->
+    <linearGradient id="borderHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.35"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Base Squircle -->
+  <rect x="0" y="0" width="512" height="512" rx="124" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="512" height="512" rx="124" fill="url(#centerGlow)"/>
+  <rect x="4" y="4" width="504" height="504" rx="120" fill="none" stroke="url(#borderHighlight)" stroke-width="3"/>
+
+  <!-- Compass Dial / Outer Halo Ring -->
+  <circle cx="256" cy="245" r="185" fill="none" stroke="#F59E0B" stroke-width="2" stroke-opacity="0.28" stroke-dasharray="3 7"/>
+  <circle cx="256" cy="245" r="172" fill="none" stroke="#FBBF24" stroke-width="1.5" stroke-opacity="0.2"/>
+
+  <!-- Compass Cardinal Direction Ticks -->
+  <line x1="256" y1="52" x2="256" y2="68" stroke="#FDE047" stroke-width="3" stroke-linecap="round"/>
+  <line x1="256" y1="422" x2="256" y2="438" stroke="#FDE047" stroke-width="3" stroke-linecap="round"/>
+  <line x1="63" y1="245" x2="79" y2="245" stroke="#FDE047" stroke-width="3" stroke-linecap="round"/>
+  <line x1="433" y1="245" x2="449" y2="245" stroke="#FDE047" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Layer 1: Himalayan Mountain Ridges (Trikuta / Pir Panjal) -->
+  <path d="M70 330 L160 215 L245 295 L345 185 L442 330 Z" fill="url(#mountainGrad1)" opacity="0.85"/>
+  <path d="M125 330 L210 230 L285 305 L385 205 L442 290 L442 330 Z" fill="url(#mountainGrad2)" opacity="0.6"/>
+
+  <!-- Layer 2: Bahu Fort Regal Ramparts & Battlements -->
+  <path d="M110 330 L110 270 
+           L132 270 L132 284 L152 284 L152 270 
+           L174 270 L174 284 L194 284 L194 270 
+           L216 270 L216 284 L236 284 L236 270
+           L276 270 L276 284 L296 284 L296 270
+           L318 270 L318 284 L338 284 L338 270
+           L360 270 L360 284 L380 284 L380 270
+           L402 270 L402 330 Z" 
+        fill="#F8FAF9" opacity="0.95"/>
+
+  <!-- Layer 3: Central Majestic Temple Shikhara (Raghunath & Vaishno Devi) -->
+  <path d="M212 300 C220 220, 240 148, 256 120 C272 148, 292 220, 300 300 Z" fill="url(#goldGrad)"/>
+
+  <!-- Shikhara Horizontal Sacred Tiers / Amalaka -->
+  <path d="M228 260 Q256 250 284 260" stroke="#FFFBEB" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.8"/>
+  <path d="M236 220 Q256 212 276 220" stroke="#FFFBEB" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.8"/>
+  <path d="M244 175 Q256 168 268 175" stroke="#FFFBEB" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+
+  <!-- Temple Gateway Sanctum Arch -->
+  <path d="M240 330 L240 285 C240 275, 272 275, 272 285 L272 330 Z" fill="#0A362C"/>
+  <circle cx="256" cy="282" r="5" fill="#FDE047"/>
+
+  <!-- Layer 4: Flowing Suryaputri River Tawi (Dynamic Waves) -->
+  <!-- Back River Wave (Gold Sunset Reflection) -->
+  <path d="M70 380 C130 340, 200 410, 290 370 C360 335, 410 365, 442 375 L442 415 C390 395, 340 375, 280 405 C190 445, 130 380, 70 415 Z" 
+        fill="url(#riverGold)" opacity="0.95"/>
+  <!-- Front River Wave (Crystalline Glacier Azure) -->
+  <path d="M70 350 C140 310, 220 380, 310 340 C370 312, 415 330, 442 342 L442 372 C410 358, 365 342, 305 368 C220 405, 140 338, 70 378 Z" 
+        fill="url(#riverAzure)"/>
+
+  <!-- River Crest Highlights -->
+  <path d="M95 352 C150 322, 220 375, 305 342 C355 322, 395 332, 420 344" 
+        stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.7"/>
+
+  <!-- Layer 5: Apex Golden Kalash & Khoj Navigation Star (✧) -->
+  <!-- Golden Kalash Finial Base -->
+  <ellipse cx="256" cy="118" rx="8" ry="4" fill="#FDE047"/>
+  <circle cx="256" cy="112" r="5" fill="#FDE047"/>
+
+  <!-- The 8-Point Khoj Exploration Star (North Star / Compass) -->
+  <!-- Outer Gold Star Glow -->
+  <circle cx="256" cy="94" r="14" fill="#F59E0B" opacity="0.35"/>
+
+  <!-- Main 8-Point Compass Star -->
+  <polygon points="256,66 261,88 284,94 261,100 256,122 251,100 228,94 251,88" fill="#FFFFFF"/>
+  <polygon points="256,76 259,91 274,94 259,97 256,112 253,97 238,94 253,91" fill="#FDE047"/>
+  <!-- Diagonal Sub-Points -->
+  <polygon points="256,83 264,86 267,94 264,102 256,105 248,102 245,94 248,86" fill="#F59E0B" opacity="0.8"/>
+  <circle cx="256" cy="94" r="3" fill="#FFFFFF"/>
+
+  <!-- Brand Typography: JAMMUKHOJ -->
+  <text x="256" y="468" 
+        font-family="system-ui, -apple-system, 'Mukta', 'Segoe UI', Roboto, sans-serif" 
+        font-size="34" 
+        font-weight="800" 
+        fill="#F8FAF9" 
+        text-anchor="middle" 
+        letter-spacing="5">JAMMUKHOJ</text>
+
+  <!-- Subtitle Tag: EXPLORE • PILGRIM • HERITAGE -->
+  <text x="256" y="490" 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="11" 
+        font-weight="700" 
+        fill="#F59E0B" 
+        text-anchor="middle" 
+        letter-spacing="3" 
+        opacity="0.9">CITY OF TEMPLES</text>
 </svg>

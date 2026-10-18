@@ -54,8 +54,15 @@ export const OnboardingPage: React.FC = () => {
   if (step === 'language') {
     return (
       <div className="min-h-[100dvh] bg-surface flex flex-col items-center justify-center p-6 text-center animate-in fade-in">
-        <div className="w-16 h-16 rounded-2xl bg-primary text-white font-heading font-bold text-2xl flex items-center justify-center shadow-lg mb-4">
-          JK
+        <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-lg mb-4 flex items-center justify-center bg-forest-900 border border-amber-500/30">
+          <img
+            src="/icons/icon-emblem.svg"
+            alt="JammuKhoj Emblem"
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/icons/icon-192.png';
+            }}
+          />
         </div>
         <h1 className="font-heading text-2xl font-bold text-ink">
           JammuKhoj

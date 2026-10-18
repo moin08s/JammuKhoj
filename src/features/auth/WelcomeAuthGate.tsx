@@ -145,8 +145,15 @@ export const WelcomeAuthGate: React.FC = () => {
       {/* Top Branding & Explore as Guest */}
       <header className="flex items-center justify-between pt-2 pb-1">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-2xl bg-[#174D3C] text-white font-heading font-bold text-sm flex items-center justify-center shadow-md shadow-[#174D3C]/20">
-            JK
+          <div className="w-9 h-9 rounded-2xl overflow-hidden shadow-md shadow-[#174D3C]/20 shrink-0 flex items-center justify-center bg-forest-900 border border-amber-500/30">
+            <img
+              src="/icons/icon-emblem.svg"
+              alt="JammuKhoj Emblem"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/icons/icon-192.png';
+              }}
+            />
           </div>
           <div>
             <span className="font-heading font-bold text-base text-[#1C2923] tracking-tight block">JammuKhoj</span>
