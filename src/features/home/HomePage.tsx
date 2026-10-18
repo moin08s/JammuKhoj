@@ -163,7 +163,7 @@ export const HomePage: React.FC = () => {
         id: 'attr_amar_mahal',
         name: 'Amar Mahal Palace Museum (अमर महल)',
         badge: 'Dogra Royal Chateau',
-        image: 'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1000&q=80',
+        image: JAMMU_SPOT_IMAGES.attr_amar_mahal,
         rating: '4.9',
         reviews: '1.2k',
         desc: '19th-century French chateau designed by a French architect for Raja Amar Singh. Houses the legendary 120 kg pure solid gold throne, Pahari miniature paintings, and royal library overlooking the River Tawi.',
@@ -684,6 +684,12 @@ export const HomePage: React.FC = () => {
               src={featuredAttractions[0].image}
               alt={featuredAttractions[0].name}
               className="w-full h-full object-cover"
+              loading="lazy"
+              referrerPolicy="no-referrer"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src =
+                  'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1000&q=80';
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none" />
 
@@ -782,6 +788,12 @@ export const HomePage: React.FC = () => {
                     src={spot.image}
                     alt={spot.name}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        'https://images.unsplash.com/photo-1590076215667-875d4ef2d7ee?auto=format&fit=crop&w=800&q=80';
+                    }}
                   />
                   <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-xs text-white text-[10px] font-bold">
                     ★ {spot.rating} • {spot.fee}

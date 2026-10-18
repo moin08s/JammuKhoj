@@ -237,6 +237,8 @@ export const ExplorePage: React.FC = () => {
                 src={getSpotImage(attr.id, attr.type)}
                 alt={attr.name.en}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                referrerPolicy="no-referrer"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src =
                     'https://images.unsplash.com/photo-1590076215667-875d4ef2d7ee?auto=format&fit=crop&w=800&q=80';

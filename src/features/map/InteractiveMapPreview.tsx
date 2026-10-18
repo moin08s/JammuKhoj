@@ -236,6 +236,12 @@ export const InteractiveMapPreview: React.FC = () => {
                     src={JAMMU_SPOT_IMAGES[selectedSpot.id] || 'https://images.unsplash.com/photo-1590076215667-875d4ef2d7ee?auto=format&fit=crop&w=160&q=80'}
                     alt={selectedSpot.name.en}
                     className="w-14 h-14 rounded-xl object-cover shrink-0"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        'https://images.unsplash.com/photo-1590076215667-875d4ef2d7ee?auto=format&fit=crop&w=160&q=80';
+                    }}
                   />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between">
