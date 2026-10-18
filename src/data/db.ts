@@ -28,6 +28,7 @@ export class JammuKhojDB extends Dexie {
   savedPlans!: Table<SavedPlan, string>;
   preferences!: Table<UserPreference, string>;
   bundleMeta!: Table<BundleMeta, string>;
+  appLogs!: Table<import('./types').AppLogEntry, number>;
 
   constructor() {
     super('JammuKhojDB');
@@ -52,6 +53,10 @@ export class JammuKhojDB extends Dexie {
       attractions: 'id, type, areaId, city, isOffbeat, *tags, priority',
       nodes: 'id, kind, city',
       savedPlans: 'id, createdAt, bucket, city',
+    });
+
+    this.version(3).stores({
+      appLogs: '++id, level, category, timestamp',
     });
   }
 }

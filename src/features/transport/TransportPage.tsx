@@ -33,6 +33,7 @@ import {
   AutoRickshawIcon,
   ExpressTrainIcon,
 } from '@/ui/icons/TransitIcons';
+import { FareCalculatorWidget } from './FareCalculatorWidget';
 
 export const TransportPage: React.FC = () => {
   const { t } = useTranslation();
@@ -104,6 +105,9 @@ export const TransportPage: React.FC = () => {
       </div>
 
       <DisclaimerNote kind="fare" />
+
+      {/* Interactive Fare & Distance Calculator */}
+      <FareCalculatorWidget />
 
       {/* Main Mode Navigation Tabs */}
       <div className="grid grid-cols-3 gap-1.5 p-1 bg-stone-100 rounded-2xl border border-stone-200">

@@ -229,3 +229,12 @@ export interface BundleMeta {
   key: string;
   value: string;
 }
+
+export interface AppLogEntry {
+  id?: number;
+  level: 'debug' | 'info' | 'warn' | 'error';
+  category: string;
+  message: string;
+  data?: any;
+  timestamp: string;
+}

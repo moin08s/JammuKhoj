@@ -1,6 +1,8 @@
 import React, { Component, type ErrorInfo, type ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, ShieldAlert } from 'lucide-react';
 
+import { logger } from '@/services/logger';
+
 interface Props {
   children: ReactNode;
 }
@@ -24,7 +26,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('JammuKhoj ErrorBoundary caught:', error, errorInfo);
+    logger.error('ErrorBoundary', error.message, { stack: error.stack, componentStack: errorInfo.componentStack });
   }
 
   private handleReload = () => {

@@ -4,7 +4,7 @@ import { TopBar } from './TopBar';
 import { BottomNav } from './BottomNav';
 import { ConnectivityBanner } from '../ConnectivityBanner';
 import { HelpFab } from '../HelpFab';
-import { GlobalAudioBar } from '../audio/GlobalAudioBar';
+import { GlobalAudioMiniPlayer } from '@/features/audio/GlobalAudioMiniPlayer';
 import { bundleManager } from '@/domain/offline/bundleManager';
 import { useAppStore } from '@/stores/appStore';
 import { PermissionRequestModal } from '@/features/permissions/PermissionRequestModal';
@@ -56,7 +56,7 @@ export const AppShell: React.FC = () => {
         </main>
 
         <HelpFab />
-        <GlobalAudioBar />
+        <GlobalAudioMiniPlayer />
         <BottomNav />
 
         {/* First ask device permissions after login/guest access */}

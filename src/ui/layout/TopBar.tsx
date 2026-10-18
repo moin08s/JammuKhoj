@@ -208,6 +208,17 @@ export const TopBar: React.FC<TopBarProps> = ({ title, showBack }) => {
                   <span>Saved Itineraries</span>
                 </button>
 
+                <button
+                  className="w-full px-3.5 py-2.5 rounded-xl flex items-center gap-3 hover:bg-surface text-left transition-colors font-medium text-xs"
+                  onClick={() => {
+                    navigate('/transport');
+                    setMenuOpen(false);
+                  }}
+                >
+                  <Compass size={16} className="text-amber-600" />
+                  <span>Transit & Fare Calculator</span>
+                </button>
+
                 <div className="border-t border-border/80 my-1.5" />
 
                 <button

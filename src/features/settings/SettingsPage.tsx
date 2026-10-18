@@ -23,6 +23,8 @@ import {
 import { useAppStore } from '@/stores/appStore';
 import { capabilityMatrix } from '@/domain/offline/capabilityMatrix';
 import { bundleManager } from '@/domain/offline/bundleManager';
+import { logger } from '@/services/logger';
+import type { AppLogEntry } from '@/data/types';
 
 export const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -47,6 +49,23 @@ export const SettingsPage: React.FC = () => {
   const [updateMsg, setUpdateMsg] = useState('');
   const [showClearModal, setShowClearModal] = useState(false);
   const [showCorrections, setShowCorrections] = useState(false);
+  const [recentLogs, setRecentLogs] = useState<AppLogEntry[]>([]);
+  const [showLogsModal, setShowLogsModal] = useState(false);
+  const [storageUsageMb, setStorageUsageMb] = useState<string>('0.0');
+
+  React.useEffect(() => {
+    // Storage Quota Meter
+    if (typeof navigator !== 'undefined' && 'storage' in navigator && 'estimate' in navigator.storage) {
+      navigator.storage.estimate().then((est) => {
+        if (est.usage) {
+          setStorageUsageMb((est.usage / (1024 * 1024)).toFixed(2));
+        }
+      }).catch(() => {});
+    }
+
+    // Load recent client logs
+    logger.getRecentLogs(20).then(setRecentLogs).catch(() => {});
+  }, []);
 
   const handleLanguageChange = (lang: 'en' | 'hi' | 'doi') => {
     i18n.changeLanguage(lang);
@@ -430,7 +449,33 @@ export const SettingsPage: React.FC = () => {
         </button>
       </section>
 
-      {/* 8. Privacy & Google Play Compliance */}
+      {/* 8. Storage Quota & Local Audit Logging */}
+      <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-3 shadow-sm text-xs text-stone-600">
+        <div className="flex items-center justify-between">
+          <h3 className="font-heading font-bold text-sm text-ink flex items-center gap-1.5">
+            <HardDrive size={16} className="text-[#9E4A0C]" />
+            <span>Local Device Storage & Audit Logs</span>
+          </h3>
+          <span className="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded-full border border-blue-200">
+            {storageUsageMb} MB Used
+          </span>
+        </div>
+
+        <p className="leading-relaxed">
+          Offline GIS tiles, Dogra heritage images, and transient diagnostics are maintained securely in your device's private IndexedDB storage.
+        </p>
+
+        <div className="pt-1 flex gap-2">
+          <button
+            onClick={() => setShowLogsModal(true)}
+            className="flex-1 py-2 px-3 rounded-xl border border-stone-300 hover:border-forest-700 text-ink font-bold text-xs bg-stone-50 hover:bg-stone-100 transition-all flex items-center justify-center gap-1.5"
+          >
+            <span>Inspect Diagnostic Logs ({recentLogs.length})</span>
+          </button>
+        </div>
+      </section>
+
+      {/* 9. Privacy & Google Play Compliance */}
       <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-3 shadow-sm text-xs text-stone-600">
         <div className="flex items-center justify-between">
           <h3 className="font-heading font-bold text-sm text-ink flex items-center gap-1.5">
@@ -489,6 +534,73 @@ export const SettingsPage: React.FC = () => {
                 className="flex-1 py-2 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700"
               >
                 Permanently Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Diagnostic Logs Inspection Modal */}
+      {showLogsModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+          <div className="bg-white dark:bg-stone-900 border border-[#EBE4DC] dark:border-stone-800 rounded-3xl p-5 max-w-md w-full space-y-3 shadow-2xl max-h-[80vh] flex flex-col">
+            <div className="flex items-center justify-between pb-2 border-b border-border">
+              <h4 className="font-heading text-base font-bold text-ink">
+                Device Diagnostic Logs ({recentLogs.length})
+              </h4>
+              <button
+                onClick={() => setShowLogsModal(false)}
+                className="text-xs font-bold text-stone px-2 py-1 hover:text-ink"
+              >
+                Close
+              </button>
+            </div>
+
+            <p className="text-[11px] text-stone">
+              Private sandbox logs generated locally. Never transmitted over network.
+            </p>
+
+            <div className="flex-1 overflow-y-auto space-y-2 pr-1 text-[11px] font-mono">
+              {recentLogs.length === 0 ? (
+                <div className="text-center py-6 text-stone">No error or warning events recorded. Device is healthy.</div>
+              ) : (
+                recentLogs.map((log, idx) => (
+                  <div
+                    key={log.id || idx}
+                    className={`p-2 rounded-lg border ${
+                      log.level === 'error'
+                        ? 'bg-red-50 border-red-200 text-red-900'
+                        : log.level === 'warn'
+                        ? 'bg-amber-50 border-amber-200 text-amber-900'
+                        : 'bg-stone-50 border-stone-200 text-stone-800'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between text-[10px] opacity-75">
+                      <span className="font-bold uppercase">[{log.level}] {log.category}</span>
+                      <span>{new Date(log.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                    <div className="mt-1 font-semibold">{log.message}</div>
+                    {log.data && <div className="mt-0.5 opacity-70 truncate">{log.data}</div>}
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="flex gap-2 pt-2 border-t border-border">
+              <button
+                onClick={async () => {
+                  await logger.clearLogs();
+                  setRecentLogs([]);
+                }}
+                className="flex-1 py-2 rounded-xl border border-stone-300 text-xs font-semibold hover:bg-stone-50"
+              >
+                Clear Log Buffer
+              </button>
+              <button
+                onClick={() => setShowLogsModal(false)}
+                className="flex-1 py-2 rounded-xl bg-forest-900 text-white text-xs font-bold hover:bg-forest-800"
+              >
+                Done
               </button>
             </div>
           </div>

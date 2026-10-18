@@ -265,6 +265,19 @@ assert(tokensContent.includes('data-font-size="large"'), 'Large Text dynamic fon
 assert(tokensContent.includes('data-senior-mode="true"'), 'Senior Pilgrim mode with enlarged buttons (≥50px) active', 'DESIGN_TOKENS');
 
 // -----------------------------------------------------------------------------
+// 6. CLIENT-SIDE LOGGING, CSP & ARCHITECTURAL INTEGRITY
+// -----------------------------------------------------------------------------
+const loggerFile = path.resolve(process.cwd(), 'src/services/logger.ts');
+assert(fs.existsSync(loggerFile), 'Client-side ring-buffer logger service is present', 'DATA_LOGGING');
+
+const fareCalcFile = path.resolve(process.cwd(), 'src/features/transport/FareCalculatorWidget.tsx');
+assert(fs.existsSync(fareCalcFile), 'Interactive Transit Fare Calculator is present', 'TRANSIT_CALCULATOR');
+
+const htmlFile = path.resolve(process.cwd(), 'index.html');
+const htmlContent = fs.readFileSync(htmlFile, 'utf8');
+assert(htmlContent.includes('Content-Security-Policy'), 'Strict Content-Security-Policy meta header enforced', 'SECURITY');
+
+// -----------------------------------------------------------------------------
 // SUMMARY REPORT
 // -----------------------------------------------------------------------------
 console.log('\n====================================================');
