@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">JammuKhoj</string>
+    <string name="title_activity_main">JammuKhoj</string>
+    <string name="package_name">com.jammukhoj.app</string>
+    <string name="custom_url_scheme">com.jammukhoj.app</string>
+</resources>
