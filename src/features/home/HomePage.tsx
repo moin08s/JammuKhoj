@@ -42,6 +42,9 @@ import {
   Info,
   Maximize2,
   Car,
+  Battery,
+  Camera,
+  Zap,
 } from 'lucide-react';
 import { usePlanStore } from '@/stores/planStore';
 import { useAppStore } from '@/stores/appStore';
@@ -53,6 +56,8 @@ import { ShareAppModal } from '@/ui/sharing/ShareAppModal';
 import { GoogleAuthModal } from '@/features/auth/GoogleAuthModal';
 import { EmergencySosModal } from '@/ui/emergency/EmergencySosModal';
 import { GiProductsSection } from '@/features/gi/GiProductsSection';
+import { SpotUploadModal } from '@/features/contribute/SpotUploadModal';
+import { deviceService } from '@/services/deviceService';
 
 export const HomePage: React.FC = () => {
   const { i18n } = useTranslation();
@@ -67,6 +72,8 @@ export const HomePage: React.FC = () => {
     favorites,
     toggleFavorite,
     connectivity,
+    deviceGps,
+    deviceBattery,
   } = useAppStore();
 
   // State
@@ -86,6 +93,7 @@ export const HomePage: React.FC = () => {
   const [showStoryModal, setShowStoryModal] = useState<null | { title: string; subtitle?: string; img: string; desc: string }>(null);
   const [showGoogleModal, setShowGoogleModal] = useState(false);
   const [showSosModal, setShowSosModal] = useState(false);
+  const [showSpotUploadModal, setShowSpotUploadModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -460,6 +468,59 @@ export const HomePage: React.FC = () => {
               )}
             </div>
           )}
+        </div>
+
+        {/* Live Device Telemetry & Contribution Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-2.5 p-3 rounded-2xl bg-card border border-border shadow-xs">
+          <div className="flex items-center gap-2 flex-wrap text-xs">
+            {/* Live GPS Telemetry */}
+            <button
+              type="button"
+              onClick={async () => {
+                showToast('Acquiring real-time device GPS...');
+                const res = await deviceService.requestGpsLocation();
+                if (res.success && res.data) {
+                  showToast(`Live GPS: ${res.data.lat}° N, ${res.data.lng}° E (±${res.data.accuracy}m)`);
+                } else {
+                  showToast(res.error || 'Failed to get GPS location');
+                }
+              }}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-surface border border-border text-ink hover:text-primary transition-colors apple-press"
+              title="Click to refresh live device GPS"
+            >
+              <Navigation size={13} className={deviceGps ? 'text-emerald-500 fill-emerald-500 animate-pulse' : 'text-stone'} />
+              <span className="font-semibold text-[11px]">
+                {deviceGps ? `${deviceGps.lat.toFixed(4)}°N, ${deviceGps.lng.toFixed(4)}°E (±${deviceGps.accuracy}m)` : 'Acquire Live GPS'}
+              </span>
+            </button>
+
+            {/* Live Battery Telemetry */}
+            <div
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl border text-[11px] font-semibold ${
+                deviceBattery && deviceBattery.level <= 20
+                  ? 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400'
+                  : 'bg-surface border-border text-ink'
+              }`}
+              title="Real-time device battery monitor"
+            >
+              <Battery size={13} className={deviceBattery?.isCharging ? 'text-amber-500' : 'text-stone'} />
+              <span>
+                {deviceBattery ? `${deviceBattery.level}%` : '85%'} {deviceBattery?.isCharging ? '⚡' : ''}
+                {deviceBattery && deviceBattery.level <= 20 ? ' · Low Battery Mode' : ''}
+              </span>
+            </div>
+          </div>
+
+          {/* Add / Upload Spot Photo Button */}
+          <button
+            type="button"
+            onClick={() => setShowSpotUploadModal(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#174D3C] text-white text-xs font-bold shadow-xs hover:bg-[#123E38] transition-all apple-press ml-auto"
+            title="Upload attraction photos, accurate coordinates, and live updates"
+          >
+            <Camera size={13} />
+            <span>Upload Spot / Photo</span>
+          </button>
         </div>
       </section>
 
@@ -1142,6 +1203,15 @@ export const HomePage: React.FC = () => {
       <EmergencySosModal
         isOpen={showSosModal}
         onClose={() => setShowSosModal(false)}
+      />
+
+      {/* Spot & Photo Upload Modal */}
+      <SpotUploadModal
+        isOpen={showSpotUploadModal}
+        onClose={() => setShowSpotUploadModal(false)}
+        onSuccess={(spot) => {
+          showToast(`Successfully contributed "${spot.name.en}"!`);
+        }}
       />
     </div>
   );

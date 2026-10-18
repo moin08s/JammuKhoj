@@ -19,6 +19,9 @@ interface AppState {
   currentUser: UserAccount | null;
   isGuest: boolean;
   favorites: string[];
+  permissionsReviewed: boolean;
+  deviceGps: { lat: number; lng: number; accuracy: number; timestamp: number } | null;
+  deviceBattery: { level: number; isCharging: boolean } | null;
 
   setConnectivity: (status: ConnectivityStatus) => void;
   setSetupStatus: (status: SetupStatus) => void;
@@ -30,6 +33,9 @@ interface AppState {
   setLargeText: (enabled: boolean) => void;
   setSeniorMode: (enabled: boolean) => void;
   setGuestMode: (guest: boolean) => void;
+  setPermissionsReviewed: (reviewed: boolean) => void;
+  setDeviceGps: (coords: { lat: number; lng: number; accuracy: number; timestamp: number } | null) => void;
+  setDeviceBattery: (battery: { level: number; isCharging: boolean } | null) => void;
   toggleFavorite: (attractionId: string) => void;
   login: (email: string, role: UserRole, name?: string, businessDetails?: BusinessProfile, authProvider?: 'email' | 'google', avatar?: string) => void;
   logout: () => void;
@@ -52,6 +58,9 @@ export const useAppStore = create<AppState>()(
       currentUser: null,
       isGuest: false,
       favorites: ['attr_raghunath_temple', 'attr_bhaderwah'],
+      permissionsReviewed: false,
+      deviceGps: null,
+      deviceBattery: null,
 
       setConnectivity: (status) => set({ connectivity: status }),
       setSetupStatus: (status) => set({ setupStatus: status }),
@@ -92,6 +101,9 @@ export const useAppStore = create<AppState>()(
         set({ seniorMode: enabled });
       },
       setGuestMode: (guest) => set({ isGuest: guest }),
+      setPermissionsReviewed: (reviewed) => set({ permissionsReviewed: reviewed }),
+      setDeviceGps: (coords) => set({ deviceGps: coords }),
+      setDeviceBattery: (battery) => set({ deviceBattery: battery }),
       toggleFavorite: (attractionId) => {
         const current = get().favorites;
         if (current.includes(attractionId)) {
@@ -167,6 +179,7 @@ export const useAppStore = create<AppState>()(
         seniorMode: state.seniorMode,
         currentUser: state.currentUser,
         favorites: state.favorites,
+        permissionsReviewed: state.permissionsReviewed,
       }),
       onRehydrateStorage: () => (state) => {
         if (state && !state.currentUser) {

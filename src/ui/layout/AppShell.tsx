@@ -7,10 +7,12 @@ import { HelpFab } from '../HelpFab';
 import { GlobalAudioBar } from '../audio/GlobalAudioBar';
 import { bundleManager } from '@/domain/offline/bundleManager';
 import { useAppStore } from '@/stores/appStore';
+import { PermissionRequestModal } from '@/features/permissions/PermissionRequestModal';
+import { deviceService } from '@/services/deviceService';
 
 export const AppShell: React.FC = () => {
   const location = useLocation();
-  const { currentUser, isGuest } = useAppStore();
+  const { currentUser, isGuest, permissionsReviewed, setPermissionsReviewed } = useAppStore();
 
   // If the user is unauthenticated at root or on /login, hide app chrome
   const isAuthGate = (!currentUser && !isGuest && location.pathname === '/') || location.pathname === '/login' || location.pathname === '/welcome';
@@ -18,12 +20,20 @@ export const AppShell: React.FC = () => {
   const isMap = location.pathname === '/map';
   const isCleanHeader = isHome || location.pathname === '/saved' || location.pathname === '/settings';
 
-  // Seed data on first load if IndexedDB is empty
+  // Seed data on first load if IndexedDB is empty & monitor device
   useEffect(() => {
     bundleManager.initializeDefaultsIfEmpty().catch((err) => {
       console.error('Error auto-seeding offline database:', err);
     });
-  }, []);
+
+    // Auto-init battery status
+    deviceService.initBatteryMonitor();
+
+    // If permissions already reviewed, monitor location
+    if (permissionsReviewed) {
+      deviceService.startWatchPosition();
+    }
+  }, [permissionsReviewed]);
 
   if (isAuthGate) {
     return (
@@ -48,7 +58,14 @@ export const AppShell: React.FC = () => {
         <HelpFab />
         <GlobalAudioBar />
         <BottomNav />
+
+        {/* First ask device permissions after login/guest access */}
+        <PermissionRequestModal
+          isOpen={Boolean((currentUser || isGuest) && !permissionsReviewed)}
+          onComplete={() => setPermissionsReviewed(true)}
+        />
       </div>
     </div>
   );
 };
+

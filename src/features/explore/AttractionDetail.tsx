@@ -33,6 +33,7 @@ import { useAudioStore } from '@/stores/audioStore';
 import { ShareAppModal } from '@/ui/sharing/ShareAppModal';
 import { JAMMU_GI_PRODUCTS, type GIProduct } from '@/data/giProductsData';
 import { GiProductShowcaseModal } from '@/features/gi/GiProductShowcaseModal';
+import { SpotUploadModal } from '@/features/contribute/SpotUploadModal';
 
 export const AttractionDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,6 +44,7 @@ export const AttractionDetail: React.FC = () => {
   const [attraction, setAttraction] = useState<Attraction | null>(null);
   const [node, setNode] = useState<Node | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [selectedGiModal, setSelectedGiModal] = useState<GIProduct | null>(null);
 
@@ -139,6 +141,15 @@ export const AttractionDetail: React.FC = () => {
           </button>
 
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowUploadModal(true)}
+              className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md text-[#1C1917] flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all"
+              title="Upload Photo or Suggest Location Correction"
+            >
+              <Camera size={17} />
+            </button>
+
             <button
               onClick={() => {
                 toggleFavorite(attraction.id);
@@ -385,6 +396,21 @@ export const AttractionDetail: React.FC = () => {
               <UserCheck size={16} className="text-[#059669] shrink-0" />
               <span>Certified heritage historians available at reception desk (₹250/group).</span>
             </div>
+
+            {/* Upload / Suggest Correction Card */}
+            <div className="p-3 bg-white border border-border rounded-2xl flex items-center justify-between gap-3 shadow-xs">
+              <div className="flex items-center gap-2">
+                <Camera size={16} className="text-primary shrink-0" />
+                <span className="text-xs font-semibold text-ink">Have a photo or location correction for this spot?</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowUploadModal(true)}
+                className="px-3 py-1.5 rounded-xl bg-primary text-white text-[11px] font-bold shadow-xs hover:bg-primary-dark transition-all shrink-0 apple-press"
+              >
+                Upload / Correct
+              </button>
+            </div>
           </div>
         </div>
 
@@ -449,6 +475,17 @@ export const AttractionDetail: React.FC = () => {
       <GiProductShowcaseModal
         product={selectedGiModal}
         onClose={() => setSelectedGiModal(null)}
+      />
+
+      {/* SPOT & PHOTO UPLOAD / CORRECTION MODAL */}
+      <SpotUploadModal
+        isOpen={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+        targetAttractionId={attraction.id}
+        onSuccess={(updated) => {
+          setAttraction(updated);
+          showToast(`Updated details & photos for "${updated.name.en}"!`);
+        }}
       />
     </div>
   );

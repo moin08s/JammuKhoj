@@ -11,6 +11,7 @@ import {
   Eye,
   CheckCircle2,
   Sparkles,
+  Camera,
 } from 'lucide-react';
 import { db } from '@/data/db';
 import type { Attraction } from '@/data/types';
@@ -19,6 +20,7 @@ import { getSpotImage } from '@/data/spotImages';
 import { SourceBadge } from '@/ui/trust/SourceBadge';
 import { FreshnessChip } from '@/ui/trust/FreshnessChip';
 import { GiProductsSection } from '@/features/gi/GiProductsSection';
+import { SpotUploadModal } from '@/features/contribute/SpotUploadModal';
 
 const ZONE_TABS = [
   { id: 'all', label: 'All Destinations' },
@@ -41,8 +43,9 @@ export const ExplorePage: React.FC = () => {
   const [vibeFilter, setVibeFilter] = useState<'all' | 'classic' | 'offbeat'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [maxDuration, setMaxDuration] = useState<number>(360);
+  const [showUploadModal, setShowUploadModal] = useState(false);
 
-  useEffect(() => {
+  const loadAttractions = () => {
     db.attractions.toArray().then((items) => {
       if (items && items.length > 0) {
         setAttractions(items);
@@ -52,6 +55,10 @@ export const ExplorePage: React.FC = () => {
     }).catch(() => {
       setAttractions(JAMMU_ALL_ATTRACTIONS);
     });
+  };
+
+  useEffect(() => {
+    loadAttractions();
   }, []);
 
   useEffect(() => {
@@ -99,14 +106,26 @@ export const ExplorePage: React.FC = () => {
             36 verified shrines, Dogra forts, alpine valleys, and offbeat wonders across Jammu division.
           </p>
         </div>
-        <button
-          onClick={() => navigate('/map')}
-          className="px-3.5 py-2 rounded-xl bg-primary text-white text-xs font-bold shadow-xs hover:bg-primary-dark transition-all flex items-center gap-1.5 apple-press shrink-0"
-          title="Switch to Interactive Map"
-        >
-          <Compass size={14} />
-          <span>Interactive Map</span>
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={() => setShowUploadModal(true)}
+            className="px-3 py-2 rounded-xl bg-surface border border-border text-ink hover:text-primary text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 apple-press"
+            title="Upload new spot, accurate GPS or photo"
+          >
+            <Camera size={14} className="text-primary" />
+            <span>+ Add Spot</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/map')}
+            className="px-3.5 py-2 rounded-xl bg-primary text-white text-xs font-bold shadow-xs hover:bg-primary-dark transition-all flex items-center gap-1.5 apple-press"
+            title="Switch to Interactive Map"
+          >
+            <Compass size={14} />
+            <span>Interactive Map</span>
+          </button>
+        </div>
       </div>
 
       {/* Search Input */}
@@ -306,6 +325,15 @@ export const ExplorePage: React.FC = () => {
       </div>
     </>
   )}
+
+  {/* Spot & Photo Upload Modal */}
+  <SpotUploadModal
+    isOpen={showUploadModal}
+    onClose={() => setShowUploadModal(false)}
+    onSuccess={() => {
+      loadAttractions();
+    }}
+  />
 </div>
   );
 };
