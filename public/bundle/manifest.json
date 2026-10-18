@@ -1,0 +1,14 @@
+{
+  "contentVersion": "2026.10.17-1",
+  "minAppVersion": "1.0.0",
+  "generatedAt": "2026-10-17T10:00:00+05:30",
+  "files": [
+    { "path": "content.json", "bytes": 182044 },
+    { "path": "matrix.json", "bytes": 40211 }
+  ],
+  "changes": [
+    "Pilot Central Jammu Heritage POIs added with verified timings",
+    "Verified ERSS 112, Police, GMCH hospital helpline",
+    "Dated auto & taxi fare survey rates updated"
+  ]
+}

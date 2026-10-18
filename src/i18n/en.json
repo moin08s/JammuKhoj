@@ -1,0 +1,102 @@
+{
+  "app": {
+    "name": "JammuKhoj",
+    "subtitle": "Smart Pilgrim & Transit Companion",
+    "tagline": "Explore central Jammu and return safely on time — even with zero network."
+  },
+  "nav": {
+    "home": "Home",
+    "plan": "Plan",
+    "map": "Map",
+    "transport": "Transport",
+    "safety": "Safety"
+  },
+  "home": {
+    "title": "How much transit time do you have in Jammu?",
+    "arriving_at": "Arriving at",
+    "arrive_time": "Arrival time",
+    "leave_time": "Next departure",
+    "plan_button": "Generate Feasible Plan",
+    "quick_explore": "Attractions",
+    "quick_map": "Offline Map",
+    "quick_fares": "Fair Fares",
+    "pack_ready": "Jammu Offline Pack: Active",
+    "pack_not_ready": "Offline pack not installed"
+  },
+  "plan": {
+    "where_arriving": "Where are you arriving in Jammu?",
+    "station": "Jammu Tawi Railway Station",
+    "bus_stand": "General Bus Stand (BC Road)",
+    "airport": "Jammu Civil Airport (Satwari)",
+    "use_gps": "Use GPS Fix",
+    "preferences": "Your Interests",
+    "heritage": "Historic & Forts",
+    "religious": "Sacred Temples",
+    "food": "Dogra Delicacies",
+    "riverfront": "River & Views",
+    "shopping": "Dry Fruits & Crafts",
+    "mobility": "Mobility Level",
+    "walk_ok": "Walking Friendly",
+    "minimal_walk": "Minimal Walking",
+    "wheelchair": "Wheelchair Accessible",
+    "generate": "Build Itinerary with Return Buffer",
+    "return_by": "Be back at hub by",
+    "time_left": "remaining",
+    "not_enough_time": "Safe exploration not recommended.",
+    "nearby_options": "Explore direct transit hub surroundings instead.",
+    "why_this_plan": "Why this plan?",
+    "save": "Save for Offline",
+    "running_late": "I'm Running Late",
+    "return_now": "Head to Hub Now"
+  },
+  "transport": {
+    "title": "Transport & Fare Transparency",
+    "fare_reference": "Fare Reference Card",
+    "reference_disclaimer": "Reference rates collected by field surveys. Ask for meter or prepaid receipt.",
+    "how_to_verify": "Scam Prevention Checklist",
+    "report_problem": "Lodge Overcharging Complaint",
+    "source": "Source",
+    "updated": "Verified on"
+  },
+  "safety": {
+    "title": "Emergency & Pilgrim Assistance",
+    "emergency_call": "National Emergency 112",
+    "call": "Call Now",
+    "copy_location": "Copy GPS Coordinates for Dispatcher",
+    "location_copied": "Coordinates Copied to Clipboard!",
+    "nearby_help": "Nearest Medical & Police Posts",
+    "what_to_do": "Safety Guidance & Road Protocols",
+    "disclaimer": "JammuKhoj provides offline reference assistance and does not replace official emergency services."
+  },
+  "offline": {
+    "ready": "Offline Mode — full maps, plans and contacts available without internet.",
+    "no_pack": "Running on app shell emergency cache. Download Jammu pack for offline maps.",
+    "download_title": "Install Offline Jammu Pack",
+    "download_size": "~45 MB",
+    "downloading": "Downloading verified assets...",
+    "download_complete": "Pack Installed & Verified!",
+    "last_updated": "Bundle date",
+    "check_update": "Check for Updates",
+    "what_works_offline": "What Works Completely Offline"
+  },
+  "freshness": {
+    "fresh": "Verified recently",
+    "aging": "Aging record",
+    "stale": "Check before relying"
+  },
+  "badges": {
+    "official": "Official",
+    "verified": "Field Verified",
+    "third_party": "Observed Survey",
+    "community": "Community"
+  },
+  "common": {
+    "save": "Save",
+    "share": "Share",
+    "navigate": "Directions",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "back": "Back"
+  }
+}

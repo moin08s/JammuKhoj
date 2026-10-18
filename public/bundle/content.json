@@ -1,0 +1,148 @@
+{
+  "attractions": [
+    {
+      "id": "attr_bahu_fort",
+      "type": "heritage",
+      "name": { "en": "Bahu Fort & Bawe Wali Mata", "hi": "बाहु किला एवं बावे वाली माता" },
+      "summary": {
+        "en": "Ancient 3,000-year-old fort perched on a rock face overlooking Tawi River, housing the sacred Mahakali shrine.",
+        "hi": "तवी नदी के तट पर स्थित 3,000 वर्ष पुराना ऐतिहासिक किला और माँ काली का पवित्र तीर्थ।"
+      },
+      "nodeId": "node_bahu_fort",
+      "areaId": "area_bahu_tawi",
+      "tags": ["heritage", "fort", "religious", "views"],
+      "visit": { "typicalMinutes": 60, "minMinutes": 30, "bestTime": "Morning / Sunset", "indoorOutdoor": "both" },
+      "priority": 9,
+      "accessibility": { "stepFree": false, "restrooms": true, "seating": true, "walkingLoad": "medium" },
+      "opening": [{ "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"], "open": "05:30", "close": "21:00" }],
+      "entryFee": { "amountInr": 0, "note": "Fort & temple entry is free. ₹10 nominal garden fee adjacent." },
+      "cautions": ["Steep steps to the upper ramparts", "Leather goods not permitted inside sanctum"],
+      "media": ["/images/bahu_fort.webp"],
+      "source": { "name": "Directorate of Tourism Jammu", "url": "https://jktourism.jk.gov.in", "type": "official", "retrievedOn": "2026-10-17" },
+      "sourceType": "official",
+      "verification": { "status": "verified", "verifiedOn": "2026-10-15", "verifiedBy": "Field Verifier Team", "method": "On-site physical inspection" },
+      "updatedAt": "2026-10-17",
+      "reviewDueOn": "2027-01-15"
+    },
+    {
+      "id": "attr_raghunath_temple",
+      "type": "religious",
+      "name": { "en": "Raghunath Temple Complex", "hi": "श्री रघुनाथ मंदिर" },
+      "summary": {
+        "en": "Historic 1857-built temple complex commissioned by Maharaja Gulab Singh with gold-plated sanctums and 300+ stone shilas.",
+        "hi": "महाराजा गुलाब सिंह द्वारा निर्मित 1857 का विशाल ऐतिहासिक मंदिर परिसर, उत्तर भारत का प्रमुख श्रद्धा केंद्र।"
+      },
+      "nodeId": "node_raghunath_temple",
+      "areaId": "area_old_city",
+      "tags": ["religious", "heritage", "architecture"],
+      "visit": { "typicalMinutes": 45, "minMinutes": 25, "bestTime": "Early Morning / Evening Aarti", "indoorOutdoor": "indoor" },
+      "priority": 10,
+      "accessibility": { "stepFree": true, "restrooms": true, "seating": true, "walkingLoad": "low" },
+      "opening": [{ "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"], "open": "06:00", "close": "20:30" }],
+      "entryFee": { "amountInr": 0, "note": "Free entry for all pilgrims" },
+      "cautions": ["Security baggage check at entrance", "Phones & cameras to be deposited at counter"],
+      "media": ["/images/raghunath_temple.webp"],
+      "source": { "name": "Dharmarth Trust J&K", "url": "https://dharmarthtrust.org", "type": "official", "retrievedOn": "2026-10-17" },
+      "sourceType": "official",
+      "verification": { "status": "verified", "verifiedOn": "2026-10-15", "verifiedBy": "Field Verifier Team", "method": "Official verified desk & site survey" },
+      "updatedAt": "2026-10-17",
+      "reviewDueOn": "2027-01-15"
+    },
+    {
+      "id": "attr_bagh_e_bahu",
+      "type": "park",
+      "name": { "en": "Bagh-e-Bahu & Underground Aquarium", hi: "बाग-ए-बाहु एवं एक्वेरियम" },
+      "summary": {
+        "en": "Terraced Mughal-style garden surrounding Bahu Fort, housing the subcontinent's largest underground marine aquarium.",
+        "hi": "बाहु किले के निकट सीढ़ीदार उद्यान, फव्वारे और देश का प्रमुख भूमिगत समुद्री एक्वेरियम।"
+      },
+      "nodeId": "node_bagh_e_bahu",
+      "areaId": "area_bahu_tawi",
+      "tags": ["park", "views", "family", "riverfront"],
+      "visit": { "typicalMinutes": 50, "minMinutes": 25, "bestTime": "Late Afternoon", "indoorOutdoor": "both" },
+      "priority": 8,
+      "accessibility": { "stepFree": true, "restrooms": true, "seating": true, "walkingLoad": "low" },
+      "opening": [{ "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"], "open": "06:00", "close": "20:00" }],
+      "entryFee": { "amountInr": 25, "note": "Garden ₹10, Aquarium entry ₹15 for adults" },
+      "cautions": ["Evening fountain show timing 18:30 in summers"],
+      "media": ["/images/bagh_e_bahu.webp"],
+      "source": { "name": "J&K Floriculture & Fisheries Dept", "url": "https://jktourism.jk.gov.in", "type": "official", "retrievedOn": "2026-10-17" },
+      "sourceType": "official",
+      "verification": { "status": "verified", "verifiedOn": "2026-10-16", "verifiedBy": "Field Verifier Team", "method": "Counter ticket receipt check" },
+      "updatedAt": "2026-10-17",
+      "reviewDueOn": "2027-01-15"
+    },
+    {
+      "id": "attr_mubarak_mandi",
+      "type": "heritage",
+      "name": { "en": "Mubarak Mandi Palace Complex", hi: "मुबारक मंडी शाही महल" },
+      "summary": {
+        "en": "Grand 18th-century palace complex of the Dogra rulers combining Rajasthani, European baroque and Mughal styles.",
+        "hi": "डोगरा शासकों का ऐतिहासिक भव्य राजमहल, जहां राजस्थानी व यूरोपीय वास्तुकला का अनुपम संगम है।"
+      },
+      "nodeId": "node_mubarak_mandi",
+      "areaId": "area_old_city",
+      "tags": ["heritage", "palace", "architecture", "views"],
+      "visit": { "typicalMinutes": 60, "minMinutes": 30, "bestTime": "Morning (10:00 - 13:00)", "indoorOutdoor": "both" },
+      "priority": 8,
+      "accessibility": { "stepFree": false, "restrooms": true, "seating": true, "walkingLoad": "medium" },
+      "opening": [{ "days": ["tue", "wed", "thu", "fri", "sat", "sun"], "open": "10:00", "close": "17:00" }],
+      "entryFee": { "amountInr": 20, "note": "Museum entry ₹20. Outer courtyards free." },
+      "cautions": ["Closed on Mondays", "Heritage conservation work active in select zones"],
+      "media": ["/images/mubarak_mandi.webp"],
+      "source": { "name": "Mubarak Mandi Jammu Heritage Society", "url": "https://jammu.nic.in", "type": "official", "retrievedOn": "2026-10-17" },
+      "sourceType": "official",
+      "verification": { "status": "verified", "verifiedOn": "2026-10-14", "verifiedBy": "Field Verifier Team", "method": "Site verification" },
+      "updatedAt": "2026-10-17",
+      "reviewDueOn": "2027-01-15"
+    },
+    {
+      "id": "attr_amar_mahal",
+      "type": "museum",
+      "name": { "en": "Amar Mahal Palace Museum", hi: "अमर महल संग्रहालय" },
+      "summary": {
+        "en": "French chateau-style red sandstone palace built in 1890s, boasting a 120 kg pure gold throne and Pahari miniature paintings.",
+        "hi": "फ्रांसीसी शैली में निर्मित लाल बलुआ पत्थर का भव्य महल, जिसमें 120 किग्रा सोने का राजसिंहासन है।"
+      },
+      "nodeId": "node_amar_mahal",
+      "areaId": "area_tawi_north",
+      "tags": ["museum", "heritage", "art", "views"],
+      "visit": { "typicalMinutes": 50, "minMinutes": 30, "bestTime": "Morning or Post-Lunch", "indoorOutdoor": "indoor" },
+      "priority": 8,
+      "accessibility": { "stepFree": false, "restrooms": true, "seating": true, "walkingLoad": "low" },
+      "opening": [{ "days": ["tue", "wed", "thu", "fri", "sat", "sun"], "open": "10:00", "close": "17:00" }],
+      "entryFee": { "amountInr": 50, "note": "Adults ₹50, Children ₹20" },
+      "cautions": ["Closed on Mondays and state public holidays", "Photography restricted inside galleries"],
+      "media": ["/images/amar_mahal.webp"],
+      "source": { "name": "Hari-Tara Charitable Trust", "url": "https://jktourism.jk.gov.in", "type": "official", "retrievedOn": "2026-10-17" },
+      "sourceType": "official",
+      "verification": { "status": "verified", "verifiedOn": "2026-10-15", "verifiedBy": "Field Verifier Team", "method": "Trust published guidelines" },
+      "updatedAt": "2026-10-17",
+      "reviewDueOn": "2027-01-15"
+    },
+    {
+      "id": "attr_tawi_riverfront",
+      "type": "riverfront",
+      "name": { "en": "Tawi Riverfront Promenade", hi: "तवी रिवरफ्रंट वॉकवे" },
+      "summary": {
+        "en": "Modern developed pedestrian riverside walk offering tranquil sunset views of the Tawi river and illuminated Bahu Fort.",
+        "hi": "तवी नदी के किनारे सुसज्जित शांत वॉकवे, शाम के समय विश्राम और बाहु किले का सुरम्य दृश्य।"
+      },
+      "nodeId": "node_tawi_riverfront",
+      "areaId": "area_bahu_tawi",
+      "tags": ["riverfront", "views", "walk", "breezy"],
+      "visit": { "typicalMinutes": 30, "minMinutes": 15, "bestTime": "Sunrise or Sunset (17:30 - 19:30)", "indoorOutdoor": "outdoor" },
+      "priority": 7,
+      "accessibility": { "stepFree": true, "restrooms": false, "seating": true, "walkingLoad": "low" },
+      "opening": [{ "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"], "open": "05:00", "close": "22:00" }],
+      "entryFee": { "amountInr": 0, "note": "Open public promenade, free access" },
+      "cautions": ["Stay along paved pedestrian track; do not venture into riverbed during monsoon"],
+      "media": ["/images/tawi_riverfront.webp"],
+      "source": { "name": "Jammu Smart City Project (JSCL)", "url": "https://jammusmartcity.jk.gov.in", "type": "official", "retrievedOn": "2026-10-17" },
+      "sourceType": "official",
+      "verification": { "status": "verified", "verifiedOn": "2026-10-16", "verifiedBy": "Field Verifier Team", "method": "Physical walk" },
+      "updatedAt": "2026-10-17",
+      "reviewDueOn": "2027-01-15"
+    }
+  ]
+}

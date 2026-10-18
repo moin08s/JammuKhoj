@@ -1,0 +1,62 @@
+[
+  {
+    "id": "em_unified_112",
+    "category": "all_emergencies",
+    "name": { "en": "Emergency Response Support System (ERSS)", "hi": "आपातकालीन प्रतिक्रिया सेवा" },
+    "number": "112",
+    "availableOffline": true,
+    "notes": "National 24x7 unified emergency number (Police, Fire, Ambulance)",
+    "source": { "name": "MHA Govt of India", "url": "https://112.gov.in", "type": "official", "retrievedOn": "2026-10-17" },
+    "verification": { "status": "verified", "verifiedOn": "2026-10-17", "verifiedBy": "official_desk", "method": "gazette notification" }
+  },
+  {
+    "id": "em_police_100",
+    "category": "police",
+    "name": { "en": "Police Control Room Jammu", "hi": "पुलिस नियंत्रण कक्ष जम्मू" },
+    "number": "100",
+    "availableOffline": true,
+    "notes": "Direct line to Jammu PCR",
+    "source": { "name": "J&K Police", "url": "https://jkpolice.gov.in", "type": "official", "retrievedOn": "2026-10-17" },
+    "verification": { "status": "verified", "verifiedOn": "2026-10-17", "verifiedBy": "official_desk", "method": "official site" }
+  },
+  {
+    "id": "em_ambulance_108",
+    "category": "medical",
+    "name": { "en": "J&K Emergency Medical Services", "hi": "आपातकालीन एम्बुलेंस सेवा" },
+    "number": "108",
+    "availableOffline": true,
+    "notes": "Toll-free 24x7 ambulance service across Jammu district",
+    "source": { "name": "Health & Medical Education Dept J&K", "url": "https://jknhm.com", "type": "official", "retrievedOn": "2026-10-17" },
+    "verification": { "status": "verified", "verifiedOn": "2026-10-17", "verifiedBy": "official_desk", "method": "official portal" }
+  },
+  {
+    "id": "em_tourist_1363",
+    "category": "tourist",
+    "name": { "en": "National Tourist Helpline", "hi": "राष्ट्रीय पर्यटक हेल्पलाइन" },
+    "number": "1363",
+    "availableOffline": true,
+    "notes": "Multi-lingual tourist support (Hindi, English & 10 foreign languages)",
+    "source": { "name": "Ministry of Tourism Govt of India", "url": "https://tourism.gov.in", "type": "official", "retrievedOn": "2026-10-17" },
+    "verification": { "status": "verified", "verifiedOn": "2026-10-17", "verifiedBy": "official_desk", "method": "official portal" }
+  },
+  {
+    "id": "em_railway_139",
+    "category": "railway",
+    "name": { "en": "RailMadad / Railway Helpline", "hi": "रेलवे हेल्पलाइन" },
+    "number": "139",
+    "availableOffline": true,
+    "notes": "Jammu Tawi railway station security, inquiries & medical assistance",
+    "source": { "name": "Indian Railways", "url": "https://railmadad.indianrailways.gov.in", "type": "official", "retrievedOn": "2026-10-17" },
+    "verification": { "status": "verified", "verifiedOn": "2026-10-17", "verifiedBy": "official_desk", "method": "official portal" }
+  },
+  {
+    "id": "em_women_1091",
+    "category": "women_safety",
+    "name": { "en": "Women in Distress Helpline", "hi": "महिला हेल्पलाइन" },
+    "number": "1091",
+    "availableOffline": true,
+    "notes": "Dedicated 24x7 safety & support helpline for women travellers",
+    "source": { "name": "J&K Police Women Cell", "url": "https://jkpolice.gov.in", "type": "official", "retrievedOn": "2026-10-17" },
+    "verification": { "status": "verified", "verifiedOn": "2026-10-17", "verifiedBy": "official_desk", "method": "official portal" }
+  }
+]

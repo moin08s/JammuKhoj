@@ -1,0 +1,20 @@
+{
+  "name": "JammuKhoj — Pilgrim & Tourist Companion",
+  "short_name": "JammuKhoj",
+  "description": "Offline-first smart tourism and pilgrim safety companion for Jammu",
+  "theme_color": "#0F6B73",
+  "background_color": "#F6F8F8",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["travel", "navigation"]
+}

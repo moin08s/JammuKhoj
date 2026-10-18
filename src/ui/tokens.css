@@ -1,0 +1,135 @@
+:root {
+  /* JammuKhoj Apple-Inspired Brand Palette */
+  --color-primary: #174D3C;       /* Primary forest green */
+  --color-primary-dark: #123E38;  /* Deep green */
+  --color-primary-soft: #E8F1EC;  /* Soft forest green wash */
+  --color-accent: #F3C969;        /* Saffron accent */
+  --color-accent-ink: #1C2923;    /* Contrast text for saffron */
+  --color-surface: #F7F6F0;       /* Warm ivory background */
+  --color-card: #FFFFFF;          /* Pure white card surface */
+  --color-ink: #1C2923;           /* Primary text */
+  --color-stone: #65736B;         /* Secondary text */
+  --color-border: #E3E7E4;        /* Subtle neutral border */
+  --color-danger: #B42318;        /* Error alert red */
+  --color-success: #26734D;       /* Verified success green */
+  --color-warn: #D97706;          /* Warning amber */
+
+  /* Apple Radii */
+  --radius-control: 12px;
+  --radius-card: 18px;
+  --radius-sheet: 24px;
+
+  /* Apple System Typography */
+  --font-heading: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", system-ui, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", system-ui, sans-serif;
+}
+
+:root[data-theme="dark"],
+.dark {
+  --color-primary: #2F7C65;
+  --color-primary-dark: #205948;
+  --color-primary-soft: #142721;
+  --color-accent: #F3C969;
+  --color-accent-ink: #142721;
+  --color-surface: #0C1714;       /* Deep curated forest neutral */
+  --color-card: #152721;          /* Card surface in dark */
+  --color-ink: #F2F6F4;           /* Primary light text */
+  --color-stone: #8E9F97;         /* Muted secondary text */
+  --color-border: #233930;        /* Restrained dark border */
+  --color-danger: #F87171;
+  --color-success: #34D399;
+  --color-warn: #FBBF24;
+}
+
+/* WCAG 2.1 AA High Contrast Mode */
+html[data-contrast="high"] {
+  --color-ink: #000000;
+  --color-surface: #FFFFFF;
+  --color-card: #FFFFFF;
+  --color-stone: #1A1A1A;
+  --color-border: #000000;
+  --color-primary: #0C3326;
+  --color-accent: #B45309;
+}
+html[data-contrast="high"].dark {
+  --color-ink: #FFFFFF;
+  --color-surface: #000000;
+  --color-card: #0A0A0A;
+  --color-stone: #E5E5E5;
+  --color-border: #FFFFFF;
+  --color-primary: #34D399;
+  --color-accent: #FDE047;
+}
+
+/* Dynamic Large Text Scaling */
+html[data-font-size="large"] {
+  font-size: 19px;
+}
+
+/* Senior Pilgrim Accessibility Mode */
+html[data-senior-mode="true"] button,
+html[data-senior-mode="true"] a.button {
+  min-height: 52px;
+  font-weight: 700;
+}
+html[data-senior-mode="true"] input,
+html[data-senior-mode="true"] select {
+  min-height: 52px;
+  font-size: 17px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, .font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Translucent Apple Frosted Materials */
+.apple-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+.dark .apple-glass {
+  background: rgba(21, 39, 33, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .apple-glass {
+    background: var(--color-card) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* Direct Manipulation & Tactile Pressed State */
+.apple-press {
+  transition: transform 120ms cubic-bezier(0.2, 0, 0, 1), opacity 120ms ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.apple-press:active {
+  transform: scale(0.975);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apple-press {
+    transition: none !important;
+  }
+  .apple-press:active {
+    transform: none !important;
+  }
+}
