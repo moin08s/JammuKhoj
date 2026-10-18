@@ -405,6 +405,31 @@ export const SettingsPage: React.FC = () => {
         )}
       </section>
 
+      {/* 7.5 Global & Indian City Tourism Benchmark Hub */}
+      <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-3 shadow-sm text-xs text-stone-600">
+        <div className="flex items-center justify-between">
+          <h3 className="font-heading font-bold text-sm text-ink flex items-center gap-1.5">
+            <Globe size={16} className="text-[#9E4A0C]" />
+            <span>Global & Indian City Analysis Hub</span>
+          </h3>
+          <span className="text-[10px] bg-amber-50 text-amber-800 font-bold px-2 py-0.5 rounded-full border border-amber-200">
+            20 World Cities
+          </span>
+        </div>
+
+        <p className="leading-relaxed">
+          See how JammuKhoj adopts international best practices from world cities like Kyoto, Rome, Barcelona, and Indian pilgrimage hubs like Varanasi and Tirupati.
+        </p>
+
+        <button
+          onClick={() => navigate('/city-analysis')}
+          className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-stone-900 to-amber-950 text-white font-bold text-xs hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shadow-xs"
+        >
+          <span>Open Comparative City Benchmark</span>
+          <ChevronRight size={14} />
+        </button>
+      </section>
+
       {/* 8. Privacy & Google Play Compliance */}
       <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-3 shadow-sm text-xs text-stone-600">
         <div className="flex items-center justify-between">

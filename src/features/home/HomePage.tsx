@@ -57,6 +57,9 @@ import { GoogleAuthModal } from '@/features/auth/GoogleAuthModal';
 import { EmergencySosModal } from '@/ui/emergency/EmergencySosModal';
 import { GiProductsSection } from '@/features/gi/GiProductsSection';
 import { SpotUploadModal } from '@/features/contribute/SpotUploadModal';
+import { DogriFoodSection } from '@/features/food/DogriFoodSection';
+import { SpiritualEtiquetteModal } from '@/features/spiritual/SpiritualEtiquetteModal';
+import { AudioTourModal } from '@/features/audio/AudioTourModal';
 import { deviceService } from '@/services/deviceService';
 
 export const HomePage: React.FC = () => {
@@ -94,6 +97,8 @@ export const HomePage: React.FC = () => {
   const [showGoogleModal, setShowGoogleModal] = useState(false);
   const [showSosModal, setShowSosModal] = useState(false);
   const [showSpotUploadModal, setShowSpotUploadModal] = useState(false);
+  const [showSpiritualModal, setShowSpiritualModal] = useState(false);
+  const [showAudioTourModal, setShowAudioTourModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -911,6 +916,76 @@ export const HomePage: React.FC = () => {
       <GiProductsSection />
 
       {/* =================================================================== */}
+      {/* 6.6 AUTHENTIC DOGRI CUISINE & FOOD TRAILS */}
+      {/* =================================================================== */}
+      <DogriFoodSection />
+
+      {/* =================================================================== */}
+      {/* 6.7 NEXT-GEN TRAVEL INNOVATION HUB */}
+      {/* =================================================================== */}
+      <section aria-label="Smart Tourism Tools" className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+        {/* Audio Tour Guide Card */}
+        <div
+          onClick={() => setShowAudioTourModal(true)}
+          className="p-3.5 rounded-2xl bg-gradient-to-br from-stone-900 to-stone-800 text-white cursor-pointer hover:border-amber-500/50 border border-stone-800 transition-all apple-press shadow-xs flex flex-col justify-between"
+        >
+          <div className="space-y-1.5">
+            <div className="w-8 h-8 rounded-xl bg-[#9E4A0C] text-white flex items-center justify-center">
+              <Volume2 size={16} />
+            </div>
+            <h4 className="font-heading font-bold text-sm text-white">Audio Story Tours</h4>
+            <p className="text-[11px] text-stone-300 leading-snug">
+              Listen to spoken folklore and history for Bahu Fort, Mubarak Mandi & Raghunath in Dogri, Hindi & English.
+            </p>
+          </div>
+          <div className="pt-2 text-xs font-bold text-amber-300 flex items-center gap-1">
+            <span>Start voice guide</span>
+            <ArrowRight size={13} />
+          </div>
+        </div>
+
+        {/* Spiritual Etiquette Card */}
+        <div
+          onClick={() => setShowSpiritualModal(true)}
+          className="p-3.5 rounded-2xl bg-gradient-to-br from-[#FFF9F3] to-[#FCEFE7] border border-[#F3D7C5] text-ink cursor-pointer hover:border-[#9E4A0C] transition-all apple-press shadow-xs flex flex-col justify-between"
+        >
+          <div className="space-y-1.5">
+            <div className="w-8 h-8 rounded-xl bg-amber-600 text-white flex items-center justify-center">
+              <Flower2 size={16} />
+            </div>
+            <h4 className="font-heading font-bold text-sm text-ink">Temple & Darshan Rules</h4>
+            <p className="text-[11px] text-stone-600 leading-snug">
+              Official dress codes, shoe lockers, aarti timings, and mobile scanning rules for top temples.
+            </p>
+          </div>
+          <div className="pt-2 text-xs font-bold text-[#9E4A0C] flex items-center gap-1">
+            <span>View shrine guide</span>
+            <ArrowRight size={13} />
+          </div>
+        </div>
+
+        {/* City Benchmark Analysis Card */}
+        <div
+          onClick={() => navigate('/city-analysis')}
+          className="p-3.5 rounded-2xl bg-gradient-to-br from-emerald-950 to-stone-900 text-white cursor-pointer hover:border-emerald-500/50 border border-emerald-900/50 transition-all apple-press shadow-xs flex flex-col justify-between"
+        >
+          <div className="space-y-1.5">
+            <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
+              <Globe size={16} />
+            </div>
+            <h4 className="font-heading font-bold text-sm text-white">Global City Analysis</h4>
+            <p className="text-[11px] text-emerald-200 leading-snug">
+              Compare 20 Indian & International heritage cities (Kyoto, Rome, Varanasi) and app benchmarks.
+            </p>
+          </div>
+          <div className="pt-2 text-xs font-bold text-emerald-300 flex items-center gap-1">
+            <span>Explore 20 cities</span>
+            <ArrowRight size={13} />
+          </div>
+        </div>
+      </section>
+
+      {/* =================================================================== */}
       {/* 7. TRAVEL ESSENTIALS */}
       {/* =================================================================== */}
       <section aria-label="Travel Essentials" className="space-y-3">
@@ -1213,6 +1288,20 @@ export const HomePage: React.FC = () => {
           showToast(`Successfully contributed "${spot.name.en}"!`);
         }}
       />
+
+      {/* Spiritual Etiquette & Temple Customs Modal */}
+      {showSpiritualModal && (
+        <SpiritualEtiquetteModal
+          onClose={() => setShowSpiritualModal(false)}
+        />
+      )}
+
+      {/* Audio Heritage Story Tour Modal */}
+      {showAudioTourModal && (
+        <AudioTourModal
+          onClose={() => setShowAudioTourModal(false)}
+        />
+      )}
     </div>
   );
 };

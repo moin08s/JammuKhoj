@@ -34,6 +34,8 @@ import { ShareAppModal } from '@/ui/sharing/ShareAppModal';
 import { JAMMU_GI_PRODUCTS, type GIProduct } from '@/data/giProductsData';
 import { GiProductShowcaseModal } from '@/features/gi/GiProductShowcaseModal';
 import { SpotUploadModal } from '@/features/contribute/SpotUploadModal';
+import { SpiritualEtiquetteModal } from '@/features/spiritual/SpiritualEtiquetteModal';
+import { AudioTourModal } from '@/features/audio/AudioTourModal';
 
 export const AttractionDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -45,6 +47,8 @@ export const AttractionDetail: React.FC = () => {
   const [node, setNode] = useState<Node | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [showSpiritualModal, setShowSpiritualModal] = useState(false);
+  const [showAudioTourModal, setShowAudioTourModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [selectedGiModal, setSelectedGiModal] = useState<GIProduct | null>(null);
 
@@ -367,7 +371,41 @@ export const AttractionDetail: React.FC = () => {
             </div>
             <span>03:12</span>
           </div>
+
+          <div className="flex items-center justify-between pt-1 border-t border-[#BFDBFE]/60">
+            <span className="text-[10px] text-[#1E3A8A]">Offline Spoken Audio Guide</span>
+            <button
+              onClick={() => setShowAudioTourModal(true)}
+              className="text-[11px] font-bold text-[#9E4A0C] hover:underline flex items-center gap-1"
+            >
+              <span>View Transcript & Voice Guide</span>
+              <Volume2 size={12} />
+            </button>
+          </div>
         </div>
+
+        {/* TEMPLE DARSHAN & ETIQUETTE BUTTON */}
+        {(attraction.type === 'religious' || attraction.id.toLowerCase().includes('temple') || attraction.id.toLowerCase().includes('bahu') || attraction.id.toLowerCase().includes('peer')) && (
+          <div
+            onClick={() => setShowSpiritualModal(true)}
+            className="p-3.5 rounded-3xl bg-[#FFF9F3] border border-[#F3D7C5] flex items-center justify-between cursor-pointer hover:border-[#9E4A0C] transition-all shadow-xs"
+          >
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-full bg-amber-600 text-white flex items-center justify-center shrink-0">
+                <span className="text-sm">🌸</span>
+              </div>
+              <div>
+                <h4 className="font-heading font-bold text-xs text-ink">
+                  Shrine Darshan Rules & Dress Code
+                </h4>
+                <p className="text-[10px] text-stone-500">
+                  Locker locations, prohibited items, footwear token & aarti times
+                </p>
+              </div>
+            </div>
+            <span className="text-xs font-bold text-[#9E4A0C]">View Guide →</span>
+          </div>
+        )}
 
         {/* 6. VISITOR PRACTICALITIES */}
         <div className="space-y-2 pt-1">
@@ -487,6 +525,40 @@ export const AttractionDetail: React.FC = () => {
           showToast(`Updated details & photos for "${updated.name.en}"!`);
         }}
       />
+
+      {/* SPIRITUAL DARSHAN & ETIQUETTE MODAL */}
+      {showSpiritualModal && (
+        <SpiritualEtiquetteModal
+          initialShrineId={
+            attraction.id.includes('raghunath')
+              ? 'raghunath-temple'
+              : attraction.id.includes('bahu')
+              ? 'bawe-wali-mata'
+              : attraction.id.includes('kol')
+              ? 'kol-kandoli-temple'
+              : attraction.id.includes('ranbireshwar')
+              ? 'ranbireshwar-temple'
+              : 'raghunath-temple'
+          }
+          onClose={() => setShowSpiritualModal(false)}
+        />
+      )}
+
+      {/* AUDIO TOUR GUIDE MODAL */}
+      {showAudioTourModal && (
+        <AudioTourModal
+          initialSpotId={
+            attraction.id.includes('bahu')
+              ? 'audio-bahu-fort'
+              : attraction.id.includes('mubarak')
+              ? 'audio-mubarak-mandi'
+              : attraction.id.includes('raghunath')
+              ? 'audio-raghunath-temple'
+              : 'audio-amar-mahal'
+          }
+          onClose={() => setShowAudioTourModal(false)}
+        />
+      )}
     </div>
   );
 };

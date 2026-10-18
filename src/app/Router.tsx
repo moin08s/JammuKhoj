@@ -19,6 +19,7 @@ import { LoginPage } from '@/features/auth/LoginPage';
 import { BusinessPortal } from '@/features/business/BusinessPortal';
 import { TripPlannerPage } from '@/features/suggestions/TripPlannerPage';
 import { PrivacyPolicyPage } from '@/features/privacy/PrivacyPolicyPage';
+import { CityAnalysisPage } from '@/features/benchmark/CityAnalysisPage';
 import { useAppStore } from '@/stores/appStore';
 
 // Root Index Component that acts as an intelligent entry gate
@@ -105,6 +106,14 @@ const router = createBrowserRouter([
       {
         path: 'business',
         element: <BusinessPortal />,
+      },
+      {
+        path: 'benchmark',
+        element: <CityAnalysisPage />,
+      },
+      {
+        path: 'city-analysis',
+        element: <CityAnalysisPage />,
       },
       {
         path: '*',
