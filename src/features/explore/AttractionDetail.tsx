@@ -36,6 +36,7 @@ import { GiProductShowcaseModal } from '@/features/gi/GiProductShowcaseModal';
 import { SpotUploadModal } from '@/features/contribute/SpotUploadModal';
 import { SpiritualEtiquetteModal } from '@/features/spiritual/SpiritualEtiquetteModal';
 import { AudioTourModal } from '@/features/audio/AudioTourModal';
+import { LocalTipsCard } from './LocalTipsCard';
 
 export const AttractionDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -414,6 +415,9 @@ export const AttractionDetail: React.FC = () => {
             <span className="text-xs font-bold text-[#9E4A0C]">View Guide →</span>
           </div>
         )}
+
+        {/* TIPS FROM LOCALS */}
+        <LocalTipsCard attraction={attraction} />
 
         {/* 6. VISITOR PRACTICALITIES */}
         <div className="space-y-2 pt-1">

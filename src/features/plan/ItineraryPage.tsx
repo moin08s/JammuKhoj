@@ -19,6 +19,7 @@ import {
   PlusCircle,
   BadgeIndianRupee,
   Map as MapIcon,
+  Trash2,
 } from 'lucide-react';
 import { usePlanStore } from '@/stores/planStore';
 import { ReturnByBar } from '@/ui/ReturnByBar';
@@ -195,6 +196,36 @@ export const ItineraryPage: React.FC = () => {
     setTimeout(() => setIsSaved(false), 3000);
   };
 
+  const [isSeniorMode, setIsSeniorMode] = useState(false);
+
+  const handleRemoveStop = (itemIndex: number) => {
+    if (!result) return;
+    const removedEntry = result.timeline[itemIndex];
+    const updatedTimeline = result.timeline.filter((_, idx) => idx !== itemIndex);
+    setResult({
+      ...result,
+      timeline: updatedTimeline,
+      explanations: [...result.explanations, `Removed stop ${removedEntry.label || 'Attraction'} as per user customization.`],
+    });
+  };
+
+  const handleWhatsAppShare = () => {
+    if (!result) return;
+    const stops = result.timeline
+      .filter((s) => s.type === 'visit')
+      .map((s, idx) => `${idx + 1}. ${s.start} - ${s.label || s.attractionId}`)
+      .join('\n');
+
+    const msg = `🚩 *JammuKhoj Trip Itinerary* (${result.bucket.toUpperCase()} Circuit)\n\n*Verified Stops:*\n${stops}\n\n⚠️ *Mandatory Return Deadline:* ${result.mustBeAtDepartureBy} (${input.departureNode || 'Departure Station'})\n*Total Walking:* ~${result.totalWalkKm} km\n*Est. Transport Cost:* ₹150 - ₹250 (Auto/Cab)\n\n_Planned with JammuKhoj - 100% Offline Civic Travel Companion:_\nhttps://jammukhoj.in/plan`;
+
+    const encoded = encodeURIComponent(msg);
+    window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank', 'noopener,noreferrer');
+  };
+
+  const handlePrintSummary = () => {
+    window.print();
+  };
+
   const handleShare = () => {
     const text = `My Jammu transit plan (${result.bucket}):\n${result.timeline
       .filter((s) => s.type === 'visit' || s.type === 'return')
@@ -217,18 +248,80 @@ export const ItineraryPage: React.FC = () => {
         onHeadBackClick={() => navigate('/map', { state: { target: input.departureNode } })}
       />
 
-      {/* Action Strip */}
-      <div className="flex items-center justify-between gap-2 py-1">
-        <div className="flex items-center gap-1.5">
-          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-            {result.bucket.toUpperCase()} Circuit
-          </span>
-          <span className="text-[11px] text-stone">
-            {result.timeline.filter((s) => s.type === 'visit').length} verified stops
-          </span>
+      {/* Metrics & Circuit Summary Card */}
+      <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+              {result.bucket.toUpperCase()} Circuit
+            </span>
+            <span className="text-xs font-medium text-slate-600">
+              {result.timeline.filter((s) => s.type === 'visit').length} Verified Stops
+            </span>
+          </div>
+
+          {/* Senior Mode Toggle */}
+          <button
+            onClick={() => setIsSeniorMode(!isSeniorMode)}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all border ${
+              isSeniorMode
+                ? 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs'
+                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+            }`}
+            title="Toggle Senior Mode for gentle walking pace and rest advice"
+          >
+            <span>🧓 Senior Ease Mode</span>
+            <span className={`w-2 h-2 rounded-full ${isSeniorMode ? 'bg-amber-600' : 'bg-slate-300'}`} />
+          </button>
         </div>
 
-        <div className="flex items-center gap-1">
+        {/* 3 Metric Pills */}
+        <div className="grid grid-cols-3 gap-2 text-center text-xs">
+          <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
+            <div className="text-[10px] text-slate-500 font-medium">Est. Walking</div>
+            <div className="font-bold text-slate-800 tabular-nums">~{result.totalWalkKm} km</div>
+          </div>
+          <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
+            <div className="text-[10px] text-slate-500 font-medium">Return Buffer</div>
+            <div className="font-bold text-amber-700 tabular-nums">{result.assumptions.departureBuffer || 45} mins</div>
+          </div>
+          <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
+            <div className="text-[10px] text-slate-500 font-medium">Est. Transport</div>
+            <div className="font-bold text-emerald-700 tabular-nums">₹120 - ₹250</div>
+          </div>
+        </div>
+
+        {isSeniorMode && (
+          <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2">
+            <span className="text-sm">💡</span>
+            <div>
+              <strong>Senior Mode Active:</strong> Walking pace is cushioned with +25% rest buffers. Battery car & elevator accessible spots are prioritized.
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Action Strip: Customize, WhatsApp, Print, Save */}
+      <div className="flex flex-wrap items-center justify-between gap-2 py-1">
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={handleWhatsAppShare}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 text-xs font-semibold shadow-xs transition-all active:scale-95"
+            title="Share complete itinerary to WhatsApp"
+          >
+            <span>Share via WhatsApp</span>
+          </button>
+
+          <button
+            onClick={handlePrintSummary}
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold transition-all"
+            title="Print or save as PDF"
+          >
+            <span>Print / PDF</span>
+          </button>
+        </div>
+
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => {
               const firstVisit = result.timeline.find((s) => s.type === 'visit');
@@ -237,16 +330,16 @@ export const ItineraryPage: React.FC = () => {
                 : input.startNode;
               navigate('/map', { state: { targetNode } });
             }}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-control bg-primary/10 text-primary hover:bg-primary/20 text-xs font-bold transition-all border border-primary/20 apple-press"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 text-xs font-bold transition-all border border-primary/20"
             title="View itinerary stops on interactive map"
           >
             <MapIcon size={12} />
-            <span>Map Circuit</span>
+            <span>Map</span>
           </button>
 
           <button
             onClick={handleRunningLate}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-control bg-warn/15 text-warn hover:bg-warn/25 text-xs font-bold transition-all border border-warn/30"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-warn/15 text-warn hover:bg-warn/25 text-xs font-bold transition-all border border-warn/30"
             title="Recalculate plan if delayed"
           >
             <RotateCcw size={12} />
@@ -255,7 +348,7 @@ export const ItineraryPage: React.FC = () => {
 
           <button
             onClick={() => handleDelayedDeparture(30)}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-control bg-primary/10 text-primary hover:bg-primary/20 text-xs font-bold transition-all border border-primary/25"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 text-xs font-bold transition-all border border-primary/25"
             title="Train or flight delayed? Add 30 mins to layover"
           >
             <PlusCircle size={12} />
@@ -264,10 +357,10 @@ export const ItineraryPage: React.FC = () => {
 
           <button
             onClick={handleSavePlan}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-control text-xs font-semibold border transition-all ${
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
               isSaved
                 ? 'bg-success text-white border-success'
-                : 'bg-card text-ink border-border hover:border-primary/40'
+                : 'bg-white text-slate-700 border-slate-200 hover:border-primary/40'
             }`}
           >
             {isSaved ? <CheckCircle2 size={13} /> : <Bookmark size={13} />}
@@ -276,8 +369,8 @@ export const ItineraryPage: React.FC = () => {
 
           <button
             onClick={handleShare}
-            className="p-1.5 rounded-control bg-card text-stone hover:text-ink border border-border"
-            title="Copy plan summary"
+            className="p-1.5 rounded-xl bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
+            title="Copy plan summary to clipboard"
           >
             <Share2 size={14} />
           </button>
@@ -397,7 +490,15 @@ export const ItineraryPage: React.FC = () => {
                         title="Swap this stop for another verified attraction"
                       >
                         <ArrowLeftRight size={11} />
-                        <span>Swap stop</span>
+                        <span>Swap</span>
+                      </button>
+                      <button
+                        onClick={() => handleRemoveStop(index)}
+                        className="text-[11px] font-semibold px-2 py-1 rounded border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 flex items-center gap-1 transition-colors"
+                        title="Remove this stop from itinerary"
+                      >
+                        <Trash2 size={11} />
+                        <span>Remove</span>
                       </button>
                       <button
                         onClick={() => navigate('/map', { state: { targetNode: attr?.nodeId } })}

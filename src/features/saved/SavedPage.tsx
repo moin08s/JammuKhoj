@@ -22,7 +22,9 @@ import {
   ExternalLink,
   Wifi,
   X,
+  Luggage,
 } from 'lucide-react';
+import { TripChecklist } from './TripChecklist';
 import { db } from '@/data/db';
 import type { SavedPlan } from '@/data/types';
 import { usePlanStore } from '@/stores/planStore';
@@ -38,7 +40,7 @@ export const SavedPage: React.FC = () => {
   const { currentUser, language, setLanguage } = useAppStore();
   const { setResult } = usePlanStore();
 
-  const [activeTab, setActiveTab] = useState<'spots' | 'plans' | 'packs'>('spots');
+  const [activeTab, setActiveTab] = useState<'spots' | 'plans' | 'packs' | 'checklist'>('spots');
   const [autoUpdateWifi, setAutoUpdateWifi] = useState(true);
   const [showClearModal, setShowClearModal] = useState(false);
   const [showTaxiModal, setShowTaxiModal] = useState(false);
@@ -225,6 +227,18 @@ export const SavedPage: React.FC = () => {
         >
           <Download size={13} />
           <span>Packs</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('checklist')}
+          className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1 ${
+            activeTab === 'checklist'
+              ? 'bg-[#9E4A0C] text-white shadow-xs'
+              : 'text-stone-600 hover:text-ink'
+          }`}
+        >
+          <Luggage size={13} />
+          <span>Checklist</span>
         </button>
       </div>
 
@@ -796,7 +810,7 @@ export const SavedPage: React.FC = () => {
             ))}
           </div>
         </div>
-      ) : (
+      ) : activeTab === 'packs' ? (
         /* Tab 3: Downloaded Offline Packs */
         <div className="space-y-4 animate-in fade-in">
           <div className="bg-[#E6F7F2] border border-[#BCE8DD] rounded-2xl p-4 text-[#085444] space-y-2">
@@ -866,6 +880,11 @@ export const SavedPage: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
+      ) : (
+        /* Tab 4: Yatra & Trip Checklist */
+        <div className="space-y-4 animate-in fade-in">
+          <TripChecklist />
         </div>
       )}
 

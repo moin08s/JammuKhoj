@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Compass, CalendarDays, ShieldAlert, Home } from 'lucide-react';
+import { Compass, CalendarDays, ShieldAlert, Home, Bus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export const BottomNav: React.FC = () => {
@@ -9,7 +9,8 @@ export const BottomNav: React.FC = () => {
   const navItems = [
     { to: '/', label: 'Home', icon: Home, end: true },
     { to: '/explore', label: 'Explore', icon: Compass, end: false },
-    { to: '/plan', label: 'My Plan', icon: CalendarDays, end: false },
+    { to: '/plan', label: '1-Tap Plan', icon: CalendarDays, end: false, badge: '⚡' },
+    { to: '/transport', label: 'Transport', icon: Bus, end: false },
     { to: '/safety', label: 'Safety', icon: ShieldAlert, end: false },
   ];
 
@@ -47,6 +48,11 @@ export const BottomNav: React.FC = () => {
                     >
                       <Icon size={19} strokeWidth={isActive ? 2.3 : 1.9} />
                     </div>
+                    {item.badge && (
+                      <span className="absolute -top-1 -right-1 text-[9px] bg-amber-500 text-white rounded-full w-4 h-4 flex items-center justify-center font-bold shadow-xs">
+                        {item.badge}
+                      </span>
+                    )}
                   </div>
                   <span
                     className={`mt-1 text-[11px] tracking-tight ${

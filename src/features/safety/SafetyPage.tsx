@@ -61,6 +61,33 @@ export const SafetyPage: React.FC = () => {
     }
   };
 
+  const [isSharingSos, setIsSharingSos] = useState(false);
+
+  const handleWhatsAppSos = () => {
+    setIsSharingSos(true);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude.toFixed(6);
+          const lon = pos.coords.longitude.toFixed(6);
+          const msg = `🚨 *EMERGENCY SOS - IMMEDIATE ASSISTANCE NEEDED*\n\nI am in transit in Jammu & Kashmir and need urgent help.\n\n📍 *My GPS Location:* https://maps.google.com/?q=${lat},${lon}\n*Coordinates:* ${lat}, ${lon} (±${Math.round(pos.coords.accuracy)}m)\n\n*Emergency Dialers:*\n• National Emergency: 112\n• Shrine Board Helpline: 01991-232075\n• Ambulance: 108\n\nSent via JammuKhoj Safety Companion`;
+          setIsSharingSos(false);
+          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+        },
+        () => {
+          const fallbackMsg = `🚨 *EMERGENCY SOS - IMMEDIATE ASSISTANCE NEEDED*\n\nI am in transit in Jammu & Kashmir and need urgent help.\nI am unable to resolve exact GPS coordinates. Please contact local emergency services (112) or call my phone immediately.\n\nSent via JammuKhoj Safety Companion`;
+          setIsSharingSos(false);
+          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(fallbackMsg)}`, '_blank', 'noopener,noreferrer');
+        },
+        { timeout: 6000 }
+      );
+    } else {
+      setIsSharingSos(false);
+      const fallbackMsg = `🚨 *EMERGENCY SOS - IMMEDIATE ASSISTANCE NEEDED*\n\nI am in transit in Jammu & Kashmir and need urgent help.\nPlease contact 112 or local emergency services immediately.\n\nSent via JammuKhoj Safety Companion`;
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(fallbackMsg)}`, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <div className="space-y-4 animate-in fade-in duration-200">
       <div className="space-y-1">
@@ -68,7 +95,7 @@ export const SafetyPage: React.FC = () => {
           {t('safety.title')}
         </h2>
         <p className="text-xs text-stone">
-          Verified emergency response contacts and on-device guidance accessible offline at all times.
+          Verified emergency response contacts, 1-Tap SOS dispatch, and medical aid directory accessible offline at all times.
         </p>
       </div>
 
@@ -88,14 +115,24 @@ export const SafetyPage: React.FC = () => {
           </p>
         </div>
 
-        <a
-          href="tel:112"
-          className="w-full py-3.5 px-4 rounded-control bg-danger text-white font-bold text-base shadow-md hover:bg-danger/95 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
-          aria-label="Call national emergency 112"
-        >
-          <PhoneCall size={18} />
-          <span>Call 112 (Toll Free)</span>
-        </a>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <a
+            href="tel:112"
+            className="w-full py-3.5 px-4 rounded-xl bg-danger text-white font-bold text-sm shadow-md hover:bg-danger/95 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+            aria-label="Call national emergency 112"
+          >
+            <PhoneCall size={18} />
+            <span>Call 112 (Toll Free)</span>
+          </a>
+
+          <button
+            onClick={handleWhatsAppSos}
+            disabled={isSharingSos}
+            className="w-full py-3.5 px-4 rounded-xl bg-emerald-600 text-white font-bold text-sm shadow-md hover:bg-emerald-700 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+          >
+            <span>{isSharingSos ? 'Locating...' : '🚨 1-Tap WhatsApp SOS'}</span>
+          </button>
+        </div>
       </section>
 
       {/* Copy My Exact GPS Location */}

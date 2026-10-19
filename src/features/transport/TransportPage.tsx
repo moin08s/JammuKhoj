@@ -34,6 +34,8 @@ import {
   ExpressTrainIcon,
 } from '@/ui/icons/TransitIcons';
 import { FareCalculatorWidget } from './FareCalculatorWidget';
+import { TransportComparisonMatrix } from './TransportComparisonMatrix';
+import { StationQuickRoutes } from './StationQuickRoutes';
 
 export const TransportPage: React.FC = () => {
   const { t } = useTranslation();
@@ -108,6 +110,12 @@ export const TransportPage: React.FC = () => {
 
       {/* Interactive Fare & Distance Calculator */}
       <FareCalculatorWidget />
+
+      {/* Quick Transit Matrix (Matador vs Auto vs Taxi) */}
+      <TransportComparisonMatrix />
+
+      {/* From Station & Airport Quick Routes */}
+      <StationQuickRoutes />
 
       {/* Main Mode Navigation Tabs */}
       <div className="grid grid-cols-3 gap-1.5 p-1 bg-stone-100 rounded-2xl border border-stone-200">

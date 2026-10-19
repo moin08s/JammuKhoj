@@ -276,6 +276,29 @@ assert(fs.existsSync(fareCalcFile), 'Interactive Transit Fare Calculator is pres
 const htmlFile = path.resolve(process.cwd(), 'index.html');
 const htmlContent = fs.readFileSync(htmlFile, 'utf8');
 assert(htmlContent.includes('Content-Security-Policy'), 'Strict Content-Security-Policy meta header enforced', 'SECURITY');
+assert(htmlContent.includes('https://jammukhoj.in/'), 'Canonical URL tag points to official domain https://jammukhoj.in/', 'SEO_BRANDING');
+assert(htmlContent.includes('application/ld+json') && htmlContent.includes('TouristAttraction'), 'Schema.org JSON-LD structured data implemented', 'SEO_BRANDING');
+
+// -----------------------------------------------------------------------------
+// 7. PILLAR VERIFICATION: BRANDING, VAISHNO DEVI, ROUTES & COMMUNITY
+// -----------------------------------------------------------------------------
+const cnameFile = path.resolve(process.cwd(), 'public/CNAME');
+assert(fs.existsSync(cnameFile) && fs.readFileSync(cnameFile, 'utf8').includes('jammukhoj.in'), 'Custom domain CNAME jammukhoj.in configured', 'BRANDING');
+
+const netlifyFile = path.resolve(process.cwd(), 'netlify.toml');
+assert(fs.existsSync(netlifyFile) && fs.readFileSync(netlifyFile, 'utf8').includes('jammukhoj.in'), 'Netlify redirect & security headers configured for custom domain', 'INFRASTRUCTURE');
+
+const vaishnoGuideFile = path.resolve(process.cwd(), 'src/features/spiritual/VaishnoDeviYatraGuide.tsx');
+assert(fs.existsSync(vaishnoGuideFile), 'Dedicated Vaishno Devi Yatra Guide portal is present', 'PILGRIMAGE');
+
+const quickRoutesFile = path.resolve(process.cwd(), 'src/features/transport/StationQuickRoutes.tsx');
+assert(fs.existsSync(quickRoutesFile), 'From Station & Airport Quick Routes directory is present', 'TRANSPORT');
+
+const checklistFile = path.resolve(process.cwd(), 'src/features/saved/TripChecklist.tsx');
+assert(fs.existsSync(checklistFile), 'Interactive Yatra & Trip Checklist module is present', 'SAVED_TRIPS');
+
+const aboutFile = path.resolve(process.cwd(), 'src/features/about/AboutModal.tsx');
+assert(fs.existsSync(aboutFile), 'Civic About Us & Mission documentation is present', 'TRUST_CIVIC');
 
 // -----------------------------------------------------------------------------
 // SUMMARY REPORT

@@ -21,6 +21,7 @@ import { SourceBadge } from '@/ui/trust/SourceBadge';
 import { FreshnessChip } from '@/ui/trust/FreshnessChip';
 import { GiProductsSection } from '@/features/gi/GiProductsSection';
 import { SpotUploadModal } from '@/features/contribute/SpotUploadModal';
+import { EmptyState } from '@/ui/EmptyState';
 
 const ZONE_TABS = [
   { id: 'all', label: 'All Destinations' },
@@ -43,7 +44,27 @@ export const ExplorePage: React.FC = () => {
   const [vibeFilter, setVibeFilter] = useState<'all' | 'classic' | 'offbeat'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [maxDuration, setMaxDuration] = useState<number>(360);
+  const [seniorFriendlyOnly, setSeniorFriendlyOnly] = useState(false);
+  const [freeEntryOnly, setFreeEntryOnly] = useState(false);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showUploadModal, setShowUploadModal] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('jammukhoj_recent_searches');
+      if (stored) setRecentSearches(JSON.parse(stored));
+    } catch (_) {}
+  }, []);
+
+  const saveRecentSearch = (term: string) => {
+    if (!term || term.trim().length < 2) return;
+    const clean = term.trim();
+    const updated = [clean, ...recentSearches.filter((s) => s.toLowerCase() !== clean.toLowerCase())].slice(0, 5);
+    setRecentSearches(updated);
+    try {
+      localStorage.setItem('jammukhoj_recent_searches', JSON.stringify(updated));
+    } catch (_) {}
+  };
 
   const loadAttractions = () => {
     db.attractions.toArray().then((items) => {
@@ -71,6 +92,15 @@ export const ExplorePage: React.FC = () => {
     }
   }, [categoryParam]);
 
+  const resetAllFilters = () => {
+    setSelectedZone('all');
+    setVibeFilter('all');
+    setSearchQuery('');
+    setMaxDuration(360);
+    setSeniorFriendlyOnly(false);
+    setFreeEntryOnly(false);
+  };
+
   const filteredAttractions = useMemo(() => {
     return attractions.filter((item) => {
       const matchesZone =
@@ -91,9 +121,18 @@ export const ExplorePage: React.FC = () => {
 
       const matchesDuration = item.visit.typicalMinutes <= maxDuration;
 
-      return matchesZone && matchesVibe && matchesSearch && matchesDuration;
+      const matchesSenior =
+        !seniorFriendlyOnly ||
+        item.accessibility?.stepFree ||
+        item.accessibility?.walkingLoad === 'low' ||
+        item.tags.some((t) => t.toLowerCase().includes('senior') || t.toLowerCase().includes('accessible') || t.toLowerCase().includes('temple'));
+
+      const matchesFree =
+        !freeEntryOnly || !item.entryFee || item.entryFee.amountInr === 0 || item.entryFee.amountInr === null;
+
+      return matchesZone && matchesVibe && matchesSearch && matchesDuration && matchesSenior && matchesFree;
     });
-  }, [attractions, selectedZone, vibeFilter, searchQuery, maxDuration]);
+  }, [attractions, selectedZone, vibeFilter, searchQuery, maxDuration, seniorFriendlyOnly, freeEntryOnly]);
 
   return (
     <div className="space-y-4 animate-in fade-in duration-200">
@@ -128,16 +167,55 @@ export const ExplorePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Search Input */}
-      <div className="relative">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone" />
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search (e.g. Raghunath, Bhaderwah, Patnitop, Shiv Khori, Suchetgarh)..."
-          className="w-full pl-9 pr-3 py-2.5 rounded-control border border-border bg-card text-ink text-xs focus:ring-2 focus:ring-primary/40 focus:outline-none"
-        />
+      {/* Search Input with Recent & Popular Searches */}
+      <div className="space-y-2">
+        <div className="relative">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') saveRecentSearch(searchQuery);
+            }}
+            onBlur={() => saveRecentSearch(searchQuery)}
+            placeholder="Search (e.g. Vaishno Devi, Raghunath, Bahu Fort, Patnitop)..."
+            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-border bg-card text-ink text-xs focus:ring-2 focus:ring-primary/40 focus:outline-none"
+          />
+        </div>
+
+        {/* Popular & Recent Chips */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] no-scrollbar">
+          <span className="text-stone-400 font-medium shrink-0">Popular:</span>
+          {['Vaishno Devi', 'Raghunath Temple', 'Bahu Fort', 'Patnitop', 'Kaladi Kulcha'].map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => {
+                setSearchQuery(s);
+                saveRecentSearch(s);
+              }}
+              className="px-2 py-0.5 rounded-full bg-slate-100 hover:bg-primary-soft hover:text-primary text-slate-700 font-medium shrink-0 transition-colors border border-slate-200"
+            >
+              {s}
+            </button>
+          ))}
+          {recentSearches.length > 0 && (
+            <>
+              <span className="text-stone-400 font-medium shrink-0 ml-1">Recent:</span>
+              {recentSearches.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setSearchQuery(s)}
+                  className="px-2 py-0.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-900 font-medium shrink-0 transition-colors border border-amber-200"
+                >
+                  {s}
+                </button>
+              ))}
+            </>
+          )}
+        </div>
       </div>
 
       {/* Zone Category Pills Slider */}
@@ -160,13 +238,13 @@ export const ExplorePage: React.FC = () => {
         })}
       </div>
 
-      {/* Vibe and Duration Filters */}
+      {/* Smart Filters: Vibe, Senior Ease, Free Entry, Duration */}
       <div className="flex items-center justify-between gap-2 flex-wrap text-xs">
         {/* Vibe Toggle */}
-        <div className="flex p-0.5 rounded-control bg-card border border-border shrink-0">
+        <div className="flex p-0.5 rounded-xl bg-card border border-border shrink-0">
           <button
             onClick={() => setVibeFilter('all')}
-            className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
               vibeFilter === 'all' ? 'bg-primary text-white shadow-sm' : 'text-stone hover:text-ink'
             }`}
           >
@@ -174,7 +252,7 @@ export const ExplorePage: React.FC = () => {
           </button>
           <button
             onClick={() => setVibeFilter('classic')}
-            className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
               vibeFilter === 'classic' ? 'bg-primary text-white shadow-sm' : 'text-stone hover:text-ink'
             }`}
           >
@@ -182,11 +260,38 @@ export const ExplorePage: React.FC = () => {
           </button>
           <button
             onClick={() => setVibeFilter('offbeat')}
-            className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
               vibeFilter === 'offbeat' ? 'bg-accent text-accent-ink shadow-sm' : 'text-stone hover:text-ink'
             }`}
           >
             ✨ Hidden Gems
+          </button>
+        </div>
+
+        {/* Feature Toggles: Senior Mode & Free Entry */}
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <button
+            onClick={() => setSeniorFriendlyOnly(!seniorFriendlyOnly)}
+            className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold border transition-all ${
+              seniorFriendlyOnly
+                ? 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs font-bold'
+                : 'bg-white text-stone border-border hover:border-primary/40'
+            }`}
+            title="Show destinations with low walking or senior-friendly access"
+          >
+            🧓 Senior / Low Walk
+          </button>
+
+          <button
+            onClick={() => setFreeEntryOnly(!freeEntryOnly)}
+            className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold border transition-all ${
+              freeEntryOnly
+                ? 'bg-emerald-100 text-emerald-900 border-emerald-300 shadow-2xs font-bold'
+                : 'bg-white text-stone border-border hover:border-primary/40'
+            }`}
+            title="Show free entry destinations"
+          >
+            🎟️ Free Entry
           </button>
         </div>
 
@@ -216,11 +321,28 @@ export const ExplorePage: React.FC = () => {
             subtitle="Explore officially registered Geographical Indications, authentic buying outlets, price standards and verification criteria."
           />
         </div>
+      ) : filteredAttractions.length === 0 ? (
+        <EmptyState
+          query={searchQuery}
+          onReset={resetAllFilters}
+          onSuggestionClick={(s) => {
+            setSearchQuery(s);
+            saveRecentSearch(s);
+          }}
+        />
       ) : (
         <>
           {/* Result Count */}
-          <div className="text-[11px] font-semibold text-stone">
-            Showing {filteredAttractions.length} verified destinations across Jammu
+          <div className="flex items-center justify-between text-[11px] font-semibold text-stone">
+            <span>Showing {filteredAttractions.length} verified destinations across Jammu</span>
+            {(seniorFriendlyOnly || freeEntryOnly || searchQuery || selectedZone !== 'all') && (
+              <button
+                onClick={resetAllFilters}
+                className="text-primary hover:underline font-bold text-[11px]"
+              >
+                Clear all filters
+              </button>
+            )}
           </div>
 
           {/* Attraction Cards (Photo First, Then Info) */}

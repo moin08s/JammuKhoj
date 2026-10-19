@@ -61,6 +61,14 @@ import { DogriFoodSection } from '@/features/food/DogriFoodSection';
 import { SpiritualEtiquetteModal } from '@/features/spiritual/SpiritualEtiquetteModal';
 import { AudioTourModal } from '@/features/audio/AudioTourModal';
 import { deviceService } from '@/services/deviceService';
+import { TrustBadges } from '@/ui/trust/TrustBadges';
+import { TestimonialSection } from '@/ui/trust/TestimonialSection';
+import { VaishnoDeviYatraGuide } from '@/features/spiritual/VaishnoDeviYatraGuide';
+import { AboutModal } from '@/features/about/AboutModal';
+import { TripExpenseEstimator } from '@/features/plan/TripExpenseEstimator';
+import { DharamshalaAndStayGuide } from '@/features/spiritual/DharamshalaAndStayGuide';
+import { WeatherAndAltitudeAdvisory } from '@/features/spiritual/WeatherAndAltitudeAdvisory';
+import { ReportUpdateModal } from '@/features/contribute/ReportUpdateModal';
 
 export const HomePage: React.FC = () => {
   const { i18n } = useTranslation();
@@ -100,6 +108,10 @@ export const HomePage: React.FC = () => {
   const [showSpotUploadModal, setShowSpotUploadModal] = useState(false);
   const [showSpiritualModal, setShowSpiritualModal] = useState(false);
   const [showAudioTourModal, setShowAudioTourModal] = useState(false);
+  const [showVaishnoDeviGuide, setShowVaishnoDeviGuide] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [activeDrawer, setActiveDrawer] = useState<'none' | 'stay' | 'weather' | 'budget'>('none');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -635,6 +647,56 @@ export const HomePage: React.FC = () => {
             <Camera size={13} />
             <span>Upload Spot / Photo</span>
           </button>
+        </div>
+      </section>
+
+      {/* Trust Badges */}
+      <TrustBadges variant="compact" className="my-1 px-1" />
+
+      {/* =================================================================== */}
+      {/* 2.5 DEDICATED VAISHNO DEVI YATRA PORTAL */}
+      {/* =================================================================== */}
+      <section 
+        onClick={() => setShowVaishnoDeviGuide(true)}
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-700 via-amber-800 to-amber-950 text-white p-5 shadow-md cursor-pointer hover:shadow-lg transition-all group"
+      >
+        <div className="absolute top-0 right-0 w-48 h-full opacity-20 pointer-events-none overflow-hidden">
+          <img 
+            src={JAMMU_SPOT_IMAGES.attr_vaishno_devi} 
+            alt="Mata Vaishno Devi" 
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/icons/icon-emblem.svg';
+            }}
+          />
+        </div>
+
+        <div className="relative z-10 space-y-2 max-w-md">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 font-bold text-[10px] shadow-xs">
+            <span>🛕 Holy Shrine Guide</span>
+            <span>•</span>
+            <span>2026 Manual</span>
+          </div>
+
+          <h3 className="font-heading font-black text-xl text-white tracking-tight flex items-center gap-2">
+            <span>Shri Mata Vaishno Devi Yatra</span>
+            <span className="text-amber-300 text-sm font-normal">(कटड़ा यात्रा मार्गदर्शक)</span>
+          </h3>
+
+          <p className="text-xs text-white/90 leading-relaxed">
+            Step-by-step route map (Katra ➔ Bhawan ➔ Bhairon Ghati), Battery car guidelines for seniors, free RFID registration counters, and packing checklist.
+          </p>
+
+          <div className="pt-1 flex items-center gap-3">
+            <button
+              type="button"
+              className="px-4 py-2 rounded-xl bg-white text-amber-950 font-bold text-xs shadow-sm hover:bg-amber-100 transition-colors flex items-center gap-1.5"
+            >
+              <span>Open Complete Yatra Portal</span>
+              <ArrowRight size={14} />
+            </button>
+            <span className="text-[11px] text-amber-200">100% Offline Guide</span>
+          </div>
         </div>
       </section>
 
@@ -1392,6 +1454,65 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
+      {/* Testimonials & Social Proof */}
+      <TestimonialSection />
+
+      {/* Regional Traveler & Pilgrim Toolset */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-heading font-black text-base text-ink">
+              Pilgrim & Travel Toolkit
+            </h3>
+            <p className="text-xs text-stone">
+              Shrine Board accommodations, weather advisories, and estimated trip budgets
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2 text-xs font-bold">
+          <button
+            onClick={() => setActiveDrawer(activeDrawer === 'stay' ? 'none' : 'stay')}
+            className={`p-2.5 rounded-2xl border transition-all flex flex-col items-center justify-center gap-1 text-center ${
+              activeDrawer === 'stay'
+                ? 'bg-primary text-white border-primary shadow-xs'
+                : 'bg-card text-stone hover:text-ink border-border hover:border-primary/40'
+            }`}
+          >
+            <span className="text-base">🏨</span>
+            <span className="text-[11px]">Shrine Stays</span>
+          </button>
+
+          <button
+            onClick={() => setActiveDrawer(activeDrawer === 'weather' ? 'none' : 'weather')}
+            className={`p-2.5 rounded-2xl border transition-all flex flex-col items-center justify-center gap-1 text-center ${
+              activeDrawer === 'weather'
+                ? 'bg-primary text-white border-primary shadow-xs'
+                : 'bg-card text-stone hover:text-ink border-border hover:border-primary/40'
+            }`}
+          >
+            <span className="text-base">⛅</span>
+            <span className="text-[11px]">Weather & Altitude</span>
+          </button>
+
+          <button
+            onClick={() => setActiveDrawer(activeDrawer === 'budget' ? 'none' : 'budget')}
+            className={`p-2.5 rounded-2xl border transition-all flex flex-col items-center justify-center gap-1 text-center ${
+              activeDrawer === 'budget'
+                ? 'bg-primary text-white border-primary shadow-xs'
+                : 'bg-card text-stone hover:text-ink border-border hover:border-primary/40'
+            }`}
+          >
+            <span className="text-base">💰</span>
+            <span className="text-[11px]">Trip Estimator</span>
+          </button>
+        </div>
+
+        {activeDrawer === 'stay' && <DharamshalaAndStayGuide />}
+        {activeDrawer === 'weather' && <WeatherAndAltitudeAdvisory />}
+        {activeDrawer === 'budget' && <TripExpenseEstimator />}
+      </section>
+
       {/* =================================================================== */}
       {/* 8. FOOTER */}
       {/* =================================================================== */}
@@ -1443,8 +1564,22 @@ export const HomePage: React.FC = () => {
             </p>
             <div className="flex items-center gap-3 pt-1 text-[11px]">
               <button
-                onClick={() => navigate('/privacy')}
+                onClick={() => setShowAboutModal(true)}
                 className="font-bold text-primary hover:underline apple-press"
+              >
+                About Us & Mission
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => setShowReportModal(true)}
+                className="font-bold text-amber-700 hover:underline apple-press"
+              >
+                Suggest Update
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => navigate('/privacy')}
+                className="font-bold text-stone hover:text-ink apple-press"
               >
                 Privacy Policy
               </button>
@@ -1455,13 +1590,6 @@ export const HomePage: React.FC = () => {
               >
                 Settings
               </button>
-              <span>•</span>
-              <a
-                href="mailto:support@jammukhoj.app"
-                className="font-bold text-stone hover:text-ink"
-              >
-                Feedback
-              </a>
             </div>
           </div>
         </div>
@@ -1567,6 +1695,25 @@ export const HomePage: React.FC = () => {
           onClose={() => setShowAudioTourModal(false)}
         />
       )}
+
+      {/* Vaishno Devi Dedicated Yatra Guide */}
+      <VaishnoDeviYatraGuide
+        isOpen={showVaishnoDeviGuide}
+        onClose={() => setShowVaishnoDeviGuide(false)}
+      />
+
+      {/* About Us & Mission Modal */}
+      <AboutModal
+        isOpen={showAboutModal}
+        onClose={() => setShowAboutModal(false)}
+      />
+
+      {/* Community Report & Suggestion Modal */}
+      <ReportUpdateModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        spotName="JammuKhoj Platform & Directory"
+      />
     </div>
   );
 };
