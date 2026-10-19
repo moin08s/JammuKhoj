@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JammuKhoj - Official High-Definition Product Demo Walkthrough</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <style>
+    :root {
+      --primary: #0B3D33;
+      --forest: #07241E;
+      --amber: #A84D0E;
+      --gold: #D98210;
+      --bg: #0A1412;
+      --card: #12221E;
+      --border: #1E3832;
+      --text: #FAF7F2;
+      --muted: #8FA39A;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 24px 20px 48px;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(217, 130, 16, 0.12);
+      border: 1px solid var(--gold);
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      font-family: Georgia, serif;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    h1 span {
+      color: var(--gold);
+    }
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .video-wrapper {
+      background: #000;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid var(--gold);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+      margin-bottom: 32px;
+      position: relative;
+    }
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 640px;
+    }
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .timeline-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .timeline-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+    .time-stamp {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .timeline-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .timeline-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .actions-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: 1px solid var(--gold);
+      transition: all 0.2s;
+    }
+    .btn:hover {
+      background: var(--gold);
+      color: #000;
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+    footer {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="badge">Official Product Walkthrough • 1080p Full HD</div>
+      <h1>JammuKhoj <span>(जम्मू खोज)</span></h1>
+      <p class="subtitle">
+        A comprehensive 60-second product walkthrough demonstrating the 1-Tap Buffer Planner, 100% offline IndexedDB stack, transparent Matador transit guide, senior ease accessibility, and ERSS 112 emergency SOS.
+      </p>
+    </header>
+
+    <div class="video-wrapper">
+      <video controls preload="metadata" poster="/deck_assets/app_home_planner.png">
+        <source src="/demo_video/jammukhoj_demo_walkthrough.mp4" type="video/mp4" />
+        Your browser does not support the video tag. You can download the video using the link below.
+      </video>
+    </div>
+
+    <div class="actions-bar">
+      <a class="btn" href="/demo_video/jammukhoj_demo_walkthrough.mp4" download>
+        ⬇️ Download Video (1080p MP4 • 49 MB)
+      </a>
+      <a class="btn btn-secondary" href="/presentation.html">
+        📊 View Interactive 10-Slide Pitch Deck
+      </a>
+      <a class="btn btn-secondary" href="/">
+        🌐 Launch Live Web Application
+      </a>
+    </div>
+
+    <h2 style="font-size: 1.5rem; color: #fff; margin: 38px 0 16px; font-family: Georgia, serif; text-align: center;">
+      Video Demonstration Chapters & Features
+    </h2>
+
+    <div class="timeline-grid">
+      <div class="timeline-card">
+        <div class="time-stamp">0:00 – 0:08 • CHAPTER 1</div>
+        <h3>Brand Identity & Hero Overview</h3>
+        <p>Official circular JammuKhoj brand emblem, executive positioning, core mission, and verified 44/44 automated test compliance badge.</p>
+      </div>
+
+      <div class="timeline-card">
+        <div class="time-stamp">0:08 – 0:17 • CHAPTER 2</div>
+        <h3>1-Tap Buffer-Safe Trip Planner</h3>
+        <p>Demonstrates deterministic layover generation (4h, 8h, 24h) enforcing strict 45-min railway and 150-min flight departure buffers.</p>
+      </div>
+
+      <div class="timeline-card">
+        <div class="time-stamp">0:17 – 0:26 • CHAPTER 3</div>
+        <h3>Itinerary Execution & Transit Intel</h3>
+        <p>Generated step-by-step route timeline, official Matador mini-bus route directory (₹10–₹25), and prepaid taxi/auto rate matrices.</p>
+      </div>
+
+      <div class="timeline-card">
+        <div class="time-stamp">0:26 – 0:35 • CHAPTER 4</div>
+        <h3>36+ Destinations & Senior Accessibility</h3>
+        <p>Bahu Fort, Mubarak Mandi Palace, and Amar Mahal detail views featuring walking load tags, stair counts, and daily aarti schedules.</p>
+      </div>
+
+      <div class="timeline-card">
+        <div class="time-stamp">0:35 – 0:44 • CHAPTER 5</div>
+        <h3>Dogri Food Trail & GI Certified Crafts</h3>
+        <p>Authentic Kaladi Kulcha with Pure Veg and Jain filters, verified Basohli miniature painting cooperatives, and counterfeit deterrence guide.</p>
+      </div>
+
+      <div class="timeline-card">
+        <div class="time-stamp">0:44 – 0:52 • CHAPTER 6</div>
+        <h3>100% Offline Autonomy & 112 SOS</h3>
+        <p>Mountain tunnel resilience via local IndexedDB, National ERSS 112 offline dialers, and 1-tap WhatsApp GPS location dispatcher.</p>
+      </div>
+
+      <div class="timeline-card" style="grid-column: 1 / -1;">
+        <div class="time-stamp">0:52 – 1:00 • CHAPTER 7</div>
+        <h3>Measurable Socio-Economic Outcomes & Pilot Call to Action</h3>
+        <p>3.5x dwell time extension, ₹150 Cr+ direct economic unlock, and 3 structured pilot proposals for Jammu Tawi and SVDK Katra concourses.</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>JammuKhoj • Civic Technology Innovation for Jammu Division & Mata Vaishno Devi Yatris</p>
+      <p>Live Web Application: <a href="https://jammukhoj.in" style="color: var(--gold);">https://jammukhoj.in</a> • Open Source Repository: <a href="https://github.com/moin08s/JammuKhoj" style="color: var(--gold);">github.com/moin08s/JammuKhoj</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>
