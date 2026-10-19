@@ -1,8 +1,11 @@
 # 📖 JammuKhoj: Comprehensive Feasibility Report, System Dossier & Impact Analysis
 
 > **Project Name:** JammuKhoj (जम्मू खोज)  
+> **Live Demo Application:** [https://bucolic-buttercream-966135.netlify.app/](https://bucolic-buttercream-966135.netlify.app/)  
 > **Official Domain:** [https://jammukhoj.in](https://jammukhoj.in)  
 > **Code Repository:** [github.com/moin08s/JammuKhoj](https://github.com/moin08s/JammuKhoj)  
+> **Interactive Pitch Deck:** [Slide Deck](https://bucolic-buttercream-966135.netlify.app/presentation.html)  
+> **Demo Video Walkthrough:** [Demo Video & Player](https://bucolic-buttercream-966135.netlify.app/demo.html)  
 > **Author & Engineering Team:** JammuKhoj Civic Innovation Lab  
 > **Target Audience:** Government Evaluators, J&K Tourism Directorate, SMVDSB Shrine Board, Hackathon Grand Jury, Civic Technologists  
 > **Document Version:** 2.4.0 (Executive Production Edition)  
@@ -377,7 +380,8 @@ We invite the **Directorate of Tourism, Jammu**, the **Shri Mata Vaishno Devi Sh
 ---
 
 ### Official Project Inquiries & Institutional Contact
-- **Live Web Portal:** [https://jammukhoj.in](https://jammukhoj.in)
+- **Live Demo Web Application:** [https://bucolic-buttercream-966135.netlify.app/](https://bucolic-buttercream-966135.netlify.app/)
+- **Production Domain:** [https://jammukhoj.in](https://jammukhoj.in)
 - **Source Code Repository:** [github.com/moin08s/JammuKhoj](https://github.com/moin08s/JammuKhoj)
 - **Official Institutional Email:** `support@jammukhoj.in`
 - **Lead Engineering Lab:** JammuKhoj Civic Innovation Lab, Jammu, J&K

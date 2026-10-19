@@ -10,6 +10,12 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC.svg)](https://tailwindcss.com/)
 [![PWA](https://img.shields.io/badge/PWA-Ready-green.svg)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg)](LICENSE)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/966135/deploy-status)](https://bucolic-buttercream-966135.netlify.app/)
+
+> 🌐 **Live Demo (Netlify):** [https://bucolic-buttercream-966135.netlify.app/](https://bucolic-buttercream-966135.netlify.app/)  
+> 🌍 **Official Production Domain:** [https://jammukhoj.in](https://jammukhoj.in)  
+> 🎬 **Product Demo Video Walkthrough:** [Demo Video & Player](https://bucolic-buttercream-966135.netlify.app/demo.html)  
+> 📊 **Interactive 10-Slide Pitch Deck:** [Slide Deck](https://bucolic-buttercream-966135.netlify.app/presentation.html)  
 
 ---
 

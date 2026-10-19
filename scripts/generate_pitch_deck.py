@@ -125,7 +125,7 @@ def add_phone_mockup(slide, img_path, left, top, width, height):
             height - (pad * 2)
         )
 
-def add_footer(slide, text="JammuKhoj • Smart Tourism & Pilgrim Companion • Live App: https://jammukhoj.in"):
+def add_footer(slide, text="JammuKhoj • Smart Tourism & Pilgrim Companion • Live Demo: https://bucolic-buttercream-966135.netlify.app/"):
     f_box = slide.shapes.add_textbox(Inches(0.8), Inches(7.0), Inches(11.7), Inches(0.35))
     tf = f_box.text_frame
     p = tf.paragraphs[0]
@@ -238,7 +238,7 @@ for idx, (p_title, p_sub) in enumerate(pills):
 m_box = s1.shapes.add_textbox(Inches(1.5), Inches(6.38), Inches(10.333), Inches(0.35))
 tf_m = m_box.text_frame
 p_m = tf_m.paragraphs[0]
-p_m.text = "Production Release • October 2026 • Live Demo: https://jammukhoj.in • 44/44 Verified High-Level Tests Passing"
+p_m.text = "Production Release • October 2026 • Live Demo: https://bucolic-buttercream-966135.netlify.app/ • Domain: https://jammukhoj.in"
 p_m.alignment = PP_ALIGN.CENTER
 p_m.font.size = Pt(9.5)
 p_m.font.color.rgb = RGBColor(180, 200, 192)
@@ -885,14 +885,14 @@ tf_bar = bar.text_frame
 tf_bar.word_wrap = True
 
 p_c1 = tf_bar.paragraphs[0]
-p_c1.text = "🌐 Live Application: https://jammukhoj.in   •   ✉️ Contact: support@jammukhoj.in"
-p_c1.font.size = Pt(14)
+p_c1.text = "🌐 Live Demo: https://bucolic-buttercream-966135.netlify.app/   •   🌍 Domain: https://jammukhoj.in"
+p_c1.font.size = Pt(13)
 p_c1.font.bold = True
 p_c1.font.color.rgb = C_WHITE
 p_c1.alignment = PP_ALIGN.CENTER
 
 p_c2 = tf_bar.add_paragraph()
-p_c2.text = "Open Source • 100% Offline Progressive Web App & Android Ready • Built with Pride for Jammu"
+p_c2.text = "Open Source • 100% Offline Progressive Web App & Android Ready • Contact: support@jammukhoj.in"
 p_c2.font.size = Pt(10.5)
 p_c2.font.color.rgb = C_GOLD
 p_c2.alignment = PP_ALIGN.CENTER
