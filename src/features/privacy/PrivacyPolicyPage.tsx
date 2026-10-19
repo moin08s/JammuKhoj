@@ -44,8 +44,10 @@ export const PrivacyPolicyPage: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
+  const [activeTab, setActiveTab] = useState<'privacy' | 'terms'>('privacy');
+
   return (
-    <div className="space-y-5 py-3 animate-in fade-in max-w-lg mx-auto">
+    <div className="space-y-4 py-3 animate-in fade-in max-w-lg mx-auto">
       {/* Header */}
       <div className="flex items-center gap-2">
         <button
@@ -56,10 +58,34 @@ export const PrivacyPolicyPage: React.FC = () => {
         </button>
         <div>
           <h2 className="font-heading text-xl font-bold text-ink">
-            Privacy Policy & Data Safety
+            Legal & Data Transparency
           </h2>
-          <p className="text-xs text-stone">Google Play Developer Policy Compliance</p>
+          <p className="text-xs text-stone">Google Play Compliance & Pilgrim Rights</p>
         </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex rounded-2xl bg-surface p-1 border border-border text-xs font-semibold">
+        <button
+          onClick={() => setActiveTab('privacy')}
+          className={`flex-1 py-2 rounded-xl transition-all ${
+            activeTab === 'privacy'
+              ? 'bg-card text-ink shadow-xs border border-border/80 font-bold'
+              : 'text-stone hover:text-ink'
+          }`}
+        >
+          Privacy Policy
+        </button>
+        <button
+          onClick={() => setActiveTab('terms')}
+          className={`flex-1 py-2 rounded-xl transition-all ${
+            activeTab === 'terms'
+              ? 'bg-card text-ink shadow-xs border border-border/80 font-bold'
+              : 'text-stone hover:text-ink'
+          }`}
+        >
+          Terms of Use & Disclaimer
+        </button>
       </div>
 
       {deleteSuccess && (
@@ -69,69 +95,103 @@ export const PrivacyPolicyPage: React.FC = () => {
         </div>
       )}
 
-      {/* Overview Card */}
-      <div className="p-4 bg-card border border-border rounded-3xl shadow-sm space-y-3 text-xs leading-relaxed">
-        <div className="flex items-center gap-2 text-primary font-bold">
-          <ShieldCheck size={18} />
-          <span>Offline-First Data Architecture</span>
-        </div>
-        <p className="text-stone">
-          JammuKhoj is designed with a strict privacy-first principle. All user data, itineraries, preferences, and offline maps are stored locally on your device via <strong>IndexedDB (Dexie)</strong>. We do not sell, rent, or monetize your personal travel data.
-        </p>
-      </div>
-
-      {/* Permissions Breakdown */}
-      <div className="p-4 bg-card border border-border rounded-3xl shadow-sm space-y-3 text-xs">
-        <h3 className="font-heading font-bold text-sm text-ink flex items-center gap-1.5">
-          <Lock size={16} className="text-primary" />
-          <span>Android Permissions Explained</span>
-        </h3>
-
-        <div className="space-y-2">
-          <div className="p-3 rounded-2xl bg-surface border border-border/70 space-y-1">
-            <div className="font-bold text-ink">📍 Precise Location (GPS)</div>
-            <p className="text-[11px] text-stone">
-              Used strictly client-side to calculate distance to Jammu destinations, show your blue dot on the map, and generate landmark coordinates for 24x7 ERSS 112 emergency calls. Never uploaded to remote tracking servers.
+      {activeTab === 'privacy' ? (
+        <>
+          {/* Overview Card */}
+          <div className="p-4 bg-card border border-border rounded-3xl shadow-sm space-y-3 text-xs leading-relaxed">
+            <div className="flex items-center gap-2 text-primary font-bold">
+              <ShieldCheck size={18} />
+              <span>Offline-First Data Architecture</span>
+            </div>
+            <p className="text-stone">
+              JammuKhoj is designed with a strict privacy-first principle. All user data, itineraries, preferences, and offline maps are stored locally on your device via <strong>IndexedDB (Dexie)</strong>. We do not sell, rent, or monetize your personal travel data.
             </p>
           </div>
 
-          <div className="p-3 rounded-2xl bg-surface border border-border/70 space-y-1">
-            <div className="font-bold text-ink">💾 Local Device Storage</div>
-            <p className="text-[11px] text-stone">
-              Used to cache high-resolution vector and terrain map tiles, opening hours, and fair transport tariff tables for 100% offline usage in remote areas.
+          {/* Permissions Breakdown */}
+          <div className="p-4 bg-card border border-border rounded-3xl shadow-sm space-y-3 text-xs">
+            <h3 className="font-heading font-bold text-sm text-ink flex items-center gap-1.5">
+              <Lock size={16} className="text-primary" />
+              <span>Android Permissions Explained</span>
+            </h3>
+
+            <div className="space-y-2">
+              <div className="p-3 rounded-2xl bg-surface border border-border/70 space-y-1">
+                <div className="font-bold text-ink">📍 Precise Location (GPS)</div>
+                <p className="text-[11px] text-stone">
+                  Used strictly client-side to calculate distance to Jammu destinations, show your blue dot on the map, and generate landmark coordinates for 24x7 ERSS 112 emergency calls. Never uploaded to remote tracking servers.
+                </p>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-surface border border-border/70 space-y-1">
+                <div className="font-bold text-ink">💾 Local Device Storage</div>
+                <p className="text-[11px] text-stone">
+                  Used to cache high-resolution vector and terrain map tiles, opening hours, and fair transport tariff tables for 100% offline usage in remote areas.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Google Play Mandatory Account & Data Deletion */}
+          <div className="p-4 bg-card border border-border rounded-3xl shadow-sm space-y-3 text-xs">
+            <h3 className="font-heading font-bold text-sm text-ink flex items-center gap-1.5">
+              <Database size={16} className="text-rose-500" />
+              <span>Data Ownership & Account Deletion</span>
+            </h3>
+            <p className="text-stone text-[11px]">
+              In compliance with Google Play Store User Data policies, you have complete control over your data and can export or permanently delete your account at any time.
+            </p>
+
+            <div className="flex gap-2 pt-1">
+              <button
+                onClick={handleExportData}
+                className="flex-1 py-2.5 px-3 rounded-xl border border-border bg-surface hover:bg-card text-ink font-semibold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs"
+              >
+                <Download size={14} className="text-primary" />
+                <span>Export Data (JSON)</span>
+              </button>
+
+              <button
+                onClick={() => setDeleteConfirmOpen(true)}
+                className="flex-1 py-2.5 px-3 rounded-xl border border-rose-300 bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 font-semibold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs"
+              >
+                <Trash2 size={14} />
+                <span>Delete Account</span>
+              </button>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="space-y-3">
+          <div className="p-4 bg-card border border-border rounded-3xl shadow-sm space-y-2 text-xs">
+            <div className="font-bold text-ink text-sm">1. Scope & Civic Purpose</div>
+            <p className="text-stone text-[11px] leading-relaxed">
+              JammuKhoj is a free, civic-driven pilgrimage and tourism companion application. Information is collated from verified official repositories (SMVDSB, J&K Tourism, District Administrations) to assist yatris and commuters.
+            </p>
+          </div>
+
+          <div className="p-4 bg-amber-500/10 border border-amber-500/25 rounded-3xl space-y-2 text-xs">
+            <div className="font-bold text-amber-900 dark:text-amber-300 text-sm">2. Mountain Yatra & Health Precaution</div>
+            <p className="text-stone text-[11px] leading-relaxed">
+              Trekking in Katra (5,200 ft), Patnitop (6,640 ft), or Machail involves high altitude. Pilgrims with heart ailments, hypertension, or respiratory difficulty must consult medical professionals and use battery cars or ponies. JammuKhoj is an informational tool and does not replace medical or disaster management advice.
+            </p>
+          </div>
+
+          <div className="p-4 bg-card border border-border rounded-3xl shadow-sm space-y-2 text-xs">
+            <div className="font-bold text-ink text-sm">3. Transport Fare Benchmark Notice</div>
+            <p className="text-stone text-[11px] leading-relaxed">
+              Matador stage fares (₹10–₹25) and prepaid auto/taxi matrices are reference standards. JammuKhoj does not run commercial taxi bookings. Always verify meter/prepaid union counters at Jammu Tawi Station or Airport.
+            </p>
+          </div>
+
+          <div className="p-4 bg-surface border border-border rounded-3xl space-y-2 text-xs">
+            <div className="font-bold text-ink text-sm">4. Emergency Lifeline</div>
+            <p className="text-stone text-[11px] leading-relaxed">
+              In any life safety, landslide, or medical emergency, immediately dial <strong>112 (National ERSS)</strong> or <strong>01991-232125 (SMVDSB Shrine Helpline)</strong>.
             </p>
           </div>
         </div>
-      </div>
-
-      {/* Google Play Mandatory Account & Data Deletion */}
-      <div className="p-4 bg-card border border-border rounded-3xl shadow-sm space-y-3 text-xs">
-        <h3 className="font-heading font-bold text-sm text-ink flex items-center gap-1.5">
-          <Database size={16} className="text-rose-500" />
-          <span>Data Ownership & Account Deletion</span>
-        </h3>
-        <p className="text-stone text-[11px]">
-          In compliance with Google Play Store User Data policies, you have complete control over your data and can export or permanently delete your account at any time.
-        </p>
-
-        <div className="flex gap-2 pt-1">
-          <button
-            onClick={handleExportData}
-            className="flex-1 py-2.5 px-3 rounded-xl border border-border bg-surface hover:bg-card text-ink font-semibold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs"
-          >
-            <Download size={14} className="text-primary" />
-            <span>Export Data (JSON)</span>
-          </button>
-
-          <button
-            onClick={() => setDeleteConfirmOpen(true)}
-            className="flex-1 py-2.5 px-3 rounded-xl border border-rose-300 bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 font-semibold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs"
-          >
-            <Trash2 size={14} />
-            <span>Delete Account</span>
-          </button>
-        </div>
-      </div>
+      )}
 
       {/* Confirmation Modal */}
       {deleteConfirmOpen && (

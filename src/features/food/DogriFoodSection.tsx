@@ -20,6 +20,7 @@ interface DogriFoodSectionProps {
 export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop }) => {
   const [selectedFood, setSelectedFood] = useState<DogriFoodItem | null>(null);
   const [activeCategory, setActiveCategory] = useState<'all' | 'street_food' | 'main_course' | 'sweet'>('all');
+  const [dietaryFilter, setDietaryFilter] = useState<'all' | 'pure_veg' | 'jain_friendly'>('all');
   const [copiedShop, setCopiedShop] = useState<string | null>(null);
 
   const categories = [
@@ -30,8 +31,9 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
   ];
 
   const filteredItems = DOGRI_FOOD_ITEMS.filter((item) => {
-    if (activeCategory === 'all') return true;
-    return item.category === activeCategory;
+    const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
+    const matchesDietary = dietaryFilter === 'all' || item.dietary === dietaryFilter;
+    return matchesCategory && matchesDietary;
   });
 
   const handleCopyShop = (text: string, id: string) => {
@@ -59,21 +61,59 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
         </div>
       </div>
 
-      {/* Category Pills */}
-      <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
-        {categories.map((cat) => (
+      {/* Category & Dietary Pills */}
+      <div className="space-y-1.5">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+          {categories.map((cat) => (
+            <button
+              key={cat.key}
+              onClick={() => setActiveCategory(cat.key as any)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                activeCategory === cat.key
+                  ? 'bg-[#9E4A0C] text-white shadow-xs'
+                  : 'bg-white border border-[#EBE4DC] text-stone-600 hover:text-ink'
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Dietary options: Pure Veg & Jain Friendly */}
+        <div className="flex items-center gap-1.5 text-xs">
+          <span className="text-[11px] font-bold text-stone uppercase tracking-wider shrink-0">Dietary:</span>
           <button
-            key={cat.key}
-            onClick={() => setActiveCategory(cat.key as any)}
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-              activeCategory === cat.key
-                ? 'bg-[#9E4A0C] text-white shadow-xs'
-                : 'bg-white border border-[#EBE4DC] text-stone-600 hover:text-ink'
+            onClick={() => setDietaryFilter('all')}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
+              dietaryFilter === 'all'
+                ? 'bg-stone-800 text-white'
+                : 'bg-surface border border-border text-stone hover:text-ink'
             }`}
           >
-            {cat.label}
+            All Types
           </button>
-        ))}
+          <button
+            onClick={() => setDietaryFilter(dietaryFilter === 'pure_veg' ? 'all' : 'pure_veg')}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all flex items-center gap-1 ${
+              dietaryFilter === 'pure_veg'
+                ? 'bg-emerald-700 text-white shadow-xs'
+                : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300'
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>Pure Veg 🟢</span>
+          </button>
+          <button
+            onClick={() => setDietaryFilter(dietaryFilter === 'jain_friendly' ? 'all' : 'jain_friendly')}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all flex items-center gap-1 ${
+              dietaryFilter === 'jain_friendly'
+                ? 'bg-amber-700 text-white shadow-xs'
+                : 'bg-amber-500/10 border border-amber-500/30 text-amber-800 dark:text-amber-300'
+            }`}
+          >
+            <span>🥬 Jain Friendly (No Onion/Garlic)</span>
+          </button>
+        </div>
       </div>
 
       {/* Food Cards Carousel */}
@@ -95,8 +135,15 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-bold text-amber-300">
-                {item.dogriName}
+              <div className="absolute top-2.5 left-2.5 flex items-center gap-1">
+                <span className="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-bold text-amber-300">
+                  {item.dogriName}
+                </span>
+                {item.dietary === 'jain_friendly' && (
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-800/80 backdrop-blur-md text-[10px] font-bold text-emerald-200">
+                    Jain Safe
+                  </span>
+                )}
               </div>
               <div className="absolute bottom-2 left-2.5 right-2.5 text-white">
                 <h4 className="font-heading font-bold text-sm leading-snug drop-shadow-sm">

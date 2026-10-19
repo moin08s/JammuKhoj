@@ -69,6 +69,9 @@ import { TripExpenseEstimator } from '@/features/plan/TripExpenseEstimator';
 import { DharamshalaAndStayGuide } from '@/features/spiritual/DharamshalaAndStayGuide';
 import { WeatherAndAltitudeAdvisory } from '@/features/spiritual/WeatherAndAltitudeAdvisory';
 import { ReportUpdateModal } from '@/features/contribute/ReportUpdateModal';
+import { ContactSupportModal } from '@/features/about/ContactSupportModal';
+import { TermsOfServiceModal } from '@/features/privacy/TermsOfServiceModal';
+import { TempleCrowdGuide } from '@/features/spiritual/TempleCrowdGuide';
 
 export const HomePage: React.FC = () => {
   const { i18n } = useTranslation();
@@ -111,6 +114,9 @@ export const HomePage: React.FC = () => {
   const [showVaishnoDeviGuide, setShowVaishnoDeviGuide] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showCrowdGuide, setShowCrowdGuide] = useState(false);
   const [activeDrawer, setActiveDrawer] = useState<'none' | 'stay' | 'weather' | 'budget'>('none');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -1470,7 +1476,7 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 text-xs font-bold">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-bold">
           <button
             onClick={() => setActiveDrawer(activeDrawer === 'stay' ? 'none' : 'stay')}
             className={`p-2.5 rounded-2xl border transition-all flex flex-col items-center justify-center gap-1 text-center ${
@@ -1505,6 +1511,14 @@ export const HomePage: React.FC = () => {
           >
             <span className="text-base">💰</span>
             <span className="text-[11px]">Trip Estimator</span>
+          </button>
+
+          <button
+            onClick={() => setShowCrowdGuide(true)}
+            className="p-2.5 rounded-2xl border transition-all flex flex-col items-center justify-center gap-1 text-center bg-card text-stone hover:text-ink border-border hover:border-primary/40 apple-press"
+          >
+            <span className="text-base">👥</span>
+            <span className="text-[11px]">Temple Crowd</span>
           </button>
         </div>
 
@@ -1562,12 +1576,19 @@ export const HomePage: React.FC = () => {
             <p className="text-[11px] leading-relaxed">
               Transport fares and route times are surveyed reference benchmarks to assist passenger negotiation. In medical or police emergencies, dial <strong>112</strong> immediately.
             </p>
-            <div className="flex items-center gap-3 pt-1 text-[11px]">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-[11px]">
               <button
                 onClick={() => setShowAboutModal(true)}
                 className="font-bold text-primary hover:underline apple-press"
               >
                 About Us & Mission
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => setShowContactModal(true)}
+                className="font-bold text-emerald-700 hover:underline apple-press"
+              >
+                Contact & Support
               </button>
               <span>•</span>
               <button
@@ -1582,6 +1603,13 @@ export const HomePage: React.FC = () => {
                 className="font-bold text-stone hover:text-ink apple-press"
               >
                 Privacy Policy
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => setShowTermsModal(true)}
+                className="font-bold text-stone hover:text-ink apple-press"
+              >
+                Terms of Use
               </button>
               <span>•</span>
               <button
@@ -1713,6 +1741,24 @@ export const HomePage: React.FC = () => {
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
         spotName="JammuKhoj Platform & Directory"
+      />
+
+      {/* Official Contact & Pilgrim Support Modal */}
+      <ContactSupportModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+      />
+
+      {/* Terms of Use & Legal Advisory Modal */}
+      <TermsOfServiceModal
+        isOpen={showTermsModal}
+        onClose={() => setShowTermsModal(false)}
+      />
+
+      {/* Temple Crowd & Aarti Hours Guide */}
+      <TempleCrowdGuide
+        isOpen={showCrowdGuide}
+        onClose={() => setShowCrowdGuide(false)}
       />
     </div>
   );

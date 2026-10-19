@@ -300,6 +300,29 @@ assert(fs.existsSync(checklistFile), 'Interactive Yatra & Trip Checklist module 
 const aboutFile = path.resolve(process.cwd(), 'src/features/about/AboutModal.tsx');
 assert(fs.existsSync(aboutFile), 'Civic About Us & Mission documentation is present', 'TRUST_CIVIC');
 
+const contactFile = path.resolve(process.cwd(), 'src/features/about/ContactSupportModal.tsx');
+const contactContent = fs.existsSync(contactFile) ? fs.readFileSync(contactFile, 'utf8') : '';
+assert(contactContent.includes('wa.me') && contactContent.includes('01991232125'), 'Contact & Support module with WhatsApp and official SMVDSB helplines is present', 'SUPPORT');
+
+const termsFile = path.resolve(process.cwd(), 'src/features/privacy/TermsOfServiceModal.tsx');
+const termsContent = fs.existsSync(termsFile) ? fs.readFileSync(termsFile, 'utf8') : '';
+assert(termsContent.includes('Mountain') && termsContent.includes('5,200 ft'), 'Terms of Use & Mountain Yatra Legal Advisory documentation is present', 'LEGAL');
+
+const crowdFile = path.resolve(process.cwd(), 'src/features/spiritual/TempleCrowdGuide.tsx');
+const crowdContent = fs.existsSync(crowdFile) ? fs.readFileSync(crowdFile, 'utf8') : '';
+assert(crowdContent.includes('TEMPLE_CROWD_DATA') && crowdContent.includes('aartiTimings'), 'Temple Crowd & Daily Aarti Timings Guide with 6 shrines is present', 'PILGRIMAGE');
+
+const transitLiveFile = path.resolve(process.cwd(), 'src/features/transport/TransitLiveStatus.tsx');
+const transitLiveContent = fs.existsSync(transitLiveFile) ? fs.readFileSync(transitLiveFile, 'utf8') : '';
+assert(transitLiveContent.includes('confirmtkt.com') && transitLiveContent.includes('flightradar24.com'), 'Transit Live Status Checker with Railway PNR & Flight boards is present', 'TRANSPORT');
+
+const pwaBannerFile = path.resolve(process.cwd(), 'src/ui/layout/PwaInstallBanner.tsx');
+assert(fs.existsSync(pwaBannerFile), 'PWA Install Banner (Add to Home Screen offline launcher) is present', 'PWA');
+
+const foodSectionFile = path.resolve(process.cwd(), 'src/features/food/DogriFoodSection.tsx');
+const foodSectionContent = fs.existsSync(foodSectionFile) ? fs.readFileSync(foodSectionFile, 'utf8') : '';
+assert(foodSectionContent.includes('jain_friendly') && foodSectionContent.includes('pure_veg'), 'Dogri Food Trail with Pure Veg and Jain-Friendly filters is present', 'FOOD');
+
 // -----------------------------------------------------------------------------
 // SUMMARY REPORT
 // -----------------------------------------------------------------------------

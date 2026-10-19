@@ -25,6 +25,8 @@ import { capabilityMatrix } from '@/domain/offline/capabilityMatrix';
 import { bundleManager } from '@/domain/offline/bundleManager';
 import { logger } from '@/services/logger';
 import type { AppLogEntry } from '@/data/types';
+import { ContactSupportModal } from '@/features/about/ContactSupportModal';
+import { TermsOfServiceModal } from '@/features/privacy/TermsOfServiceModal';
 
 export const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -51,6 +53,8 @@ export const SettingsPage: React.FC = () => {
   const [showCorrections, setShowCorrections] = useState(false);
   const [recentLogs, setRecentLogs] = useState<AppLogEntry[]>([]);
   const [showLogsModal, setShowLogsModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const [storageUsageMb, setStorageUsageMb] = useState<string>('0.0');
 
   React.useEffect(() => {
@@ -496,12 +500,24 @@ export const SettingsPage: React.FC = () => {
           JammuKhoj runs 100% client-side in your device sandbox. No tracking cookies or surveillance telemetry are collected or sold.
         </p>
 
-        <div className="pt-1 flex gap-2">
+        <div className="pt-1 grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <button
+            onClick={() => setShowContactModal(true)}
+            className="py-2.5 px-3 rounded-xl bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition-all text-center shadow-xs"
+          >
+            Contact & Support
+          </button>
           <button
             onClick={() => navigate('/privacy')}
-            className="flex-1 py-2 px-3 rounded-xl border border-[#9E4A0C] text-[#9E4A0C] font-bold text-xs hover:bg-[#FCEFE7] transition-all text-center"
+            className="py-2.5 px-3 rounded-xl border border-[#9E4A0C] text-[#9E4A0C] font-bold text-xs hover:bg-[#FCEFE7] transition-all text-center"
           >
-            Read Full Privacy Policy
+            Privacy Policy
+          </button>
+          <button
+            onClick={() => setShowTermsModal(true)}
+            className="py-2.5 px-3 rounded-xl border border-stone-300 text-stone-700 font-bold text-xs hover:bg-stone-50 transition-all text-center"
+          >
+            Terms of Use
           </button>
         </div>
       </section>
@@ -611,6 +627,18 @@ export const SettingsPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Official Contact & Support Modal */}
+      <ContactSupportModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+      />
+
+      {/* Terms of Use & Legal Advisory Modal */}
+      <TermsOfServiceModal
+        isOpen={showTermsModal}
+        onClose={() => setShowTermsModal(false)}
+      />
     </div>
   );
 };

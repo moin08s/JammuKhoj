@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { TopBar } from './TopBar';
 import { BottomNav } from './BottomNav';
 import { ConnectivityBanner } from '../ConnectivityBanner';
+import { PwaInstallBanner } from './PwaInstallBanner';
 import { HelpFab } from '../HelpFab';
 import { GlobalAudioMiniPlayer } from '@/features/audio/GlobalAudioMiniPlayer';
 import { bundleManager } from '@/domain/offline/bundleManager';
@@ -50,6 +51,7 @@ export const AppShell: React.FC = () => {
       <div className="w-full max-w-4xl mx-auto flex flex-col flex-1 relative bg-surface shadow-xs">
         {!isCleanHeader && <TopBar />}
         <ConnectivityBanner />
+        <PwaInstallBanner />
 
         <main className={`flex-1 ${isMap ? 'p-0 flex flex-col' : isCleanHeader ? 'px-3 sm:px-6 pt-2 pb-24' : 'px-4 sm:px-6 pb-24 pt-3'}`}>
           <Outlet />

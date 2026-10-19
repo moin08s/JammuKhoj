@@ -36,6 +36,7 @@ import {
 import { FareCalculatorWidget } from './FareCalculatorWidget';
 import { TransportComparisonMatrix } from './TransportComparisonMatrix';
 import { StationQuickRoutes } from './StationQuickRoutes';
+import { TransitLiveStatus } from './TransitLiveStatus';
 
 export const TransportPage: React.FC = () => {
   const { t } = useTranslation();
@@ -451,6 +452,9 @@ export const TransportPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Live Train, Airport Flight & Helicopter Status */}
+      <TransitLiveStatus />
 
       {/* Transit Network Reference Card */}
       <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-2.5 shadow-sm text-xs">
