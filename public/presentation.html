@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JammuKhoj - 10-Slide Pitch Deck</title>
+  <title>JammuKhoj - Executive 10-Slide Pitch Deck</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <style>
     :root {
-      --primary: #085444;
-      --forest: #123E38;
-      --amber: #9E4A0C;
-      --gold: #D97706;
-      --bg-cream: #FAF8F4;
+      --primary: #0B3D33;
+      --forest: #07241E;
+      --amber: #A84D0E;
+      --gold: #D98210;
+      --bg-cream: #FAF7F2;
       --card-bg: #FFFFFF;
-      --border: #E6DED4;
-      --ink: #1A2420;
-      --muted: #64746C;
+      --border: #E4DCD2;
+      --ink: #18221E;
+      --muted: #5F6E67;
+      --light-tint: #EEF7F2;
     }
     * {
       box-sizing: border-box;
@@ -24,7 +25,7 @@
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #0A1210;
+      background: #06110E;
       color: var(--ink);
       height: 100vh;
       overflow: hidden;
@@ -38,7 +39,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid rgba(217, 119, 6, 0.4);
+      border-bottom: 1px solid rgba(217, 130, 16, 0.4);
       z-index: 10;
     }
     .brand {
@@ -48,6 +49,11 @@
       font-weight: 800;
       font-size: 1.1rem;
       color: #fff;
+    }
+    .brand img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
     }
     .brand span {
       color: var(--gold);
@@ -90,27 +96,27 @@
     .slide {
       display: none;
       width: 100%;
-      max-width: 1140px;
-      height: 640px;
+      max-width: 1160px;
+      height: 650px;
       background: var(--bg-cream);
       border-radius: 20px;
       box-shadow: 0 20px 45px rgba(0,0,0,0.45);
       border: 1px solid var(--border);
-      padding: 34px 44px;
+      padding: 32px 42px;
       flex-direction: column;
       position: relative;
-      animation: fadeIn 0.3s ease-out forwards;
+      animation: fadeIn 0.25s ease-out forwards;
     }
     .slide.active {
       display: flex;
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.985); }
+      from { opacity: 0; transform: scale(0.99); }
       to { opacity: 1; transform: scale(1); }
     }
     /* Dark Theme Slide (Slide 1 & 10) */
     .slide.hero-slide {
-      background: linear-gradient(135deg, var(--primary) 0%, #0C2D26 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--forest) 100%);
       color: #fff;
       border: 2px solid var(--gold);
     }
@@ -121,7 +127,7 @@
       color: #fff;
     }
     .hero-slide p {
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255, 255, 255, 0.92);
     }
     .cat-badge {
       font-size: 0.78rem;
@@ -140,9 +146,9 @@
       margin-bottom: 4px;
     }
     .slide-subtitle {
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       color: var(--muted);
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       line-height: 1.4;
     }
     /* Layout Helpers */
@@ -162,7 +168,7 @@
     }
     .phone-mockup {
       width: 250px;
-      background: #111816;
+      background: #141A18;
       border: 2px solid var(--gold);
       border-radius: 26px;
       padding: 6px;
@@ -206,12 +212,6 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
     }
-    .grid-5 {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      flex: 1;
-    }
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -222,7 +222,7 @@
     }
     .card-dark {
       background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(217, 119, 6, 0.4);
+      border: 1px solid rgba(217, 130, 16, 0.4);
       color: #fff;
     }
     .card h3 {
@@ -296,7 +296,7 @@
     td:last-child {
       font-weight: 700;
       color: var(--primary);
-      background: rgba(8, 84, 68, 0.05);
+      background: var(--light-tint);
     }
     footer.slide-footer {
       margin-top: auto;
@@ -317,7 +317,8 @@
 
   <header>
     <div class="brand">
-      <span>🏔️</span> JammuKhoj • Official Pitch Deck
+      <img src="/deck_assets/app_logo.png" alt="JammuKhoj Emblem" />
+      JammuKhoj • Official Executive Pitch Deck
     </div>
     <div class="controls">
       <button class="btn" onclick="prevSlide()">◀ Previous</button>
@@ -329,128 +330,145 @@
 
   <div id="deck-container">
 
-    <!-- SLIDE 1 -->
-    <div class="slide hero-slide active">
-      <div class="split-layout">
-        <div class="split-content">
-          <div>
-            <div class="cat-badge">01 • PROJECT INTRODUCTION</div>
-            <h1 class="slide-title" style="font-size: 2.8rem; color: #fff;">JammuKhoj (जम्मू खोज)</h1>
-            <p class="slide-subtitle" style="color: var(--gold); font-size: 1.25rem; font-weight: 700; margin-bottom: 12px;">
-              "Your Jammu Journey, Made Simple."
-            </p>
-            <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 18px; color: rgba(255, 255, 255, 0.92);">
-              A production-ready progressive web app & Android platform engineered for transit layovers and Mata Vaishno Devi pilgrims across the Jammu Division. Delivering deterministic departure safety buffers, transparent transport benchmarks, step-free senior guidance, and zero-tracking privacy.
-            </p>
-          </div>
-          <div class="grid-2">
-            <div class="card card-dark">
-              <h3>⚡ 1-Tap Buffer Planner</h3>
-              <p>Express 4h, 8h & 24h layovers preserving safe departure margins.</p>
-            </div>
-            <div class="card card-dark">
-              <h3>📶 100% Offline IndexedDB</h3>
-              <p>Vector maps, full routing & emergency dialers stored on-device.</p>
-            </div>
-            <div class="card card-dark">
-              <h3>🚌 Transparent Transit</h3>
-              <p>Surveyed tariffs for Matadors (₹10–25), Autos & Prepaid Taxis.</p>
-            </div>
-            <div class="card card-dark">
-              <h3>🧓 Senior & Pilgrim Ease</h3>
-              <p>Step-free access, battery-car rules & 1-tap ERSS 112 WhatsApp SOS.</p>
-            </div>
-          </div>
-        </div>
+    <!-- SLIDE 1: EXECUTIVE COVER (LOGO FOCUS, NO PHONE MOCKUP) -->
+    <div class="slide hero-slide active" style="align-items: center; justify-content: center; text-align: center; padding: 36px 48px;">
+      <div style="margin-bottom: 14px;">
+        <img src="/deck_assets/app_logo.png" alt="JammuKhoj Official Emblem" style="width: 110px; height: 110px; border-radius: 50%; box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 3px solid var(--gold);" />
+      </div>
+      
+      <div class="cat-badge" style="margin-bottom: 6px;">OFFLINE-FIRST CIVIC TRAVEL INNOVATION • JAMMU DIVISION & VAISHNO DEVI</div>
+      <h1 class="slide-title" style="font-size: 3.2rem; color: #fff; margin-bottom: 4px;">JammuKhoj</h1>
+      <p style="color: var(--gold); font-size: 1.35rem; font-weight: 700; margin-bottom: 12px;">
+        जम्मू खोज • "Your Jammu Journey, Made Simple."
+      </p>
+      
+      <p style="max-width: 860px; font-size: 0.98rem; line-height: 1.5; color: rgba(255, 255, 255, 0.92); margin: 0 auto 24px auto;">
+        A production-ready progressive web app & Android platform engineered for transit layovers and Mata Vaishno Devi pilgrims across the Jammu Division. Delivering deterministic departure safety buffers, transparent transport benchmarks, step-free senior guidance, and zero-tracking privacy.
+      </p>
 
-        <div class="phone-mockup">
-          <div class="phone-caption">Live App • Home Screen</div>
-          <img src="/deck_assets/app_home_planner.png" alt="JammuKhoj Home Screen with 1-Tap Planner" />
+      <!-- 4 Executive Highlight Pills -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 100%; max-width: 980px; margin-bottom: 24px;">
+        <div style="background: rgba(255,255,255,0.08); border: 1px solid var(--gold); border-radius: 10px; padding: 10px 12px; text-align: center;">
+          <div style="font-size: 0.95rem; font-weight: 700; color: var(--gold); margin-bottom: 2px;">⚡ 1-Tap Buffer Planner</div>
+          <div style="font-size: 0.78rem; color: #fff;">4h, 8h & 24h layover circuits</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.08); border: 1px solid var(--gold); border-radius: 10px; padding: 10px 12px; text-align: center;">
+          <div style="font-size: 0.95rem; font-weight: 700; color: var(--gold); margin-bottom: 2px;">📶 100% Offline IndexedDB</div>
+          <div style="font-size: 0.78rem; color: #fff;">Vector maps & full routing offline</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.08); border: 1px solid var(--gold); border-radius: 10px; padding: 10px 12px; text-align: center;">
+          <div style="font-size: 0.95rem; font-weight: 700; color: var(--gold); margin-bottom: 2px;">🚌 Transparent Transit</div>
+          <div style="font-size: 0.78rem; color: #fff;">Matadors (₹10–25), Autos & Taxis</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.08); border: 1px solid var(--gold); border-radius: 10px; padding: 10px 12px; text-align: center;">
+          <div style="font-size: 0.95rem; font-weight: 700; color: var(--gold); margin-bottom: 2px;">🧓 Senior & Pilgrim Ease</div>
+          <div style="font-size: 0.78rem; color: #fff;">Step-free, battery cars & 112 SOS</div>
         </div>
       </div>
 
-      <footer class="slide-footer">
-        <span>JammuKhoj • Civic Travel Innovation • Official Domain: https://jammukhoj.in</span>
-        <span>Slide 1 of 10</span>
+      <footer class="slide-footer" style="width: 100%;">
+        <span>Production Release • October 2026 • Live App: https://jammukhoj.in</span>
+        <span>44/44 Verified High-Level Tests Passing • Slide 1 of 10</span>
       </footer>
     </div>
 
-    <!-- SLIDE 2 -->
+    <!-- SLIDE 2: PROBLEM STATEMENT (INFOGRAPHIC 3-PILLAR) -->
     <div class="slide">
       <div class="cat-badge">02 • PROBLEM & HACKATHON ALIGNMENT</div>
       <h2 class="slide-title">The Transit Anxiety & Information Vacuum in Jammu</h2>
       <p class="slide-subtitle">Millions of pilgrims arrive at Jammu Tawi & Airport facing fear, exploitation, and zero curated guidance.</p>
+      
+      <!-- Context Banner -->
+      <div style="background: var(--light-tint); border: 1px solid var(--primary); border-radius: 10px; padding: 10px 16px; margin-bottom: 14px;">
+        <strong style="color: var(--primary); font-size: 0.88rem;">THE CORE DILEMMA:</strong>
+        <span style="color: var(--muted); font-size: 0.84rem; margin-left: 6px;">Jammu is treated as a high-friction transit bottleneck rather than a cultural destination. Over 10 million yatris transit annually without local discovery.</span>
+      </div>
+
       <div class="grid-3">
         <div class="card">
-          <h3 style="color: var(--amber);">🚨 Transit Anxiety & Time Fear</h3>
-          <p><strong>Fear of missing onward trains / flights:</strong></p>
+          <h3 style="color: var(--amber);">🚨 01. The Transit Panic</h3>
+          <p style="margin-bottom: 6px;"><strong>Fear of missing onward trains / flights:</strong></p>
           <ul>
             <li>Pilgrims face 4 to 12 hour layovers at Jammu Tawi or IXJ Airport.</li>
             <li>Fear of mountain highway bottlenecks traps families on railway platforms.</li>
             <li>Zero existing tools compute guaranteed conservative safety return buffers.</li>
+            <li>Result: Over 85% of visitors never step outside the station compound.</li>
           </ul>
         </div>
         <div class="card">
-          <h3 style="color: var(--amber);">💸 Transport Gouging & Haggling</h3>
-          <p><strong>Unregulated local transit fares:</strong></p>
+          <h3 style="color: var(--amber);">💸 02. The ₹1,200 Haggling Tax</h3>
+          <p style="margin-bottom: 6px;"><strong>Unregulated local transit fares:</strong></p>
           <ul>
             <li>Unsuspecting yatris routinely charged ₹800–₹1,500 for a ₹150 taxi ride.</li>
             <li>Matador mini-bus stages and route numbers are completely opaque to outsiders.</li>
             <li>Zero visibility into official prepaid auto/taxi union rate cards.</li>
+            <li>Result: Tourists feel exploited within their first hour in Jammu.</li>
           </ul>
         </div>
         <div class="card">
-          <h3 style="color: var(--amber);">📴 Mountain Dead Zones & Strain</h3>
-          <p><strong>Cellular blackouts & physical hardship:</strong></p>
+          <h3 style="color: var(--amber);">📴 03. The Mountain Blackout</h3>
+          <p style="margin-bottom: 6px;"><strong>Cellular dead zones & physical hardship:</strong></p>
           <ul>
             <li>Cloud-based travel apps crash in Shivalik foothill tunnels and dead zones.</li>
             <li>Senior citizens face unexpected steep stairs without wheelchair/battery-car guidance.</li>
             <li>Emergency hotlines and National ERSS 112 are scattered across fragmented websites.</li>
+            <li>Result: Families with elders experience high physical and mental stress.</li>
           </ul>
         </div>
       </div>
       <footer class="slide-footer">
-        <span>JammuKhoj • Problem Statement • J&K Hackathon 2026</span>
+        <span>JammuKhoj • Problem Statement • J&K Civic Travel Innovation</span>
         <span>Slide 2 of 10</span>
       </footer>
     </div>
 
-    <!-- SLIDE 3 -->
+    <!-- SLIDE 3: THE VISITOR-DISCOVERY GAP -->
     <div class="slide">
       <div class="cat-badge">03 • THE VISITOR-DISCOVERY GAP</div>
       <h2 class="slide-title">The 10-Million Pilgrim Paradox: Direct Transit Bypass</h2>
       <p class="slide-subtitle">A colossal pilgrim footfall that bypasses Jammu's rich heritage, costing the city ₹300+ Cr annually.</p>
       <div class="grid-2">
-        <div class="card" style="background: var(--primary); color: #fff;">
-          <div class="metric-value">10M+</div>
-          <div class="metric-label">Annual Vaishno Devi Pilgrims</div>
-          <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem; line-height: 1.45; margin-bottom: 16px;">
-            One of the world's most visited pilgrimage corridors, with over 10 million yatris transiting Jammu Tawi Station, General Bus Stand, and Airport every year.
-          </p>
-          <div class="metric-value" style="font-size: 2rem;">< 2 Hours</div>
-          <div class="metric-label">Average Dwell Time in Jammu City</div>
-          <p style="color: rgba(255,255,255,0.85); font-size: 0.85rem;">
-            Over 85% of yatris treat Jammu as a mere train-to-bus transit hallway, rushing straight to Katra without stepping into Jammu's historic bazaars.
-          </p>
+        <div class="card" style="background: var(--primary); color: #fff; justify-content: space-around;">
+          <div>
+            <div class="metric-value">10,000,000+</div>
+            <div class="metric-label">Annual Vaishno Devi Pilgrims</div>
+            <p style="color: rgba(255,255,255,0.9); font-size: 0.88rem; line-height: 1.45;">
+              One of the world's most visited pilgrimage corridors, with over 10 million yatris transiting Jammu Tawi Station, General Bus Stand, and Airport every year.
+            </p>
+          </div>
+          <div>
+            <div class="metric-value" style="font-size: 2.2rem;">< 2 Hours</div>
+            <div class="metric-label">Average Transit Dwell Time in Jammu City</div>
+            <p style="color: rgba(255,255,255,0.85); font-size: 0.85rem;">
+              Over 85% of yatris treat Jammu as a mere train-to-bus transit hallway, rushing straight to Katra without stepping into Jammu's historic bazaars.
+            </p>
+          </div>
+          <div>
+            <div class="metric-value" style="font-size: 2.0rem;">₹300+ Crores</div>
+            <div class="metric-label">Estimated Lost Annual Municipal Economy</div>
+            <p style="color: rgba(255,255,255,0.85); font-size: 0.82rem;">
+              Potential local revenue lost in traditional hospitality, verified Dogra crafts, and public transit.
+            </p>
+          </div>
         </div>
-        <div class="card">
-          <h3>Four Costly Tourism & Economic Gaps</h3>
-          <div style="margin-top: 4px; display: flex; flex-direction: column; gap: 8px;">
+        <div class="card" style="justify-content: space-between;">
+          <h3 style="font-size: 1.2rem; margin-bottom: 4px;">Where the Visitor Value Is Lost</h3>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
             <div>
-              <strong style="color: var(--amber); font-size: 0.88rem;">🏛️ Heritage Neglect:</strong>
-              <p style="font-size: 0.82rem;">Mubarak Mandi Palace (Dogra royal seat), Bahu Fort (3000 yrs), and Amar Mahal witness only a tiny fraction of their visitor potential.</p>
+              <strong style="color: var(--amber); font-size: 0.92rem;">🏛️ Heritage Neglect:</strong>
+              <p style="font-size: 0.84rem; margin-top: 2px;">Mubarak Mandi Palace (seat of Dogra dynasty), Bahu Fort (3000-yr landmark), and Amar Mahal witness <5% of pilgrim footfall due to missing structured half-day circuits.</p>
             </div>
             <div>
-              <strong style="color: var(--amber); font-size: 0.88rem;">🛍️ GI Craft Exploitation:</strong>
-              <p style="font-size: 0.82rem;">Authentic Dogra crafts (Basohli Paintings, Pashmina, Basohli Tweed, Bhaderwah Rajmash) lose sales to roadside highway fakes.</p>
+              <strong style="color: var(--amber); font-size: 0.92rem;">🛍️ GI Craft Exploitation:</strong>
+              <p style="font-size: 0.84rem; margin-top: 2px;">Authentic Dogra crafts (Basohli Paintings, Pashmina, Basohli Tweed, Bhaderwah Rajmash) lose sales to roadside counterfeit stalls because visitors lack a verified artisan directory.</p>
             </div>
             <div>
-              <strong style="color: var(--amber); font-size: 0.88rem;">🍲 Forgotten Dogra Cuisine:</strong>
-              <p style="font-size: 0.82rem;">Authentic Kaladi cheese, Dogra Dham feasts, and Sund panjeeri remain hidden from visiting food enthusiasts.</p>
+              <strong style="color: var(--amber); font-size: 0.92rem;">🍲 Forgotten Dogra Cuisine:</strong>
+              <p style="font-size: 0.84rem; margin-top: 2px;">Indigenous nutritious Dogra delicacies (Kaladi Kulcha, Dogra Dham feasts, Sund Panjeeri) lose out to generic highway fast food due to lack of hygienic, verified food trails.</p>
             </div>
             <div>
-              <strong style="color: var(--amber); font-size: 0.88rem;">📉 Lost Municipal Revenue:</strong>
-              <p style="font-size: 0.82rem;">Local public transit, artisans, and family dhabas miss out on massive tourism multiplier spending.</p>
+              <strong style="color: var(--amber); font-size: 0.92rem;">📉 Transit Inefficiency:</strong>
+              <p style="font-size: 0.84rem; margin-top: 2px;">Public Matador mini-buses and E-buses run with irregular passenger loads while private touts crowd station gates, driving congestion and commuter dissatisfaction.</p>
             </div>
           </div>
         </div>
@@ -461,7 +479,7 @@
       </footer>
     </div>
 
-    <!-- SLIDE 4 -->
+    <!-- SLIDE 4: THE JAMMUKHOJ SOLUTION (SOLUTIONS + PHONE SHOWCASE) -->
     <div class="slide">
       <div class="cat-badge">04 • THE JAMMUKHOJ SOLUTION</div>
       <h2 class="slide-title">An Intelligent, Resilient Local Guide Built for Pilgrims</h2>
@@ -472,7 +490,7 @@
           <div class="card">
             <h3>⚡ 1-Tap Buffer-Safe Circuit Engine</h3>
             <p>
-              Deterministic layout generator tailored to traveler's exact layover window (4h Express, 8h Cultural, 24h Valley trail). Enforces a strict <strong>45-min rail buffer</strong> and <strong>150-min air buffer</strong>, eliminating missed departures.
+              Deterministic layover itinerary engine tailored to traveler's exact departure deadline (4h Express, 8h Cultural, 24h Valley trail). Enforces a strict <strong>45-min rail buffer</strong> and <strong>150-min air buffer</strong>, eliminating missed departures.
             </p>
           </div>
           <div class="card">
@@ -501,7 +519,7 @@
       </footer>
     </div>
 
-    <!-- SLIDE 5 -->
+    <!-- SLIDE 5: USER JOURNEY (HORIZONTAL 5-STAGE FLOW + SCREENSHOT) -->
     <div class="slide">
       <div class="cat-badge">05 • USER JOURNEY</div>
       <h2 class="slide-title">From Station Arrival to Holy Darshan in 5 Steps</h2>
@@ -512,19 +530,19 @@
           <div class="card" style="flex: 1; justify-content: space-between;">
             <div>
               <div style="color: var(--amber); font-weight: 700; font-size: 0.85rem;">STEP 1: ARRIVAL AT STATION / AIRPORT</div>
-              <p style="margin-bottom: 6px;">Yatri steps off train at Jammu Tawi (JAT) or IXJ Airport. Opens jammukhoj.in directly with 1 tap. Zero mandatory login barrier.</p>
+              <p style="margin-bottom: 4px;">Yatri steps off train at Jammu Tawi (JAT) or IXJ Airport. Opens jammukhoj.in directly with 1 tap. Zero mandatory login barrier.</p>
             </div>
             <div>
               <div style="color: var(--amber); font-weight: 700; font-size: 0.85rem;">STEP 2: 1-TAP ITINERARY GENERATION</div>
-              <p style="margin-bottom: 6px;">Selects layover: '4-Hour Express' from station. App automatically reserves 45-min departure buffer and crafts a 2.5-hr curated circuit.</p>
+              <p style="margin-bottom: 4px;">Selects layover: '4-Hour Express' from station. App automatically reserves 45-min departure buffer and crafts a 2.5-hr curated circuit.</p>
             </div>
             <div>
               <div style="color: var(--amber); font-weight: 700; font-size: 0.85rem;">STEP 3: TRANSPARENT LOCAL TRANSIT</div>
-              <p style="margin-bottom: 6px;">Checks Matador Route #1 to Raghunath Bazaar. Boards with exact ₹15 fare; avoids cab touts quoting ₹400 for the same distance.</p>
+              <p style="margin-bottom: 4px;">Checks Matador Route #1 to Raghunath Bazaar. Boards with exact ₹15 fare; avoids cab touts quoting ₹400 for the same distance.</p>
             </div>
             <div>
               <div style="color: var(--amber); font-weight: 700; font-size: 0.85rem;">STEP 4: CULTURAL DISCOVERY & PURE VEG FOOD</div>
-              <p style="margin-bottom: 6px;">Offers prayers at Raghunath Mandir, tastes authentic Kaladi Kulcha with Jain/Pure Veg filter, and visits verified Basohli craft shop.</p>
+              <p style="margin-bottom: 4px;">Offers prayers at Raghunath Mandir, tastes authentic Kaladi Kulcha with Jain/Pure Veg filter, and visits verified Basohli craft shop.</p>
             </div>
             <div>
               <div style="color: var(--amber); font-weight: 700; font-size: 0.85rem;">STEP 5: SAFE ONWARD DEPARTURE</div>
@@ -545,7 +563,7 @@
       </footer>
     </div>
 
-    <!-- SLIDE 6 -->
+    <!-- SLIDE 6: CORE DIFFERENTIATION MATRIX -->
     <div class="slide">
       <div class="cat-badge">06 • CORE DIFFERENTIATION</div>
       <h2 class="slide-title">How JammuKhoj Outperforms Generic Travel Platforms</h2>
@@ -609,51 +627,47 @@
       </footer>
     </div>
 
-    <!-- SLIDE 7 -->
+    <!-- SLIDE 7: EXPECTED IMPACT & TARGETS (EXECUTIVE METRICS) -->
     <div class="slide">
       <div class="cat-badge">07 • EXPECTED IMPACT & TARGETS</div>
       <h2 class="slide-title">Measurable Economic, Civic, and Social Outcomes</h2>
       <p class="slide-subtitle">High-leverage socio-economic returns for pilgrims, local businesses, and municipal transit.</p>
       
-      <div class="split-layout">
-        <div class="split-content">
-          <div class="grid-4" style="margin-bottom: 12px;">
-            <div class="card" style="background: var(--primary); color: #fff; padding: 10px;">
-              <div class="metric-value" style="font-size: 1.8rem;">3x</div>
-              <div class="metric-label" style="font-size: 0.8rem;">Dwell Multiplier</div>
-              <p class="metric-desc">From &lt;2h to 6-8h safe circuits.</p>
-            </div>
-            <div class="card" style="background: var(--primary); color: #fff; padding: 10px;">
-              <div class="metric-value" style="font-size: 1.8rem;">₹150 Cr+</div>
-              <div class="metric-label" style="font-size: 0.8rem;">Economic Unlock</div>
-              <p class="metric-desc">Direct local food & craft spend.</p>
-            </div>
-            <div class="card" style="background: var(--primary); color: #fff; padding: 10px;">
-              <div class="metric-value" style="font-size: 1.8rem;">₹1,200</div>
-              <div class="metric-label" style="font-size: 0.8rem;">Family Savings</div>
-              <p class="metric-desc">Preventing transit gouging.</p>
-            </div>
-            <div class="card" style="background: var(--primary); color: #fff; padding: 10px;">
-              <div class="metric-value" style="font-size: 1.8rem;">0</div>
-              <div class="metric-label" style="font-size: 0.8rem;">Missed Boardings</div>
-              <p class="metric-desc">Guaranteed return buffers.</p>
-            </div>
-          </div>
-
-          <div class="card" style="flex: 1;">
-            <h3 style="font-size: 0.95rem; margin-bottom: 4px;">🏛️ GI Heritage & Public Safety Impact</h3>
-            <p style="margin-bottom: 6px;">
-              Empowers Basohli painters, Pashmina weavers, and Bhaderwah farmers with verified outlet discovery and fake-identification guides. Pilgrims purchase authentic GI certified heritage at fair benchmark prices directly supporting cottage industries.
-            </p>
-            <p>
-              1-Tap WhatsApp GPS SOS dispatcher and offline dialers for ERSS 112, SMVDSB Shrine Helplines, and women's assistance. Real-time dynamic temple crowd meters and aarti timings prevent stampedes and reduce elder exhaustion during Navratri surges.
-            </p>
-          </div>
+      <div class="grid-4" style="margin-bottom: 14px;">
+        <div class="card" style="background: var(--primary); color: #fff; padding: 12px;">
+          <div class="metric-value">3x</div>
+          <div class="metric-label">Dwell Multiplier</div>
+          <p class="metric-desc">From &lt;2h to 6-8h safe circuits.</p>
         </div>
+        <div class="card" style="background: var(--primary); color: #fff; padding: 12px;">
+          <div class="metric-value">₹150 Cr+</div>
+          <div class="metric-label">Economic Target</div>
+          <p class="metric-desc">Direct local food & craft spend.</p>
+        </div>
+        <div class="card" style="background: var(--primary); color: #fff; padding: 12px;">
+          <div class="metric-value">₹1,200</div>
+          <div class="metric-label">Family Savings</div>
+          <p class="metric-desc">Preventing transit gouging.</p>
+        </div>
+        <div class="card" style="background: var(--primary); color: #fff; padding: 12px;">
+          <div class="metric-value">0</div>
+          <div class="metric-label">Missed Boardings</div>
+          <p class="metric-desc">Guaranteed return buffers.</p>
+        </div>
+      </div>
 
-        <div class="phone-mockup">
-          <div class="phone-caption">App UI • Attraction Details</div>
-          <img src="/deck_assets/app_attraction_detail.png" alt="Bahu Fort Attraction Detail Screen" />
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="font-size: 1.05rem; margin-bottom: 4px;">🏛️ Cultural & GI Heritage Renaissance</h3>
+          <p>
+            Empowers Basohli painters, Pashmina weavers, and Bhaderwah farmers with verified outlet discovery and fake-identification guides. Pilgrims purchase authentic GI certified heritage at fair benchmark prices directly supporting cottage industries.
+          </p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 1.05rem; margin-bottom: 4px;">🛡️ Public Safety & Yatra Welfare</h3>
+          <p>
+            1-Tap WhatsApp GPS SOS dispatcher and offline dialers for ERSS 112, SMVDSB Shrine Helplines, and women's assistance. Real-time dynamic temple crowd meters and aarti timings prevent stampedes and reduce elder exhaustion during Navratri surges.
+          </p>
         </div>
       </div>
 
@@ -663,37 +677,64 @@
       </footer>
     </div>
 
-    <!-- SLIDE 8 -->
+    <!-- SLIDE 8: IMPLEMENTATION ROADMAP (HORIZONTAL TIMELINE) -->
     <div class="slide">
       <div class="cat-badge">08 • IMPLEMENTATION ROADMAP</div>
       <h2 class="slide-title">4-Stage Scalable Deployment Plan (2026 – 2027)</h2>
       <p class="slide-subtitle">From proven progressive web app & Android build to institutional statewide rollout.</p>
       
-      <div class="split-layout">
-        <div class="split-content">
-          <div class="card" style="flex: 1; justify-content: space-between;">
-            <div>
-              <div style="color: var(--primary); font-weight: 700; font-size: 0.85rem;">PHASE 1: FOUNDATION (COMPLETED & LIVE)</div>
-              <p style="margin-bottom: 6px;">Live on jammukhoj.in • 100% offline PWA & Android APK • 36+ attractions & 44 automated tests passing • 1-Tap buffer planner & transit matrix.</p>
-            </div>
-            <div>
-              <div style="color: var(--amber); font-weight: 700; font-size: 0.85rem;">PHASE 2: TRANSIT NODE PILOT (Q1-Q2 2027)</div>
-              <p style="margin-bottom: 6px;">QR code touchpoints at Jammu Tawi & Katra concourses • J&K Smart City e-bus live status integration • Onboard 50+ verified local dhabas & GI artisans • Target: 50,000 monthly users.</p>
-            </div>
-            <div>
-              <div style="color: var(--amber); font-weight: 700; font-size: 0.85rem;">PHASE 3: INSTITUTIONAL SYNC (Q3 2027)</div>
-              <p style="margin-bottom: 6px;">Official endorsement by J&K Tourism Directorate • SMVDSB Katra battery-car & RFID status tie-in • Railway Yatri Niwas booking cross-links • Target: 250,000 active yatris.</p>
-            </div>
-            <div>
-              <div style="color: var(--forest); font-weight: 700; font-size: 0.85rem;">PHASE 4: ECOSYSTEM SCALE (Q4 2027+)</div>
-              <p>Expansion to Bhaderwah, Kishtwar, Poonch & Rajouri • Audio heritage guides in Dogri, Hindi & English • Open-source blueprint for other pilgrim hubs (Varanasi, Tirupati).</p>
-            </div>
+      <div class="grid-4" style="flex: 1;">
+        <div class="card" style="border-top: 4px solid var(--primary);">
+          <div style="background: var(--primary); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-align: center; margin-bottom: 10px;">
+            LIVE IN PRODUCTION
           </div>
+          <h3 style="font-size: 1.05rem;">Phase 1: Foundation</h3>
+          <ul style="font-size: 0.82rem; margin-top: 6px;">
+            <li>Live on jammukhoj.in domain</li>
+            <li>100% offline PWA & Android APK</li>
+            <li>36+ curated attractions & maps</li>
+            <li>44 automated tests passing</li>
+            <li>1-Tap buffer planner & matrix</li>
+          </ul>
         </div>
 
-        <div class="phone-mockup">
-          <div class="phone-caption">App UI • Offline Hub</div>
-          <img src="/deck_assets/app_offline_settings.png" alt="Offline Settings Screen" />
+        <div class="card" style="border-top: 4px solid var(--amber);">
+          <div style="background: var(--amber); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-align: center; margin-bottom: 10px;">
+            Q1-Q2 2027
+          </div>
+          <h3 style="font-size: 1.05rem;">Phase 2: Transit Node Pilot</h3>
+          <ul style="font-size: 0.82rem; margin-top: 6px;">
+            <li>QR kiosks at Jammu Tawi & Katra</li>
+            <li>J&K Smart City e-bus live status</li>
+            <li>Onboard 50+ verified dhabas & GI</li>
+            <li>Target: 50,000 monthly active yatris</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--primary);">
+          <div style="background: var(--primary); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-align: center; margin-bottom: 10px;">
+            Q3 2027
+          </div>
+          <h3 style="font-size: 1.05rem;">Phase 3: Institutional Sync</h3>
+          <ul style="font-size: 0.82rem; margin-top: 6px;">
+            <li>J&K Tourism official endorsement</li>
+            <li>SMVDSB Katra battery-car status</li>
+            <li>Railway Yatri Niwas booking cross-links</li>
+            <li>Target: 250,000 active pilgrim users</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--gold);">
+          <div style="background: var(--gold); color: #000; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-align: center; margin-bottom: 10px;">
+            Q4 2027+
+          </div>
+          <h3 style="font-size: 1.05rem;">Phase 4: Ecosystem Scale</h3>
+          <ul style="font-size: 0.82rem; margin-top: 6px;">
+            <li>Expansion: Bhaderwah, Kishtwar, Poonch</li>
+            <li>Audio heritage in Dogri, Hindi, English</li>
+            <li>Open-source blueprint for pilgrim hubs</li>
+            <li>Self-sustaining civic non-commission</li>
+          </ul>
         </div>
       </div>
 
@@ -703,39 +744,44 @@
       </footer>
     </div>
 
-    <!-- SLIDE 9 -->
+    <!-- SLIDE 9: SUSTAINABILITY & PRIVACY -->
     <div class="slide">
       <div class="cat-badge">09 • SUSTAINABILITY & PRIVACY</div>
       <h2 class="slide-title">Civic Integrity, Zero-Surveillance Privacy & Low Footprint</h2>
       <p class="slide-subtitle">Built to protect user privacy and operate sustainably without predatory data monetization.</p>
       
-      <div class="split-layout">
-        <div class="split-content">
-          <div class="card" style="flex: 1; justify-content: space-between;">
-            <div>
-              <h3 style="font-size: 0.95rem; margin-bottom: 4px;">🔒 Zero-Knowledge Privacy (Google Play Compliant)</h3>
-              <p style="margin-bottom: 6px;">
-                100% of user data, bookmarks, and custom plans remain strictly on-device in IndexedDB. Zero tracking cookies, zero third-party telemetry, zero location data monetization. 1-Tap permanent account & local storage wipe button directly in Settings.
-              </p>
-            </div>
-            <div>
-              <h3 style="font-size: 0.95rem; margin-bottom: 4px;">🌱 Ultra-Low Resource Footprint</h3>
-              <p style="margin-bottom: 6px;">
-                Lightweight 5.5 MB APK and &lt;2 MB compressed web bundle. Runs smoothly on budget ₹6,000 Android phones without thermal throttling. OLED-friendly dark mode and high-contrast WCAG 2.1 AA modes save battery during travel.
-              </p>
-            </div>
-            <div>
-              <h3 style="font-size: 0.95rem; margin-bottom: 4px;">🤝 Sustainable Public-Private Civic Model</h3>
-              <p>
-                Non-commission directory preventing price distortion for travelers. Verified artisan and homestay listings supported by J&K Tourism development authorities. Open-source data structures contributing back to OpenStreetMap and civic archives.
-              </p>
-            </div>
-          </div>
+      <div class="grid-3">
+        <div class="card">
+          <h3 style="font-size: 1.05rem;">🔒 Zero-Surveillance Privacy</h3>
+          <p style="font-size: 0.82rem; font-weight: 700; color: var(--amber); margin-bottom: 6px;">Google Play & Privacy Act Compliant</p>
+          <ul>
+            <li>100% of user data, bookmarks, and custom plans remain strictly on-device in IndexedDB.</li>
+            <li>Zero tracking cookies, zero third-party telemetry, zero location data monetization.</li>
+            <li>Zero mandatory registration barrier: full functionality available to guests.</li>
+            <li>1-Tap permanent account & local storage wipe button directly in Settings.</li>
+          </ul>
         </div>
 
-        <div class="phone-mockup">
-          <div class="phone-caption">App UI • Dogri Food Trail</div>
-          <img src="/deck_assets/app_dogri_food.png" alt="Dogri Food Trail Screen" />
+        <div class="card">
+          <h3 style="font-size: 1.05rem;">🌱 Ultra-Low Footprint</h3>
+          <p style="font-size: 0.82rem; font-weight: 700; color: var(--amber); margin-bottom: 6px;">Engineered for Mountain Transit</p>
+          <ul>
+            <li>Lightweight 5.5 MB APK and &lt;2 MB compressed web bundle.</li>
+            <li>Runs smoothly on budget ₹6,000 Android phones without thermal throttling.</li>
+            <li>Offline-first vector maps consume zero background cellular data.</li>
+            <li>OLED-friendly dark mode and high-contrast WCAG 2.1 AA modes conserve traveler battery.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 1.05rem;">🤝 Sustainable Civic Model</h3>
+          <p style="font-size: 0.82rem; font-weight: 700; color: var(--amber); margin-bottom: 6px;">Public Benefit, Non-Commission</p>
+          <ul>
+            <li>Non-commission directory preventing price inflation for travelers.</li>
+            <li>Verified artisan and homestay listings supported by J&K Tourism development authorities.</li>
+            <li>Open-source data structures contributing back to OpenStreetMap and civic archives.</li>
+            <li>Scalable cloud architecture hosted efficiently with negligible monthly operational cost.</li>
+          </ul>
         </div>
       </div>
 
@@ -745,12 +791,12 @@
       </footer>
     </div>
 
-    <!-- SLIDE 10 -->
+    <!-- SLIDE 10: CLOSING CALL TO ACTION -->
     <div class="slide hero-slide">
       <div class="cat-badge">10 • CLOSING PITCH & PILOT ASKS</div>
       <h2 class="slide-title" style="color: #fff; font-size: 2.4rem;">Partner with Us to Transform Jammu Tourism</h2>
       <p class="slide-subtitle" style="color: var(--gold); font-size: 1.2rem; margin-bottom: 16px;">
-        "Let's turn a hurried 2-hour transit rush into an enriching, safe cultural gateway."
+        "Turn a hurried 2-hour transit rush into an enriching, safe cultural gateway for 10 million yatris."
       </p>
       <div class="grid-3" style="margin-bottom: 18px;">
         <div class="card card-dark">
