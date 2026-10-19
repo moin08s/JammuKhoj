@@ -1,6 +1,7 @@
 """
-JammuKhoj - Professional Pitch Deck Generator
-Generates a 16:9 widescreen presentation (10 slides) using python-pptx.
+JammuKhoj - Premium Visual Pitch Deck Generator
+Generates a polished 16:9 widescreen presentation (10 slides) with real app screenshots
+and human-designed visual hierarchy using python-pptx.
 """
 
 import os
@@ -17,25 +18,35 @@ prs = Presentation()
 prs.slide_width = Inches(13.333)
 prs.slide_height = Inches(7.5)
 
-# Color constants
-C_DARK_GREEN = RGBColor(8, 84, 68)     # #085444 Deep Forest
-C_FOREST = RGBColor(18, 62, 56)        # #123E38 Forest Ink
-C_AMBER = RGBColor(158, 74, 12)        # #9E4A0C Royal Amber
-C_GOLD = RGBColor(217, 119, 6)         # #D97706 Warm Gold
-C_LIGHT_BG = RGBColor(251, 249, 245)   # #FBF9F5 Sand
+# Premium Brand Palette (Jammu Shivalik & Royal Dogra Heritage)
+C_DARK_GREEN = RGBColor(8, 84, 68)     # #085444 Deep Forest Pine
+C_FOREST_DEEP = RGBColor(12, 45, 38)   # #0C2D26 Darkest Forest
+C_AMBER = RGBColor(158, 74, 12)        # #9E4A0C Terracotta Ochre
+C_GOLD = RGBColor(217, 119, 6)         # #D97706 Warm Temple Gold
+C_LIGHT_BG = RGBColor(250, 248, 244)   # #FAF8F4 Warm Cream
 C_WHITE = RGBColor(255, 255, 255)
 C_CARD_BG = RGBColor(255, 255, 255)
-C_CARD_BORDER = RGBColor(235, 228, 220)# #EBE4DC
-C_TEXT_INK = RGBColor(28, 41, 35)      # #1C2923
-C_TEXT_MUTED = RGBColor(100, 116, 108) # Muted green-stone
-C_ACCENT_BG = RGBColor(243, 239, 234)
+C_CARD_BORDER = RGBColor(230, 222, 212)# Soft warm border
+C_TEXT_INK = RGBColor(26, 36, 32)      # Deep slate ink
+C_TEXT_MUTED = RGBColor(108, 122, 115) # Muted slate
+C_ACCENT_BG = RGBColor(244, 239, 233)  # Sand accent
+C_DEVICE_FRAME = RGBColor(18, 24, 22)  # Dark phone bezel
 C_EMERALD = RGBColor(21, 128, 61)
-C_ROSE = RGBColor(190, 18, 60)
 
 FONT_HEADING = "Georgia"
 FONT_BODY = "Arial"
 
 blank_layout = prs.slide_layouts[6]  # Blank slide
+
+# Asset Paths
+DECK_DIR = os.path.abspath(os.path.join(os.getcwd(), "assets", "deck"))
+IMG_LOGO = os.path.join(DECK_DIR, "app_logo.png")
+IMG_HOME_PLANNER = os.path.join(DECK_DIR, "app_home_planner.png")
+IMG_ITINERARY = os.path.join(DECK_DIR, "app_itinerary_result.png")
+IMG_EXPLORE = os.path.join(DECK_DIR, "app_explore_screen.png")
+IMG_FOOD = os.path.join(DECK_DIR, "app_dogri_food.png")
+IMG_DETAIL = os.path.join(DECK_DIR, "app_attraction_detail.png")
+IMG_SETTINGS = os.path.join(DECK_DIR, "app_offline_settings.png")
 
 # -----------------------------------------------------------------------------
 # HELPER FUNCTIONS
@@ -51,35 +62,35 @@ def set_slide_background(slide, color=C_LIGHT_BG):
 
 def add_header(slide, slide_num, category, title, subtitle=None):
     # Top Category Pill
-    cat_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.45), Inches(10), Inches(0.4))
+    cat_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.42), Inches(10), Inches(0.35))
     tf_c = cat_box.text_frame
     tf_c.word_wrap = True
     p_c = tf_c.paragraphs[0]
-    p_c.text = f"{slide_num:02d} | {category.upper()}"
-    p_c.font.size = Pt(11)
+    p_c.text = f"{slide_num:02d} • {category.upper()}"
+    p_c.font.size = Pt(10.5)
     p_c.font.bold = True
     p_c.font.color.rgb = C_AMBER
     p_c.font.name = FONT_BODY
 
     # Main Title
-    title_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.8), Inches(11.5), Inches(0.65))
+    title_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.75), Inches(11.7), Inches(0.65))
     tf_t = title_box.text_frame
     tf_t.word_wrap = True
     p_t = tf_t.paragraphs[0]
     p_t.text = title
-    p_t.font.size = Pt(24)
+    p_t.font.size = Pt(23)
     p_t.font.bold = True
     p_t.font.color.rgb = C_DARK_GREEN
     p_t.font.name = FONT_HEADING
 
     # Subtitle
     if subtitle:
-        sub_box = slide.shapes.add_textbox(Inches(0.8), Inches(1.42), Inches(11.5), Inches(0.4))
+        sub_box = slide.shapes.add_textbox(Inches(0.8), Inches(1.38), Inches(11.7), Inches(0.4))
         tf_s = sub_box.text_frame
         tf_s.word_wrap = True
         p_s = tf_s.paragraphs[0]
         p_s.text = subtitle
-        p_s.font.size = Pt(13)
+        p_s.font.size = Pt(12)
         p_s.font.color.rgb = C_TEXT_MUTED
         p_s.font.name = FONT_BODY
 
@@ -94,97 +105,115 @@ def add_card(slide, left, top, width, height, bg_color=C_WHITE, border_color=C_C
         card.line.fill.background()
     return card
 
-def add_footer(slide, text="JammuKhoj • Smart Tourism & Pilgrim Companion • https://jammukhoj.in"):
+def add_phone_mockup(slide, img_path, left, top, width, height):
+    """Creates a sleek mobile frame with screen preview"""
+    # Outer Bezel
+    bezel = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, width, height)
+    bezel.fill.solid()
+    bezel.fill.fore_color.rgb = C_DEVICE_FRAME
+    bezel.line.color.rgb = C_GOLD
+    bezel.line.width = Pt(1.5)
+
+    # Screen Image inside frame
+    pad = Inches(0.08)
+    if os.path.exists(img_path):
+        slide.shapes.add_picture(
+            img_path,
+            left + pad,
+            top + pad,
+            width - (pad * 2),
+            height - (pad * 2)
+        )
+
+def add_footer(slide, text="JammuKhoj • Smart Tourism & Pilgrim Companion • Live App: https://jammukhoj.in"):
     f_box = slide.shapes.add_textbox(Inches(0.8), Inches(7.0), Inches(11.7), Inches(0.35))
     tf = f_box.text_frame
     p = tf.paragraphs[0]
     p.text = text
-    p.font.size = Pt(9.5)
+    p.font.size = Pt(9)
     p.font.color.rgb = C_TEXT_MUTED
     p.font.name = FONT_BODY
 
 # =============================================================================
-# SLIDE 1: PROJECT INTRODUCTION
+# SLIDE 1: PROJECT INTRODUCTION (HERO WITH APP EMBLEM & PHONE MOCKUP)
 # =============================================================================
 s1 = prs.slides.add_slide(blank_layout)
 set_slide_background(s1, C_DARK_GREEN)
 
 # Decorative background accent
-acc = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.8), Inches(11.733), Inches(5.9))
+acc = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.7), Inches(11.733), Inches(6.05))
 acc.fill.solid()
-acc.fill.fore_color.rgb = C_FOREST
+acc.fill.fore_color.rgb = C_FOREST_DEEP
 acc.line.color.rgb = C_GOLD
 acc.line.width = Pt(1.5)
 
-# Badge
-badge = s1.shapes.add_textbox(Inches(1.2), Inches(1.2), Inches(10), Inches(0.4))
-p_b = badge.text_frame.paragraphs[0]
-p_b.text = "OFFLINE-FIRST CIVIC TRAVEL INNOVATION • JAMMU DIVISION & VAISHNO DEVI"
-p_b.font.size = Pt(11)
-p_b.font.bold = True
-p_b.font.color.rgb = C_GOLD
-p_b.font.name = FONT_BODY
+# Left Column: Branding, Pitch & Features
+b_badge = s1.shapes.add_textbox(Inches(1.2), Inches(1.1), Inches(7.5), Inches(0.35))
+p_bb = b_badge.text_frame.paragraphs[0]
+p_bb.text = "OFFLINE-FIRST CIVIC TRAVEL INNOVATION • JAMMU DIVISION & VAISHNO DEVI"
+p_bb.font.size = Pt(10.5)
+p_bb.font.bold = True
+p_bb.font.color.rgb = C_GOLD
+p_bb.font.name = FONT_BODY
 
-# Title
-t_box = s1.shapes.add_textbox(Inches(1.2), Inches(1.7), Inches(10.5), Inches(1.4))
+t_box = s1.shapes.add_textbox(Inches(1.2), Inches(1.5), Inches(7.5), Inches(1.5))
 tf_1 = t_box.text_frame
 p1_1 = tf_1.paragraphs[0]
 p1_1.text = "JammuKhoj"
-p1_1.font.size = Pt(46)
+p1_1.font.size = Pt(44)
 p1_1.font.bold = True
 p1_1.font.color.rgb = C_WHITE
 p1_1.font.name = FONT_HEADING
 
 p1_2 = tf_1.add_paragraph()
 p1_2.text = "जम्मू खोज • Your Jammu Journey, Made Simple."
-p1_2.font.size = Pt(20)
+p1_2.font.size = Pt(18)
 p1_2.font.color.rgb = C_GOLD
 p1_2.font.name = FONT_BODY
 
-# Subtitle / Summary
-desc_box = s1.shapes.add_textbox(Inches(1.2), Inches(3.3), Inches(10.5), Inches(1.2))
+desc_box = s1.shapes.add_textbox(Inches(1.2), Inches(3.1), Inches(7.2), Inches(1.3))
 p_desc = desc_box.text_frame.paragraphs[0]
 p_desc.text = (
-    "A smart, privacy-centric tourism and pilgrimage companion engineered for visitors, "
-    "transit layovers, and Mata Vaishno Devi pilgrims across the Jammu Division. "
-    "100% offline-ready with conservative train/flight safety buffers, transparent transport benchmarks, "
-    "and verified civic assistance."
+    "A production-ready progressive web app & Android platform engineered for "
+    "transit layovers and Mata Vaishno Devi pilgrims across the Jammu Division. "
+    "100% offline-ready with conservative train/flight safety buffers, transparent "
+    "transport fare matrices, step-free senior guidance, and zero-tracking privacy."
 )
-p_desc.font.size = Pt(14)
+p_desc.font.size = Pt(13)
 p_desc.font.color.rgb = C_WHITE
 p_desc.font.name = FONT_BODY
 
-# 4 Key Value Pillar Cards
+# 4 Key Feature Badges
 cols = [
-    ("⚡ 1-Tap Buffer-Safe Planner", "Express 4h, 8h & 24h circuits preserving departure safety buffers"),
-    ("📶 100% Offline IndexedDB", "Complete on-device vector maps, guides & emergency dialer"),
-    ("🚌 Transparent Transit Matrix", "Surveyed fares for Matadors (₹10-25), Autos & Prepaid Taxis"),
-    ("🧓 Senior & Pilgrim Ease Mode", "Step-free routing, battery cars, wheelchairs & ERSS 112 SOS"),
+    ("⚡ 1-Tap Buffer Planner", "4h, 8h & 24h layover circuits"),
+    ("📶 100% Offline IndexedDB", "Vector maps & full routing offline"),
+    ("🚌 Transparent Transit", "Matadors (₹10-25), Autos & Taxis"),
+    ("🧓 Senior & Pilgrim Ease", "Step-free, battery cars & 112 SOS"),
 ]
 
 for idx, (col_title, col_sub) in enumerate(cols):
-    c_left = Inches(1.2 + idx * 2.7)
-    card_s1 = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, c_left, Inches(4.7), Inches(2.5), Inches(1.5))
-    card_s1.fill.solid()
-    card_s1.fill.fore_color.rgb = C_DARK_GREEN
-    card_s1.line.color.rgb = C_GOLD
-    card_s1.line.width = Pt(1)
+    cx = Inches(1.2 + (idx % 2) * 3.6)
+    cy = Inches(4.6 + (idx // 2) * 0.95)
+    c_shape = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, cx, cy, Inches(3.45), Inches(0.85))
+    c_shape.fill.solid()
+    c_shape.fill.fore_color.rgb = C_DARK_GREEN
+    c_shape.line.color.rgb = C_GOLD
+    c_shape.line.width = Pt(1)
 
-    tb = s1.shapes.add_textbox(c_left + Inches(0.1), Inches(4.8), Inches(2.3), Inches(1.3))
-    tf_c = tb.text_frame
-    tf_c.word_wrap = True
-    p_t = tf_c.paragraphs[0]
+    tb = s1.shapes.add_textbox(cx + Inches(0.1), cy + Inches(0.08), Inches(3.25), Inches(0.7))
+    tf = tb.text_frame
+    p_t = tf.paragraphs[0]
     p_t.text = col_title
-    p_t.font.size = Pt(11.5)
+    p_t.font.size = Pt(11)
     p_t.font.bold = True
     p_t.font.color.rgb = C_GOLD
-    p_t.font.name = FONT_HEADING
-
-    p_s = tf_c.add_paragraph()
+    p_s = tf.add_paragraph()
     p_s.text = col_sub
     p_s.font.size = Pt(9.5)
     p_s.font.color.rgb = C_WHITE
-    p_s.font.name = FONT_BODY
+
+# Right Column: Actual App Screenshot in Phone Frame
+add_phone_mockup(s1, IMG_HOME_PLANNER, Inches(8.8), Inches(1.15), Inches(2.9), Inches(5.15))
 
 # =============================================================================
 # SLIDE 2: PROBLEM AND HACKATHON ALIGNMENT
@@ -193,36 +222,35 @@ s2 = prs.slides.add_slide(blank_layout)
 set_slide_background(s2)
 add_header(s2, 2, "Problem Statement", "The Transit Anxiety & Information Vacuum in Jammu", "Why millions of pilgrims pass through Jammu with friction, fear, and zero local discovery.")
 
-# 3 Problem Cards
 p_cards = [
     ("🚨 Transit Anxiety & Time Fear", "Fear of Missing Onward Trains / Flights", [
-        "Pilgrims face 4 to 12 hour layovers at Jammu Tawi or Airport.",
-        "Fear of getting stuck in traffic traps pilgrims at station platforms.",
-        "No existing map tool calculates conservative safety return buffers.",
+        "Pilgrims face 4 to 12 hour layovers at Jammu Tawi or IXJ Airport.",
+        "Fear of mountain highway bottlenecks traps families on railway platforms.",
+        "Zero existing tools compute guaranteed conservative safety return buffers.",
     ]),
     ("💸 Transport Gouging & Haggling", "Unregulated Fares & Commuter Harassment", [
-        "Unsuspecting travelers charged ₹800–₹1,500 for a ₹150 taxi ride.",
-        "Matador mini-bus routes and stage tariffs are opaque to outsiders.",
-        "Zero transparency on official prepaid union rates.",
+        "Unsuspecting yatris routinely charged ₹800–₹1,500 for a ₹150 taxi ride.",
+        "Matador mini-bus stages and route numbers are completely opaque to outsiders.",
+        "Zero visibility into official prepaid auto/taxi union rate cards.",
     ]),
     ("📴 Cellular Blackouts & Accessibility", "Mountain Dead Zones & Elder Strain", [
-        "Cloud-based apps crash in mountain valleys and tunnel corridors.",
-        "Elderly pilgrims lack verified walking load, stair counts, and battery car tips.",
-        "Safety hotlines and ERSS 112 are hard to locate during distress.",
+        "Cloud-based travel apps crash in Shivalik foothill tunnels and dead zones.",
+        "Senior citizens face unexpected steep stairs without wheelchair/battery-car guidance.",
+        "Emergency hotlines and National ERSS 112 are scattered across fragmented websites.",
     ]),
 ]
 
 for idx, (head, subhead, bullets) in enumerate(p_cards):
     c_left = Inches(0.8 + idx * 3.95)
-    add_card(s2, c_left, Inches(1.9), Inches(3.75), Inches(4.7))
+    add_card(s2, c_left, Inches(1.85), Inches(3.75), Inches(4.8))
     
-    tb = s2.shapes.add_textbox(c_left + Inches(0.2), Inches(2.05), Inches(3.35), Inches(4.4))
+    tb = s2.shapes.add_textbox(c_left + Inches(0.2), Inches(2.0), Inches(3.35), Inches(4.5))
     tf = tb.text_frame
     tf.word_wrap = True
     
     p1 = tf.paragraphs[0]
     p1.text = head
-    p1.font.size = Pt(15)
+    p1.font.size = Pt(14)
     p1.font.bold = True
     p1.font.color.rgb = C_AMBER
     p1.font.name = FONT_HEADING
@@ -232,15 +260,13 @@ for idx, (head, subhead, bullets) in enumerate(p_cards):
     p2.font.size = Pt(11)
     p2.font.bold = True
     p2.font.color.rgb = C_TEXT_INK
-    p2.font.name = FONT_BODY
-    p2.space_after = Pt(12)
+    p2.space_after = Pt(10)
     
     for b in bullets:
         pb = tf.add_paragraph()
         pb.text = f"•  {b}"
-        pb.font.size = Pt(11)
+        pb.font.size = Pt(10.5)
         pb.font.color.rgb = C_TEXT_MUTED
-        pb.font.name = FONT_BODY
         pb.space_after = Pt(8)
 
 add_footer(s2)
@@ -253,199 +279,214 @@ set_slide_background(s3)
 add_header(s3, 3, "Economic & Cultural Gap", "The 10-Million Pilgrim Paradox: Direct Transit Bypass", "Immense visitor footfall that completely bypasses Jammu's cultural and economic ecosystem.")
 
 # Left Metric Highlight Card
-add_card(s3, Inches(0.8), Inches(1.9), Inches(4.5), Inches(4.7), bg_color=C_DARK_GREEN)
-tb_l = s3.shapes.add_textbox(Inches(1.0), Inches(2.1), Inches(4.1), Inches(4.3))
+add_card(s3, Inches(0.8), Inches(1.85), Inches(4.5), Inches(4.8), bg_color=C_DARK_GREEN)
+tb_l = s3.shapes.add_textbox(Inches(1.0), Inches(2.05), Inches(4.1), Inches(4.4))
 tf_l = tb_l.text_frame
 tf_l.word_wrap = True
 
 p_m1 = tf_l.paragraphs[0]
 p_m1.text = "10,000,000+"
-p_m1.font.size = Pt(40)
+p_m1.font.size = Pt(38)
 p_m1.font.bold = True
 p_m1.font.color.rgb = C_GOLD
 p_m1.font.name = FONT_HEADING
 
 p_m2 = tf_l.add_paragraph()
 p_m2.text = "Annual pilgrims transit through Jammu Tawi & Katra to reach Shri Mata Vaishno Devi Shrine."
-p_m2.font.size = Pt(13)
+p_m2.font.size = Pt(12.5)
 p_m2.font.color.rgb = C_WHITE
-p_m2.space_after = Pt(20)
+p_m2.space_after = Pt(18)
 
 p_m3 = tf_l.add_paragraph()
-p_m3.text = "< 2 Hours Average Dwell Time"
-p_m3.font.size = Pt(18)
+p_m3.text = "< 2 Hours Average Dwell"
+p_m3.font.size = Pt(17)
 p_m3.font.bold = True
 p_m3.font.color.rgb = C_GOLD
 p_m3.font.name = FONT_HEADING
 
 p_m4 = tf_l.add_paragraph()
 p_m4.text = "Over 85% of yatris treat Jammu as a mere train-to-bus transit hallway, unaware of rich Dogra heritage minutes away."
-p_m4.font.size = Pt(12.5)
+p_m4.font.size = Pt(12)
 p_m4.font.color.rgb = C_WHITE
 
 # Right: The Consequences Breakdown
-add_card(s3, Inches(5.6), Inches(1.9), Inches(6.9), Inches(4.7))
-tb_r = s3.shapes.add_textbox(Inches(5.8), Inches(2.1), Inches(6.5), Inches(4.3))
+add_card(s3, Inches(5.6), Inches(1.85), Inches(6.9), Inches(4.8))
+tb_r = s3.shapes.add_textbox(Inches(5.8), Inches(2.05), Inches(6.5), Inches(4.4))
 tf_r = tb_r.text_frame
 tf_r.word_wrap = True
 
 p_rt = tf_r.paragraphs[0]
-p_rt.text = "Three Costly Gaps in Jammu Tourism"
-p_rt.font.size = Pt(18)
+p_rt.text = "Four Costly Tourism & Economic Gaps"
+p_rt.font.size = Pt(17)
 p_rt.font.bold = True
 p_rt.font.color.rgb = C_DARK_GREEN
 p_rt.font.name = FONT_HEADING
-p_rt.space_after = Pt(14)
+p_rt.space_after = Pt(12)
 
 gap_items = [
-    ("🏛️ Heritage Neglect", "World-class monuments like Mubarak Mandi Palace, Bahu Fort (3000 yrs old), and Amar Mahal witness only a fraction of their potential footfall."),
-    ("🛍️ GI Craft Exploitation", "Authentic Dogra crafts (Basohli Paintings, Pashmina, Basohli Tweed, Bhaderwah Rajmash) lose sales to roadside counterfeits with no verified seller guidance."),
-    ("🍲 Forgotten Culinary Economy", "Indigenous nutritious Dogra delicacies (Kaladi Kulcha, Dogra Dham, Sund Panjeeri) lose out to generic fast-food stalls."),
+    ("🏛️ Heritage Neglect", "Mubarak Mandi Palace (Dogra royal seat), Bahu Fort (3000 yrs), and Amar Mahal witness only a tiny fraction of their visitor potential."),
+    ("🛍️ GI Craft Exploitation", "Authentic Dogra crafts (Basohli Paintings, Pashmina, Basohli Tweed, Bhaderwah Rajmash) lose sales to roadside highway fakes with no verified directory."),
+    ("🍲 Forgotten Culinary Economy", "Indigenous nutritious Dogra delicacies (Kaladi Kulcha, Dogra Dham, Sund Panjeeri) lose out to generic highway fast-food stalls."),
     ("📉 Lost Municipal Revenue", "Estimates show Jammu City loses over ₹300 Crores annually in potential local hospitality, craft, and transportation income."),
 ]
 
 for g_title, g_desc in gap_items:
     p_gt = tf_r.add_paragraph()
     p_gt.text = g_title
-    p_gt.font.size = Pt(12.5)
+    p_gt.font.size = Pt(12)
     p_gt.font.bold = True
     p_gt.font.color.rgb = C_AMBER
     
     p_gd = tf_r.add_paragraph()
     p_gd.text = g_desc
-    p_gd.font.size = Pt(11)
+    p_gd.font.size = Pt(10.5)
     p_gd.font.color.rgb = C_TEXT_MUTED
-    p_gd.space_after = Pt(8)
+    p_gd.space_after = Pt(6)
 
 add_footer(s3)
 
 # =============================================================================
-# SLIDE 4: THE JAMMUKHOJ SOLUTION
+# SLIDE 4: THE JAMMUKHOJ SOLUTION (WITH HOME PLANNER SCREENSHOT)
 # =============================================================================
 s4 = prs.slides.add_slide(blank_layout)
 set_slide_background(s4)
 add_header(s4, 4, "The Solution Architecture", "JammuKhoj: An Intelligent, Resilient Local Guide", "A human-centered progressive application tailored for zero-data environments and time-critical pilgrims.")
 
-sol_cards = [
-    ("⚡ 1-Tap Circuit Engine", "Deterministic, buffer-safe itinerary generator that plans realistic circuits tailored to user's exact available layover (4h, 8h, 24h) with guaranteed station return buffers (45m rail / 150m air)."),
-    ("📶 100% Offline Vector Stack", "Entire knowledge graph (36+ attractions, road topologies, timetables, dialer hotlines) bundled in local IndexedDB. Zero cloud telemetry dependency."),
-    ("🚌 Transparent Transit Intelligence", "Verified stage-by-stage Matador mini-bus routes, Smart City E-bus stops, and prepaid union matrices for auto-rickshaws and taxis to end passenger overcharging."),
-    ("🧓 Senior & Accessibility First", "Dedicated walking-load ratings (Low/Med/High), wheelchair step-free indicators, SMVDSB battery car guidance, and WCAG 2.1 AA senior contrast modes."),
+# Left 2 Architecture Cards
+sol_cards_left = [
+    ("⚡ 1-Tap Buffer-Safe Engine", "Deterministic layout generator tailored to traveler's exact layover window (4h Express, 8h Cultural, 24h Valley trail). Enforces a strict 45-min rail buffer & 150-min air buffer, eliminating missed departures."),
+    ("📶 100% Offline Vector Stack", "Entire knowledge graph (36+ attractions, road topologies, timetables, dialer hotlines) bundled in local IndexedDB. Operates with zero SIM or data roaming in mountain valleys."),
 ]
 
-for idx, (title, desc) in enumerate(sol_cards):
-    c_x = Inches(0.8 + (idx % 2) * 5.95)
-    c_y = Inches(1.9 + (idx // 2) * 2.45)
-    add_card(s4, c_x, c_y, Inches(5.75), Inches(2.25))
+for idx, (title, desc) in enumerate(sol_cards_left):
+    c_y = Inches(1.85 + idx * 2.45)
+    add_card(s4, Inches(0.8), c_y, Inches(4.3), Inches(2.3))
     
-    tb = s4.shapes.add_textbox(c_x + Inches(0.25), c_y + Inches(0.2), Inches(5.25), Inches(1.85))
+    tb = s4.shapes.add_textbox(Inches(0.95), c_y + Inches(0.18), Inches(4.0), Inches(1.95))
     tf = tb.text_frame
     tf.word_wrap = True
     
     p = tf.paragraphs[0]
     p.text = title
-    p.font.size = Pt(16)
+    p.font.size = Pt(14)
     p.font.bold = True
     p.font.color.rgb = C_DARK_GREEN
     p.font.name = FONT_HEADING
-    p.space_after = Pt(6)
+    p.space_after = Pt(4)
     
     pd = tf.add_paragraph()
     pd.text = desc
-    pd.font.size = Pt(11.5)
+    pd.font.size = Pt(10.5)
     pd.font.color.rgb = C_TEXT_MUTED
-    pd.font.name = FONT_BODY
+
+# Center: Real Phone Mockup of 1-Tap Home Screen
+add_phone_mockup(s4, IMG_HOME_PLANNER, Inches(5.3), Inches(1.85), Inches(2.7), Inches(4.8))
+
+# Right 2 Architecture Cards
+sol_cards_right = [
+    ("🚌 Transparent Transit Intelligence", "Verified stage-by-stage Matador mini-bus routes, Smart City E-bus stops, and prepaid union matrices for auto-rickshaws and taxis to end passenger overcharging."),
+    ("🧓 Elder & Accessibility Care", "Step-free badges, walking load indicators (Low/Med/High), verified Vaishno Devi 5-stage trek manual, battery-car regulations, and 1-tap ERSS 112 WhatsApp location SOS."),
+]
+
+for idx, (title, desc) in enumerate(sol_cards_right):
+    c_y = Inches(1.85 + idx * 2.45)
+    add_card(s4, Inches(8.2), c_y, Inches(4.3), Inches(2.3))
+    
+    tb = s4.shapes.add_textbox(Inches(8.35), c_y + Inches(0.18), Inches(4.0), Inches(1.95))
+    tf = tb.text_frame
+    tf.word_wrap = True
+    
+    p = tf.paragraphs[0]
+    p.text = title
+    p.font.size = Pt(14)
+    p.font.bold = True
+    p.font.color.rgb = C_DARK_GREEN
+    p.font.name = FONT_HEADING
+    p.space_after = Pt(4)
+    
+    pd = tf.add_paragraph()
+    pd.text = desc
+    pd.font.size = Pt(10.5)
+    pd.font.color.rgb = C_TEXT_MUTED
 
 add_footer(s4)
 
 # =============================================================================
-# SLIDE 5: USER JOURNEY
+# SLIDE 5: USER JOURNEY (WITH ITINERARY RESULT SCREENSHOT)
 # =============================================================================
 s5 = prs.slides.add_slide(blank_layout)
 set_slide_background(s5)
 add_header(s5, 5, "Seamless User Journey", "From Station Arrival to Holy Darshan in 5 Frictionless Steps", "Designed for immediate value without forced registration, heavy downloads, or steep learning curves.")
 
-steps = [
-    ("1. Arrival", "Arrives at Jammu Tawi (JAT) or Airport. Scans QR code or opens jammukhoj.in directly in browser or PWA. Zero mandatory login barrier."),
-    ("2. 1-Tap Plan", "Selects available window: '4-Hour Express' from station. App automatically reserves 45-min return buffer and computes a 2.5 hr curated circuit."),
-    ("3. Fair Transit", "Checks Matador Route #1 to Raghunath Bazaar. Pays exact ₹15 fare; avoids cab touts quoting ₹400 for the same distance."),
-    ("4. Cultural Dip", "Visits Raghunath Mandir, discovers verified Dogra Kaladi Kulcha with Jain/Pure Veg tag, and explores authentic Basohli handicraft shop."),
-    ("5. Safe Transit", "Arrives back at Jammu Tawi with 50 minutes to spare. Smoothly boards onward Vande Bharat Express to Katra with complete peace of mind."),
+# Left 5 Steps Cards
+steps_box = add_card(s5, Inches(0.8), Inches(1.85), Inches(8.5), Inches(4.8))
+tb_steps = s5.shapes.add_textbox(Inches(1.0), Inches(1.95), Inches(8.1), Inches(4.6))
+tf_st = tb_steps.text_frame
+tf_st.word_wrap = True
+
+steps_data = [
+    ("1. Arrival at Station / Airport", "Yatri steps off train at Jammu Tawi (JAT) or IXJ Airport. Opens jammukhoj.in directly with 1 tap. Zero mandatory login barrier."),
+    ("2. 1-Tap Itinerary Generation", "Selects layover: '4-Hour Express' from station. App automatically reserves 45-min departure buffer and crafts a 2.5-hr curated temple circuit."),
+    ("3. Transparent Local Transit", "Checks Matador Route #1 to Raghunath Bazaar. Boards with exact ₹15 fare; avoids cab touts quoting ₹400 for the same distance."),
+    ("4. Cultural Discovery & Pure Veg Food", "Offers prayers at Raghunath Mandir, tastes authentic Kaladi Kulcha with Jain/Pure Veg filter, and visits verified Basohli craft cooperative."),
+    ("5. Safe Onward Departure", "Returns to station with 50 minutes to spare. Boards onward Vande Bharat Express to Katra for holy darshan with complete peace of mind."),
 ]
 
-for idx, (step_title, step_desc) in enumerate(steps):
-    c_left = Inches(0.8 + idx * 2.37)
-    add_card(s5, c_left, Inches(1.9), Inches(2.25), Inches(4.7))
+for idx, (title, desc) in enumerate(steps_data):
+    p_t = tf_st.paragraphs[0] if idx == 0 else tf_st.add_paragraph()
+    p_t.text = f"STEP {idx+1}: {title.upper()}"
+    p_t.font.size = Pt(11)
+    p_t.font.bold = True
+    p_t.font.color.rgb = C_AMBER
     
-    # Step indicator pill
-    pill = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, c_left + Inches(0.2), Inches(2.1), Inches(1.85), Inches(0.45))
-    pill.fill.solid()
-    pill.fill.fore_color.rgb = C_AMBER
-    pill.line.fill.background()
-    p_pill = pill.text_frame.paragraphs[0]
-    p_pill.text = f"STEP {idx+1}"
-    p_pill.font.size = Pt(11)
-    p_pill.font.bold = True
-    p_pill.font.color.rgb = C_WHITE
-    p_pill.alignment = PP_ALIGN.CENTER
-    
-    tb = s5.shapes.add_textbox(c_left + Inches(0.15), Inches(2.7), Inches(1.95), Inches(3.7))
-    tf = tb.text_frame
-    tf.word_wrap = True
-    
-    p_st = tf.paragraphs[0]
-    p_st.text = step_title
-    p_st.font.size = Pt(14)
-    p_st.font.bold = True
-    p_st.font.color.rgb = C_DARK_GREEN
-    p_st.font.name = FONT_HEADING
-    p_st.space_after = Pt(8)
-    
-    p_sd = tf.add_paragraph()
-    p_sd.text = step_desc
-    p_sd.font.size = Pt(10.5)
-    p_sd.font.color.rgb = C_TEXT_MUTED
-    p_sd.font.name = FONT_BODY
+    p_d = tf_st.add_paragraph()
+    p_d.text = desc
+    p_d.font.size = Pt(10)
+    p_d.font.color.rgb = C_TEXT_INK
+    p_d.space_after = Pt(6)
+
+# Right: Actual App Screenshot of Generated Itinerary
+add_phone_mockup(s5, IMG_ITINERARY, Inches(9.6), Inches(1.85), Inches(2.9), Inches(4.8))
 
 add_footer(s5)
 
 # =============================================================================
-# SLIDE 6: CORE FEATURES & COMPETITIVE DIFFERENTIATION
+# SLIDE 6: CORE FEATURES & COMPETITIVE DIFFERENTIATION (WITH EXPLORE SCREENSHOT)
 # =============================================================================
 s6 = prs.slides.add_slide(blank_layout)
 set_slide_background(s6)
-add_header(s6, 6, "Competitive Differentiation", "How JammuKhoj Solves What Generic Travel Apps Miss", "Direct comparison against Google Maps, MakeMyTrip, and generic travel blogs.")
+add_header(s6, 6, "Competitive Differentiation", "How JammuKhoj Outperforms Generic Travel Platforms", "Direct comparison against Google Maps, MakeMyTrip, and generic travel blogs.")
 
-# Comparison Table
+# Left Comparison Table
 t_left = Inches(0.8)
-t_top = Inches(1.9)
-t_width = Inches(11.733)
-t_height = Inches(4.7)
+t_top = Inches(1.85)
+t_width = Inches(8.5)
+t_height = Inches(4.8)
 
 table_shape = s6.shapes.add_table(6, 4, t_left, t_top, t_width, t_height)
 table = table_shape.table
-table.columns[0].width = Inches(2.8)
-table.columns[1].width = Inches(2.8)
-table.columns[2].width = Inches(2.8)
-table.columns[3].width = Inches(3.333)
+table.columns[0].width = Inches(1.9)
+table.columns[1].width = Inches(2.1)
+table.columns[2].width = Inches(2.1)
+table.columns[3].width = Inches(2.4)
 
-headers = ["Feature Dimension", "Google Maps", "MakeMyTrip / OTA", "JammuKhoj (Our Solution)"]
+headers = ["Dimension", "Google Maps", "MakeMyTrip / OTAs", "JammuKhoj (Our App)"]
 for c_idx, h_text in enumerate(headers):
     cell = table.cell(0, c_idx)
     cell.fill.solid()
-    cell.fill.fore_color.rgb = C_DARK_GREEN if c_idx == 3 else C_FOREST
+    cell.fill.fore_color.rgb = C_DARK_GREEN if c_idx == 3 else C_FOREST_DEEP
     p = cell.text_frame.paragraphs[0]
     p.text = h_text
-    p.font.size = Pt(12)
+    p.font.size = Pt(10.5)
     p.font.bold = True
     p.font.color.rgb = C_GOLD if c_idx == 3 else C_WHITE
 
 rows_data = [
-    ("Offline Autonomy", "Requires data for routes & searches; fails in remote mountain spots", "100% online; fails without mobile connectivity", "100% On-Device IndexedDB; full routing, cards & search offline"),
-    ("Time-Budget Safe Planning", "Point-to-point only; ignores train/flight layover deadlines", "Rigid tour packages; no layover customization", "Dynamic 4h/8h/24h buffer engine; never misses your train"),
-    ("Local Transit Transparency", "No Matador routes; no fare benchmarks", "Only commercial prepaid cabs at high markup", "Complete Matador route guide (₹10-25) + Auto & Taxi Union benchmarks"),
-    ("Senior & Pilgrim Care", "No walking load or step-free data for temples", "Standard generic hotel packages", "Step-free badges, walking load (low/med/high), battery car rules"),
-    ("Privacy & Data Safety", "Pervasive ad-tracking, profiling & location logs", "Monetizes user data with aggressive ads", "Zero cookies, zero surveillance, 100% client-side privacy"),
+    ("Offline Autonomy", "Fails in mountain tunnels & valleys", "100% online only; unusable offline", "100% On-Device IndexedDB"),
+    ("Safe Buffer Planner", "Ignores train layover deadlines", "Rigid commercial packages only", "45m rail & 150m air locks"),
+    ("Transit Tariffs", "No Matadors; no fare benchmarks", "Commercial cabs at high markup", "Matadors (₹10-25) + Taxi matrices"),
+    ("Senior & Pilgrim Care", "No stair counts or walking load", "Generic packages", "Senior Ease Mode & step-free tags"),
+    ("Privacy & Data Safety", "Ad-tracking & location profiling", "Monetizes user contact data", "Zero cookies, zero surveillance"),
 ]
 
 for r_idx, r_data in enumerate(rows_data):
@@ -455,7 +496,7 @@ for r_idx, r_data in enumerate(rows_data):
         cell.fill.fore_color.rgb = C_ACCENT_BG if (r_idx % 2 == 1) else C_WHITE
         p = cell.text_frame.paragraphs[0]
         p.text = val
-        p.font.size = Pt(10)
+        p.font.size = Pt(9.5)
         p.font.name = FONT_BODY
         if c_idx == 3:
             p.font.bold = True
@@ -466,219 +507,182 @@ for r_idx, r_data in enumerate(rows_data):
         else:
             p.font.color.rgb = C_TEXT_MUTED
 
+# Right: Explore Screen Real Screenshot
+add_phone_mockup(s6, IMG_EXPLORE, Inches(9.6), Inches(1.85), Inches(2.9), Inches(4.8))
+
 add_footer(s6)
 
 # =============================================================================
-# SLIDE 7: EXPECTED IMPACT AND MEASURABLE TARGETS
+# SLIDE 7: EXPECTED IMPACT AND MEASURABLE TARGETS (WITH BAHU FORT DETAIL)
 # =============================================================================
 s7 = prs.slides.add_slide(blank_layout)
 set_slide_background(s7)
-add_header(s7, 7, "Impact & Metrics", "Measurable Economic, Civic, and Social Outcomes", "High-leverage impact for local artisans, transit riders, and pilgrim safety.")
+add_header(s7, 7, "Impact & Metrics", "Measurable Economic, Civic, and Social Outcomes", "High-leverage socio-economic returns for pilgrims, local businesses, and municipal transit.")
 
+# Top 4 Metrics
 metrics = [
-    ("3x", "Increase in Dwell Time", "Extending visitor stay from <2 hours to 6-8 hours through safe, reliable layover circuits."),
-    ("₹150 Cr+", "Economic Unlock Target", "Direct injection of traveler expenditure into local Dogra food, crafts, and municipal transport."),
-    ("₹1,200", "Avg Savings per Family", "Preventing exploitative overcharging on local transit and authentic certified souvenirs."),
-    ("0", "Missed Boarding Events", "100% adherence to safety return buffers (45-min rail / 150-min flight) across 1-tap itineraries."),
+    ("3x", "Dwell Multiplier", "Extending stay from <2h to 6-8h via safe circuits."),
+    ("₹150 Cr+", "Economic Target", "Direct injection into local Dogra food, crafts & transit."),
+    ("₹1,200", "Family Savings", "Preventing exploitative cab fares and fake crafts."),
+    ("0", "Missed Departures", "100% adherence to safety return buffers."),
 ]
 
 for idx, (val, label, sub) in enumerate(metrics):
-    c_left = Inches(0.8 + idx * 2.95)
-    add_card(s7, c_left, Inches(1.9), Inches(2.8), Inches(2.2), bg_color=C_DARK_GREEN)
+    c_left = Inches(0.8 + idx * 2.1)
+    add_card(s7, c_left, Inches(1.85), Inches(2.0), Inches(1.95), bg_color=C_DARK_GREEN)
     
-    tb = s7.shapes.add_textbox(c_left + Inches(0.15), Inches(2.05), Inches(2.5), Inches(1.9))
+    tb = s7.shapes.add_textbox(c_left + Inches(0.1), Inches(1.95), Inches(1.8), Inches(1.75))
     tf = tb.text_frame
     tf.word_wrap = True
     
     pv = tf.paragraphs[0]
     pv.text = val
-    pv.font.size = Pt(36)
+    pv.font.size = Pt(28)
     pv.font.bold = True
     pv.font.color.rgb = C_GOLD
     pv.font.name = FONT_HEADING
     
     pl = tf.add_paragraph()
     pl.text = label
-    pl.font.size = Pt(12)
+    pl.font.size = Pt(10.5)
     pl.font.bold = True
     pl.font.color.rgb = C_WHITE
-    pl.space_after = Pt(4)
     
     ps = tf.add_paragraph()
     ps.text = sub
-    ps.font.size = Pt(9.5)
+    ps.font.size = Pt(8.5)
     ps.font.color.rgb = C_ACCENT_BG
 
-# Bottom Impact Callout Cards
-add_card(s7, Inches(0.8), Inches(4.35), Inches(5.75), Inches(2.3))
-tb_b1 = s7.shapes.add_textbox(Inches(1.0), Inches(4.45), Inches(5.35), Inches(2.1))
-tf_b1 = tb_b1.text_frame
-tf_b1.word_wrap = True
-p = tf_b1.paragraphs[0]
-p.text = "🏛️ Cultural & GI Heritage Renaissance"
-p.font.size = Pt(14)
-p.font.bold = True
-p.font.color.rgb = C_DARK_GREEN
-p.font.name = FONT_HEADING
-p.space_after = Pt(4)
+# Bottom Left: 2 Callout Cards
+add_card(s7, Inches(0.8), Inches(3.95), Inches(8.5), Inches(2.7))
+tb_b = s7.shapes.add_textbox(Inches(1.0), Inches(4.05), Inches(8.1), Inches(2.5))
+tf_b = tb_b.text_frame
+tf_b.word_wrap = True
 
-p2 = tf_b1.add_paragraph()
+p1 = tf_b.paragraphs[0]
+p1.text = "🏛️ Cultural & GI Heritage Renaissance"
+p1.font.size = Pt(13)
+p1.font.bold = True
+p1.font.color.rgb = C_DARK_GREEN
+p1.font.name = FONT_HEADING
+
+p2 = tf_b.add_paragraph()
 p2.text = (
-    "Empowering Basohli painters, Pashmina weavers, and Bhaderwah farmers with verified "
+    "Empowers Basohli painters, Pashmina weavers, and Bhaderwah farmers with verified "
     "outlet discovery and fake-identification guides. Pilgrims purchase authentic GI certified "
     "heritage at fair benchmark prices directly supporting cottage industries."
 )
-p2.font.size = Pt(10.5)
+p2.font.size = Pt(10)
 p2.font.color.rgb = C_TEXT_MUTED
+p2.space_after = Pt(8)
 
-add_card(s7, Inches(6.75), Inches(4.35), Inches(5.75), Inches(2.3))
-tb_b2 = s7.shapes.add_textbox(Inches(6.95), Inches(4.45), Inches(5.35), Inches(2.1))
-tf_b2 = tb_b2.text_frame
-tf_b2.word_wrap = True
-p = tf_b2.paragraphs[0]
-p.text = "🛡️ Public Safety & Yatra Welfare"
-p.font.size = Pt(14)
-p.font.bold = True
-p.font.color.rgb = C_DARK_GREEN
-p.font.name = FONT_HEADING
-p.space_after = Pt(4)
+p3 = tf_b.add_paragraph()
+p3.text = "🛡️ Public Safety & Yatra Welfare"
+p3.font.size = Pt(13)
+p3.font.bold = True
+p3.font.color.rgb = C_DARK_GREEN
+p3.font.name = FONT_HEADING
 
-p2 = tf_b2.add_paragraph()
-p2.text = (
+p4 = tf_b.add_paragraph()
+p4.text = (
     "1-Tap WhatsApp GPS SOS dispatcher and offline dialers for ERSS 112, SMVDSB Shrine Helplines, "
     "and women's assistance. Real-time dynamic temple crowd meters and aarti timings prevent "
     "stampedes and reduce elder exhaustion during Navratri surges."
 )
-p2.font.size = Pt(10.5)
-p2.font.color.rgb = C_TEXT_MUTED
+p4.font.size = Pt(10)
+p4.font.color.rgb = C_TEXT_MUTED
+
+# Right: Actual App Screenshot of Bahu Fort Attraction Detail
+add_phone_mockup(s7, IMG_DETAIL, Inches(9.6), Inches(1.85), Inches(2.9), Inches(4.8))
 
 add_footer(s7)
 
 # =============================================================================
-# SLIDE 8: IMPLEMENTATION ROADMAP
+# SLIDE 8: IMPLEMENTATION ROADMAP (WITH OFFLINE SETTINGS SCREENSHOT)
 # =============================================================================
 s8 = prs.slides.add_slide(blank_layout)
 set_slide_background(s8)
-add_header(s8, 8, "Execution Roadmap", "4-Stage Scalable Deployment Plan (2026 - 2027)", "From hackathon proof-of-concept to institutional state-wide deployment.")
+add_header(s8, 8, "Execution Roadmap", "4-Stage Scalable Deployment Plan (2026 – 2027)", "From proven progressive web app & Android build to institutional statewide rollout.")
 
-phases = [
-    ("Phase 1: Foundation", "CURRENT • COMPLETED", [
-        "100% offline-ready PWA & Android app live.",
-        "Custom domain jammukhoj.in & Schema.org SEO.",
-        "36+ curated attractions & 44/44 test suite passed.",
-        "1-Tap buffer-safe planner & transit matrix.",
-    ], C_EMERALD),
-    ("Phase 2: Station Pilot", "Q1 - Q2 2027", [
-        "Physical QR kiosks at Jammu Tawi & SVDK Katra.",
-        "Collaboration with J&K RTC for live e-bus tracking.",
-        "Pilot onboardings with 50+ verified local merchants.",
-        "Target: 50,000 active pilgrim sessions.",
-    ], C_DARK_GREEN),
-    ("Phase 3: Institutional Tie-up", "Q3 2027", [
-        "Integration with SMVDSB Shrine Board RFID counters.",
-        "Official endorsement by J&K Directorate of Tourism.",
-        "Battery car live queue advisory in Katra.",
-        "Target: 250,000 active monthly yatris.",
-    ], C_AMBER),
-    ("Phase 4: Ecosystem Scale", "Q4 2027+", [
-        "Expansion to Bhaderwah, Kishtwar, Poonch & Rajouri.",
-        "Audio heritage trails in Dogri, Hindi & English.",
-        "Crowdsourced community fare update mechanisms.",
-        "Standard blueprint for other Indian pilgrim corridors.",
-    ], C_FOREST),
+# Left: 4 Roadmap Phases
+add_card(s8, Inches(0.8), Inches(1.85), Inches(8.5), Inches(4.8))
+tb_road = s8.shapes.add_textbox(Inches(1.0), Inches(1.95), Inches(8.1), Inches(4.6))
+tf_rd = tb_road.text_frame
+tf_rd.word_wrap = True
+
+phases_data = [
+    ("Phase 1: Foundation (COMPLETED & LIVE)", "Live on jammukhoj.in • 100% offline PWA & Android APK • 36+ attractions & 44 automated tests passing • 1-Tap buffer planner & transit matrix."),
+    ("Phase 2: Transit Node Pilot (Q1-Q2 2027)", "QR code touchpoints at Jammu Tawi & Katra concourses • J&K Smart City e-bus live status integration • Onboard 50+ verified local dhabas & GI artisans • Target: 50,000 monthly users."),
+    ("Phase 3: Institutional Sync (Q3 2027)", "Official endorsement by J&K Tourism Directorate • SMVDSB Katra battery-car & RFID status tie-in • Railway Yatri Niwas booking cross-links • Target: 250,000 active yatris."),
+    ("Phase 4: Ecosystem Scale (Q4 2027+)", "Expansion to Bhaderwah, Kishtwar, Poonch & Rajouri • Audio heritage guides in Dogri, Hindi & English • Open-source blueprint for other pilgrim hubs (Varanasi, Tirupati)."),
 ]
 
-for idx, (p_title, p_time, p_items, color) in enumerate(phases):
-    c_left = Inches(0.8 + idx * 2.95)
-    add_card(s8, c_left, Inches(1.9), Inches(2.8), Inches(4.7))
+for idx, (p_title, p_desc) in enumerate(phases_data):
+    p_t = tf_rd.paragraphs[0] if idx == 0 else tf_rd.add_paragraph()
+    p_t.text = p_title
+    p_t.font.size = Pt(11)
+    p_t.font.bold = True
+    p_t.font.color.rgb = C_DARK_GREEN if "LIVE" in p_title else C_AMBER
     
-    # Phase badge
-    badge = s8.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, c_left + Inches(0.15), Inches(2.1), Inches(2.5), Inches(0.6))
-    badge.fill.solid()
-    badge.fill.fore_color.rgb = color
-    badge.line.fill.background()
-    p_b1 = badge.text_frame.paragraphs[0]
-    p_b1.text = p_title
-    p_b1.font.size = Pt(11)
-    p_b1.font.bold = True
-    p_b1.font.color.rgb = C_WHITE
-    p_b1.alignment = PP_ALIGN.CENTER
-    
-    p_b2 = badge.text_frame.add_paragraph()
-    p_b2.text = p_time
-    p_b2.font.size = Pt(9)
-    p_b2.font.color.rgb = C_GOLD if color != C_AMBER else C_WHITE
-    p_b2.alignment = PP_ALIGN.CENTER
-    
-    tb = s8.shapes.add_textbox(c_left + Inches(0.15), Inches(2.85), Inches(2.5), Inches(3.6))
-    tf = tb.text_frame
-    tf.word_wrap = True
-    
-    for item in p_items:
-        pi = tf.add_paragraph()
-        pi.text = f"✓  {item}"
-        pi.font.size = Pt(10.5)
-        pi.font.color.rgb = C_TEXT_INK
-        pi.font.name = FONT_BODY
-        pi.space_after = Pt(8)
+    p_d = tf_rd.add_paragraph()
+    p_d.text = p_desc
+    p_d.font.size = Pt(10)
+    p_d.font.color.rgb = C_TEXT_MUTED
+    p_d.space_after = Pt(10)
+
+# Right: Actual App Screenshot of Offline Storage & Settings
+add_phone_mockup(s8, IMG_SETTINGS, Inches(9.6), Inches(1.85), Inches(2.9), Inches(4.8))
 
 add_footer(s8)
 
 # =============================================================================
-# SLIDE 9: SUSTAINABILITY AND PRIVACY
+# SLIDE 9: SUSTAINABILITY AND PRIVACY (WITH DOGRI FOOD SCREENSHOT)
 # =============================================================================
 s9 = prs.slides.add_slide(blank_layout)
 set_slide_background(s9)
-add_header(s9, 9, "Trust & Sustainability", "Civic Integrity, Zero-Surveillance Privacy & Low Footprint", "Built to protect user autonomy and operate sustainably without predatory monetization.")
+add_header(s9, 9, "Trust & Sustainability", "Civic Integrity, Zero-Surveillance Privacy & Low Footprint", "Built to protect user privacy and operate sustainably without predatory data monetization.")
 
-pillars = [
-    ("🔒 Zero-Knowledge Privacy", "No Tracking • No Ad Telemetry", [
-        "100% of personal plans, bookmarks, and logs remain in local device IndexedDB.",
-        "No third-party advertising SDKs or tracking cookies.",
-        "One-tap permanent account and device cache deletion conforming to Google Play Data Safety policies.",
+# Left: 3 Core Pillars
+add_card(s9, Inches(0.8), Inches(1.85), Inches(8.5), Inches(4.8))
+tb_sust = s9.shapes.add_textbox(Inches(1.0), Inches(1.95), Inches(8.1), Inches(4.6))
+tf_su = tb_sust.text_frame
+tf_su.word_wrap = True
+
+sust_data = [
+    ("🔒 Zero-Knowledge Privacy (Google Play Compliant)", [
+        "100% of user data, bookmarks, and custom plans remain strictly on-device in IndexedDB.",
+        "Zero tracking cookies, zero third-party telemetry, zero location data monetization.",
+        "1-Tap permanent account & local storage wipe button directly in Settings.",
     ]),
-    ("🌱 Ultra-Low Resource Footprint", "Battery & Network Conscious", [
-        "Compressed offline package (~5 MB APK / <2 MB web assets).",
-        "Optimized for budget Android devices prevalent across Indian pilgrim cohorts.",
-        "OLED-friendly dark mode and high-contrast accessibility modes reducing battery draw during long travel.",
+    ("🌱 Ultra-Low Resource Footprint", [
+        "Lightweight 5.5 MB APK and <2 MB compressed web bundle.",
+        "Runs smoothly on budget ₹6,000 Android phones without thermal throttling.",
+        "OLED-friendly dark mode and high-contrast WCAG 2.1 AA modes save battery during travel.",
     ]),
-    ("🤝 Sustainable Civic Model", "Public-Private Community Co-ops", [
-        "Non-commission based directory preventing price distortion for travelers.",
+    ("🤝 Sustainable Public-Private Civic Model", [
+        "Non-commission directory preventing price distortion for travelers.",
         "Verified artisan and homestay listings supported by J&K Tourism development authorities.",
-        "Open-source data structures contributing back to OpenStreetMap and civic datasets.",
+        "Open-source data structures contributing back to OpenStreetMap and civic archives.",
     ]),
 ]
 
-for idx, (head, subhead, bullets) in enumerate(pillars):
-    c_left = Inches(0.8 + idx * 3.95)
-    add_card(s9, c_left, Inches(1.9), Inches(3.75), Inches(4.7))
-    
-    tb = s9.shapes.add_textbox(c_left + Inches(0.2), Inches(2.05), Inches(3.35), Inches(4.4))
-    tf = tb.text_frame
-    tf.word_wrap = True
-    
-    p1 = tf.paragraphs[0]
-    p1.text = head
-    p1.font.size = Pt(15)
-    p1.font.bold = True
-    p1.font.color.rgb = C_DARK_GREEN
-    p1.font.name = FONT_HEADING
-    
-    p2 = tf.add_paragraph()
-    p2.text = subhead
-    p2.font.size = Pt(11)
-    p2.font.bold = True
-    p2.font.color.rgb = C_AMBER
-    p2.font.name = FONT_BODY
-    p2.space_after = Pt(12)
+for idx, (title, bullets) in enumerate(sust_data):
+    p_t = tf_su.paragraphs[0] if idx == 0 else tf_su.add_paragraph()
+    p_t.text = title
+    p_t.font.size = Pt(12)
+    p_t.font.bold = True
+    p_t.font.color.rgb = C_DARK_GREEN
     
     for b in bullets:
-        pb = tf.add_paragraph()
+        pb = tf_su.add_paragraph()
         pb.text = f"•  {b}"
-        pb.font.size = Pt(11)
+        pb.font.size = Pt(10)
         pb.font.color.rgb = C_TEXT_MUTED
-        pb.font.name = FONT_BODY
-        pb.space_after = Pt(8)
+        pb.space_after = Pt(2)
+    p_t.space_after = Pt(4)
+
+# Right: Actual App Screenshot of Dogri Food & Dietary Safety
+add_phone_mockup(s9, IMG_FOOD, Inches(9.6), Inches(1.85), Inches(2.9), Inches(4.8))
 
 add_footer(s9)
 
@@ -689,33 +693,33 @@ s10 = prs.slides.add_slide(blank_layout)
 set_slide_background(s10, C_DARK_GREEN)
 
 # Decorative background accent
-acc10 = s10.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.8), Inches(11.733), Inches(5.9))
+acc10 = s10.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.7), Inches(11.733), Inches(6.05))
 acc10.fill.solid()
-acc10.fill.fore_color.rgb = C_FOREST
+acc10.fill.fore_color.rgb = C_FOREST_DEEP
 acc10.line.color.rgb = C_GOLD
 acc10.line.width = Pt(1.5)
 
 # Badge
-b10 = s10.shapes.add_textbox(Inches(1.2), Inches(1.1), Inches(10), Inches(0.4))
+b10 = s10.shapes.add_textbox(Inches(1.2), Inches(1.0), Inches(10), Inches(0.35))
 p_b10 = b10.text_frame.paragraphs[0]
 p_b10.text = "CLOSING PITCH • PILOT CALL TO ACTION"
-p_b10.font.size = Pt(11)
+p_b10.font.size = Pt(10.5)
 p_b10.font.bold = True
 p_b10.font.color.rgb = C_GOLD
 
 # Header
-th10 = s10.shapes.add_textbox(Inches(1.2), Inches(1.5), Inches(10.5), Inches(1.2))
+th10 = s10.shapes.add_textbox(Inches(1.2), Inches(1.35), Inches(10.5), Inches(1.1))
 tf10 = th10.text_frame
 p10_1 = tf10.paragraphs[0]
 p10_1.text = "Partner with Us to Transform Jammu Tourism"
-p10_1.font.size = Pt(36)
+p10_1.font.size = Pt(34)
 p10_1.font.bold = True
 p10_1.font.color.rgb = C_WHITE
 p10_1.font.name = FONT_HEADING
 
 p10_2 = tf10.add_paragraph()
 p10_2.text = "Let's turn a hurried 2-hour transit rush into an enriching, safe cultural gateway."
-p10_2.font.size = Pt(16)
+p10_2.font.size = Pt(15)
 p10_2.font.color.rgb = C_GOLD
 
 # 3 Pilot Asks
@@ -726,20 +730,20 @@ asks = [
 ]
 
 for idx, (ask_title, ask_desc) in enumerate(asks):
-    c_left = Inches(1.2 + idx * 3.65)
-    card10 = s10.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, c_left, Inches(2.9), Inches(3.45), Inches(2.3))
+    cx = Inches(1.2 + idx * 3.65)
+    card10 = s10.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, cx, Inches(2.7), Inches(3.45), Inches(2.35))
     card10.fill.solid()
     card10.fill.fore_color.rgb = C_DARK_GREEN
     card10.line.color.rgb = C_GOLD
     card10.line.width = Pt(1)
 
-    tb = s10.shapes.add_textbox(c_left + Inches(0.15), Inches(3.05), Inches(3.15), Inches(2.0))
+    tb = s10.shapes.add_textbox(cx + Inches(0.15), Inches(2.85), Inches(3.15), Inches(2.05))
     tf = tb.text_frame
     tf.word_wrap = True
     
     pt = tf.paragraphs[0]
     pt.text = ask_title
-    pt.font.size = Pt(14)
+    pt.font.size = Pt(13)
     pt.font.bold = True
     pt.font.color.rgb = C_GOLD
     pt.font.name = FONT_HEADING
@@ -747,31 +751,39 @@ for idx, (ask_title, ask_desc) in enumerate(asks):
     
     pd = tf.add_paragraph()
     pd.text = ask_desc
-    pd.font.size = Pt(10.5)
+    pd.font.size = Pt(10)
     pd.font.color.rgb = C_WHITE
     pd.font.name = FONT_BODY
 
-# Contact & Links Bar
-bar = s10.shapes.add_textbox(Inches(1.2), Inches(5.4), Inches(10.5), Inches(1.0))
+# Contact & Live URL Bar
+bar = s10.shapes.add_textbox(Inches(1.2), Inches(5.25), Inches(10.5), Inches(1.1))
 tf_bar = bar.text_frame
 tf_bar.word_wrap = True
 
 p_c1 = tf_bar.paragraphs[0]
-p_c1.text = "Live Web App: https://jammukhoj.in  •  Contact: support@jammukhoj.in"
+p_c1.text = "🌐 Live Application: https://jammukhoj.in   •   ✉️ Contact: support@jammukhoj.in"
 p_c1.font.size = Pt(14)
 p_c1.font.bold = True
 p_c1.font.color.rgb = C_WHITE
 p_c1.alignment = PP_ALIGN.CENTER
 
 p_c2 = tf_bar.add_paragraph()
-p_c2.text = "Open Source • 100% Offline Progressive Web App & Android Ready • Thank You!"
-p_c2.font.size = Pt(11)
+p_c2.text = "Open Source • 100% Offline Progressive Web App & Android Ready • Built with Pride for Jammu"
+p_c2.font.size = Pt(10.5)
 p_c2.font.color.rgb = C_GOLD
 p_c2.alignment = PP_ALIGN.CENTER
 
 # -----------------------------------------------------------------------------
 # SAVE PRESENTATION
 # -----------------------------------------------------------------------------
-output_pptx = os.path.abspath(os.path.join(os.getcwd(), "JammuKhoj_Pitch_Deck.pptx"))
-prs.save(output_pptx)
-print(f"SUCCESS: Generated pitch deck at {output_pptx}")
+output_final = os.path.abspath(os.path.join(os.getcwd(), "JammuKhoj_Pitch_Deck_Final.pptx"))
+prs.save(output_final)
+print(f"SUCCESS: Generated visual pitch deck with app screenshots at {output_final}")
+
+output_standard = os.path.abspath(os.path.join(os.getcwd(), "JammuKhoj_Pitch_Deck.pptx"))
+try:
+    prs.save(output_standard)
+    print(f"SUCCESS: Also updated {output_standard}")
+except PermissionError:
+    print(f"NOTE: {output_standard} is currently open in PowerPoint. The updated version is ready at {output_final}")
+
