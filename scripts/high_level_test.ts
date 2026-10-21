@@ -349,6 +349,34 @@ assert(
 const dashboardFile = path.resolve(process.cwd(), 'src/features/safety/CommandControlDashboard.tsx');
 assert(fs.existsSync(dashboardFile), 'Crowd Density & Disaster Management Command Dashboard is present', 'SAFETY');
 
+const offlineMapFile = path.resolve(process.cwd(), 'src/features/map/OfflineCityDisasterMap.tsx');
+const offlineMapContent = fs.existsSync(offlineMapFile) ? fs.readFileSync(offlineMapFile, 'utf8') : '';
+assert(
+  offlineMapContent.includes('nh44Route') &&
+  offlineMapContent.includes('haven_udhampur') &&
+  offlineMapContent.includes('hazard-zone') &&
+  offlineMapContent.includes('projectCoordinates'),
+  'Tactical Offline City & Disaster GIS Map with NH-44 Hazard & Safe Havens is present',
+  'OFFLINE_MAP'
+);
+
+assert(
+  emergencyModalContent.includes('OfflineCityDisasterMap') &&
+  emergencyModalContent.includes('isOffline'),
+  'Disaster Modal features integrated on-device Offline Map preview and offline state detection',
+  'OFFLINE_MAP'
+);
+
+const mapPageFile = path.resolve(process.cwd(), 'src/features/map/MapPage.tsx');
+const mapPageContent = fs.existsSync(mapPageFile) ? fs.readFileSync(mapPageFile, 'utf8') : '';
+assert(
+  mapPageContent.includes('OfflineCityDisasterMap') &&
+  mapPageContent.includes('forceOfflineMap') &&
+  mapPageContent.includes('Tactical Offline GIS'),
+  'Main Map Page automatically activates on-device Tactical Offline GIS when user is disconnected',
+  'OFFLINE_MAP'
+);
+
 // -----------------------------------------------------------------------------
 // SUMMARY REPORT
 // -----------------------------------------------------------------------------

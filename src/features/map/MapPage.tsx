@@ -29,6 +29,7 @@ import {
   CheckCircle2,
   Bookmark,
   RotateCcw,
+  WifiOff,
 } from 'lucide-react';
 import { db } from '@/data/db';
 import type { Attraction, Node, HelpPoint } from '@/data/types';
@@ -36,13 +37,14 @@ import { JAMMU_ALL_ATTRACTIONS, JAMMU_REGIONAL_NODES } from '@/data/jammuFullDat
 import { getSpotImage } from '@/data/spotImages';
 import { SourceBadge } from '@/ui/trust/SourceBadge';
 import { useCommandControlStore } from '@/stores/commandControlStore';
+import { OfflineCityDisasterMap } from '@/features/map/OfflineCityDisasterMap';
 
 // Jammu Division map center & initial zoom
 const JAMMU_CENTER: [number, number] = [74.868, 32.726]; // [lng, lat]
 const JAMMU_ZOOM = 11.5;
 
 // Tile Styles with rock-solid, verified HTTPS endpoints
-type MapStyleKey = 'osm' | 'voyager' | 'positron' | 'satellite' | 'topo';
+type MapStyleKey = 'osm' | 'voyager' | 'positron' | 'satellite' | 'topo' | 'offline';
 
 const MAP_STYLES: Record<MapStyleKey, { label: string; url: string; attribution: string }> = {
   osm: {
@@ -70,6 +72,11 @@ const MAP_STYLES: Record<MapStyleKey, { label: string; url: string; attribution:
     url: 'https://tile.opentopomap.org/{z}/{x}/{y}.png',
     attribution: '© OpenTopoMap contributors',
   },
+  offline: {
+    label: 'Tactical Offline GIS Map',
+    url: '',
+    attribution: '© JammuKhoj Offline GIS Vector Engine',
+  },
 };
 
 export const MapPage: React.FC = () => {
@@ -92,6 +99,28 @@ export const MapPage: React.FC = () => {
   // Map settings
   const [currentStyle, setCurrentStyle] = useState<MapStyleKey>('osm');
   const [showStyleMenu, setShowStyleMenu] = useState(false);
+
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [forceOfflineMap, setForceOfflineMap] = useState<boolean>(() => {
+    const s = routeLocation.state as any;
+    return Boolean(s?.offlineMode || !navigator.onLine);
+  });
+
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+    };
+    const handleOffline = () => {
+      setIsOffline(true);
+      setForceOfflineMap(true);
+    };
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   // Filters & State - Full categories
   const [activeFilter, setActiveFilter] = useState<
@@ -212,6 +241,14 @@ export const MapPage: React.FC = () => {
   const switchMapStyle = (styleKey: MapStyleKey) => {
     setCurrentStyle(styleKey);
     setShowStyleMenu(false);
+
+    if (styleKey === 'offline') {
+      setForceOfflineMap(true);
+      showToast('Switched to Tactical Offline GIS Map (Zero Data Needed)');
+      return;
+    }
+
+    setForceOfflineMap(false);
     const map = mapRef.current;
     if (!map) return;
 
@@ -599,7 +636,20 @@ export const MapPage: React.FC = () => {
       )}
 
       {/* MapLibre GL Canvas Container (Single instance, always mounted) */}
-      <div ref={mapContainerRef} className="absolute inset-0 w-full h-full" />
+      <div
+        ref={mapContainerRef}
+        className={`absolute inset-0 w-full h-full ${forceOfflineMap ? 'invisible' : 'visible'}`}
+      />
+
+      {/* Offline Tactical Vector Map (Active when offline or toggled) */}
+      {forceOfflineMap && (
+        <div className="absolute inset-0 w-full h-full z-10 pt-28 pb-14">
+          <OfflineCityDisasterMap
+            selectedAlert={activeAlerts[0]}
+            focusTarget={(routeLocation.state as any)?.focusSafeSpot || (routeLocation.state as any)?.hazardCoords}
+          />
+        </div>
+      )}
 
       {/* Floating Modern Header */}
       <div className="absolute top-2 left-2 right-2 z-30 pointer-events-none space-y-1.5 max-w-lg mx-auto">
@@ -636,10 +686,27 @@ export const MapPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-success font-bold text-[10px] border border-emerald-200 dark:border-emerald-800">
-              <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-              <span>Offline Ready</span>
-            </div>
+            <button
+              onClick={() => {
+                const next = !forceOfflineMap;
+                setForceOfflineMap(next);
+                if (next) {
+                  showToast('Tactical Offline GIS Map Active');
+                } else {
+                  showToast('Switched to Online Map Tiles');
+                  setTimeout(() => mapRef.current?.resize(), 150);
+                }
+              }}
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-bold text-[10px] border transition-all apple-press ${
+                forceOfflineMap
+                  ? 'bg-emerald-700 text-white border-emerald-500 shadow-sm'
+                  : 'bg-emerald-100 dark:bg-emerald-950/40 text-success border-emerald-200 dark:border-emerald-800'
+              }`}
+              title="Toggle between Tactical Offline Map and Online Tiles"
+            >
+              <WifiOff size={11} className={forceOfflineMap ? 'text-white' : 'text-success'} />
+              <span>{forceOfflineMap ? 'Offline GIS Active' : 'Offline Ready'}</span>
+            </button>
 
             <button
               onClick={() => setShowStyleMenu(!showStyleMenu)}
@@ -755,6 +822,27 @@ export const MapPage: React.FC = () => {
             </button>
           ))}
         </div>
+
+        {/* Offline Disaster Navigation Advisory Banner */}
+        {forceOfflineMap && (
+          <div className="pointer-events-auto bg-slate-900/95 backdrop-blur-md text-emerald-300 border border-emerald-500/40 rounded-xl px-3 py-1.5 text-[11px] flex items-center justify-between shadow-lg animate-in fade-in">
+            <div className="flex items-center gap-1.5 truncate">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <span className="truncate">
+                <strong>Offline Tactical GIS:</strong> Safe havens, road closures, & Katra corridors active.
+              </span>
+            </div>
+            <button
+              onClick={() => {
+                setForceOfflineMap(false);
+                setTimeout(() => mapRef.current?.resize(), 150);
+              }}
+              className="text-[10px] font-bold text-white underline hover:text-emerald-200 shrink-0 ml-2"
+            >
+              Tiles View
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Floating Right Map Utility Controls */}

@@ -261,6 +261,7 @@ export const CommandControlDashboard: React.FC = () => {
                             state: {
                               focusSafeSpot: loc.evacuationRoutes[0].safeSpotCoords,
                               safeSpotName: loc.evacuationRoutes[0].safeSpotName,
+                              offlineMode: true,
                             },
                           });
                         }}
@@ -359,6 +360,7 @@ export const CommandControlDashboard: React.FC = () => {
                             safeSpotName: alert.safeHoldingArea.name,
                             hazardCoords: alert.coordinates,
                             hazardName: alert.locationName,
+                            offlineMode: true,
                           },
                         });
                       }}
@@ -424,6 +426,7 @@ export const CommandControlDashboard: React.FC = () => {
                           state: {
                             focusSafeSpot: route.safeSpotCoords,
                             safeSpotName: route.safeSpotName,
+                            offlineMode: true,
                           },
                         });
                       }}

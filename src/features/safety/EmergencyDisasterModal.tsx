@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   AlertTriangle,
@@ -12,12 +12,32 @@ import {
   ShieldCheck,
   Building,
   CheckCircle2,
+  WifiOff,
+  Maximize2,
+  Map as MapIcon,
 } from 'lucide-react';
 import { useCommandControlStore } from '@/stores/commandControlStore';
+import { OfflineCityDisasterMap } from '@/features/map/OfflineCityDisasterMap';
 
 export const EmergencyDisasterModal: React.FC = () => {
   const navigate = useNavigate();
   const { activeEmergencyPopup, dismissEmergencyModal } = useCommandControlStore();
+
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [showFullMapPreview, setShowFullMapPreview] = useState(true);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   if (!activeEmergencyPopup) return null;
 
@@ -33,6 +53,7 @@ export const EmergencyDisasterModal: React.FC = () => {
         hazardCoords: activeEmergencyPopup.coordinates,
         hazardName: activeEmergencyPopup.locationName,
         hazardType: activeEmergencyPopup.incidentType,
+        offlineMode: true,
       },
     });
   };
@@ -71,6 +92,28 @@ export const EmergencyDisasterModal: React.FC = () => {
 
         {/* Scrollable Content */}
         <div className="p-4 sm:p-5 overflow-y-auto space-y-3.5 text-xs sm:text-sm">
+          {/* Offline Mode Active Banner */}
+          <div className={`p-2.5 rounded-xl border flex items-center justify-between transition-colors ${
+            isOffline
+              ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300'
+              : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-800 dark:text-emerald-300'
+          }`}>
+            <div className="flex items-center gap-2">
+              <WifiOff className="w-4 h-4 text-emerald-400 shrink-0" />
+              <div>
+                <span className="font-bold block text-xs">
+                  {isOffline ? 'Offline Mode Active • Local Map Ready' : '100% Offline Resilience Active'}
+                </span>
+                <span className="text-[10px] opacity-90">
+                  Tactical city map, hazard zones, & safe havens are cached on-device without internet.
+                </span>
+              </div>
+            </div>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold shrink-0">
+              OFFLINE READY
+            </span>
+          </div>
+
           {/* Main Headline */}
           <div className="p-3 bg-danger/10 border border-danger/30 rounded-xl">
             <h3 className="font-bold text-danger text-sm sm:text-base flex items-start gap-1.5">
@@ -94,6 +137,32 @@ export const EmergencyDisasterModal: React.FC = () => {
               <div className="mt-2 pt-2 border-t border-amber-500/20 text-xs flex items-center gap-1.5 text-ink/80">
                 <Compass className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                 <span><strong>Recommended Divert Axis:</strong> {activeEmergencyPopup.alternativeRouteName}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Embedded Offline Evacuation Map Preview */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-xs font-bold text-ink">
+              <span className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                <MapIcon className="w-4 h-4" />
+                <span>Offline Disaster & Safe Haven Map</span>
+              </span>
+              <button
+                onClick={() => setShowFullMapPreview(!showFullMapPreview)}
+                className="text-[10px] text-stone hover:text-ink font-semibold"
+              >
+                {showFullMapPreview ? 'Minimize Map' : 'Show Map'}
+              </button>
+            </div>
+
+            {showFullMapPreview && (
+              <div className="rounded-2xl overflow-hidden border border-border shadow-md">
+                <OfflineCityDisasterMap
+                  compact={true}
+                  onOpenFullMap={handleNavigateToSafeHaven}
+                  selectedAlert={activeEmergencyPopup}
+                />
               </div>
             )}
           </div>
@@ -152,7 +221,7 @@ export const EmergencyDisasterModal: React.FC = () => {
             className="flex-1 py-2.5 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl shadow-sm text-xs sm:text-sm flex items-center justify-center gap-2 transition-transform active:scale-[0.98]"
           >
             <Navigation className="w-4 h-4 text-emerald-200" />
-            <span>Open Safe Haven on City Map</span>
+            <span>Open Safe Haven on City Map (Offline)</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
           <button

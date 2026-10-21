@@ -565,13 +565,14 @@ export const HomePage: React.FC = () => {
                       focusSafeSpot: activeAlerts[0].safeHoldingArea.coordinates,
                       safeSpotName: activeAlerts[0].safeHoldingArea.name,
                       hazardCoords: activeAlerts[0].coordinates,
+                      offlineMode: true,
                     },
                   });
                 }}
                 className="text-xs text-emerald-700 font-bold hover:underline flex items-center gap-1"
               >
                 <NavIcon className="w-3.5 h-3.5" />
-                <span>Open Safe Haven on City Map</span>
+                <span>Open Safe Haven on City Map (Offline Ready)</span>
               </button>
             </div>
           </div>
