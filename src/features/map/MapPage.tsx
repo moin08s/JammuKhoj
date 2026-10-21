@@ -35,6 +35,7 @@ import type { Attraction, Node, HelpPoint } from '@/data/types';
 import { JAMMU_ALL_ATTRACTIONS, JAMMU_REGIONAL_NODES } from '@/data/jammuFullData';
 import { getSpotImage } from '@/data/spotImages';
 import { SourceBadge } from '@/ui/trust/SourceBadge';
+import { useCommandControlStore } from '@/stores/commandControlStore';
 
 // Jammu Division map center & initial zoom
 const JAMMU_CENTER: [number, number] = [74.868, 32.726]; // [lng, lat]
@@ -111,6 +112,9 @@ export const MapPage: React.FC = () => {
     durationMins: number;
     fareEstimate: string;
   } | null>(null);
+
+  // Command & Control Store Integration for Disaster Hazard & Safe Haven Markers
+  const { activeAlerts, locations: crowdLocations, triggerEmergencyModal } = useCommandControlStore();
 
   const [copiedLink, setCopiedLink] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -390,8 +394,69 @@ export const MapPage: React.FC = () => {
       markersRef.current.push(marker);
     });
 
-    // Target node focus check (if navigated with state targetNode or target)
+    // 4. Disaster Hazard Markers (Landslides, Road Blocks, Overcrowding)
+    activeAlerts.forEach((hazard) => {
+      const el = document.createElement('div');
+      el.className = 'group relative cursor-pointer select-none transition-transform hover:scale-125 z-40';
+      el.innerHTML = `
+        <div class="relative flex items-center justify-center">
+          <span class="absolute w-10 h-10 rounded-full bg-red-600/40 animate-ping"></span>
+          <div class="w-9 h-9 rounded-full bg-danger text-white border-2 border-white shadow-xl flex items-center justify-center text-sm font-bold">
+            ${hazard.incidentType === 'landslide' ? '⚠️' : '🚨'}
+          </div>
+          <div class="absolute -bottom-1 w-2 h-2 rotate-45 border-r border-b border-white bg-danger"></div>
+        </div>
+        <div class="absolute left-1/2 -translate-x-1/2 -top-8 bg-danger text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-lg whitespace-nowrap pointer-events-none uppercase">
+          ${hazard.incidentType.toUpperCase()} ALERT
+        </div>
+      `;
+
+      el.onclick = () => {
+        triggerEmergencyModal(hazard);
+        map.flyTo({ center: hazard.coordinates, zoom: 13, essential: true });
+      };
+
+      const marker = new maplibregl.Marker({ element: el })
+        .setLngLat(hazard.coordinates)
+        .addTo(map);
+      markersRef.current.push(marker);
+
+      // Also render Safe Holding Concourse pin
+      if (hazard.safeHoldingArea) {
+        const safeEl = document.createElement('div');
+        safeEl.className = 'group relative cursor-pointer select-none transition-transform hover:scale-120 z-35';
+        safeEl.innerHTML = `
+          <div class="relative flex items-center justify-center">
+            <span class="absolute w-8 h-8 rounded-full bg-emerald-500/30 animate-pulse"></span>
+            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white border-2 border-white shadow-lg flex items-center justify-center text-xs font-bold">
+              🛡️
+            </div>
+          </div>
+          <div class="absolute left-1/2 -translate-x-1/2 -top-7 bg-emerald-800 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow whitespace-nowrap pointer-events-none">
+            SAFE HAVEN: ${hazard.safeHoldingArea.name}
+          </div>
+        `;
+
+        safeEl.onclick = () => {
+          map.flyTo({ center: hazard.safeHoldingArea.coordinates, zoom: 14.5, essential: true });
+          showToast(`Safe Holding Haven: ${hazard.safeHoldingArea.name}`);
+        };
+
+        const safeMarker = new maplibregl.Marker({ element: safeEl })
+          .setLngLat(hazard.safeHoldingArea.coordinates)
+          .addTo(map);
+        markersRef.current.push(safeMarker);
+      }
+    });
+
+    // Target node focus check (if navigated with state targetNode, target, or focusSafeSpot)
     const state = routeLocation.state as any;
+    if (state?.focusSafeSpot) {
+      map.flyTo({ center: state.focusSafeSpot, zoom: 14.5, essential: true });
+      showToast(`Navigated to Safe Evacuation Haven: ${state.safeSpotName || 'Designated Haven'}`);
+    } else if (state?.hazardCoords) {
+      map.flyTo({ center: state.hazardCoords, zoom: 13.5, essential: true });
+    }
     const targetId = state?.targetNode || state?.target;
     if (targetId) {
       const target = nodeMap.get(targetId);
@@ -439,6 +504,18 @@ export const MapPage: React.FC = () => {
 
     const startCoords: [number, number] = userLocation || [74.8789, 32.7058]; // User GPS or Jammu Tawi Station
     const endCoords: [number, number] = [destinationNode.lng, destinationNode.lat];
+
+    // DISASTER CHECK: Inspect if chosen route intercepts any active landslide or hazard
+    const blockedHazard = activeAlerts.find(
+      (a) => a.isActive && (a.incidentType === 'landslide' || a.incidentType === 'road_block') &&
+        Math.abs(a.coordinates[0] - ((startCoords[0] + endCoords[0]) / 2)) < 0.25 &&
+        Math.abs(a.coordinates[1] - ((startCoords[1] + endCoords[1]) / 2)) < 0.25
+    );
+
+    if (blockedHazard) {
+      triggerEmergencyModal(blockedHazard);
+      showToast(`⚠️ ROUTE BLOCKED: ${blockedHazard.incidentType.toUpperCase()} on this axis! Diverting to safe haven.`);
+    }
 
     // Compute rough distance in km using Haversine
     const dLat = (endCoords[1] - startCoords[1]) * (Math.PI / 180);

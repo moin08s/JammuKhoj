@@ -72,6 +72,8 @@ import { ReportUpdateModal } from '@/features/contribute/ReportUpdateModal';
 import { ContactSupportModal } from '@/features/about/ContactSupportModal';
 import { TermsOfServiceModal } from '@/features/privacy/TermsOfServiceModal';
 import { TempleCrowdGuide } from '@/features/spiritual/TempleCrowdGuide';
+import { useCommandControlStore } from '@/stores/commandControlStore';
+import { ShieldAlert as AlertShield, AlertTriangle as HazardTriangle, ArrowRight as RightArrow, Navigation as NavIcon } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
   const { i18n } = useTranslation();
@@ -111,6 +113,9 @@ export const HomePage: React.FC = () => {
   const [showSpotUploadModal, setShowSpotUploadModal] = useState(false);
   const [showSpiritualModal, setShowSpiritualModal] = useState(false);
   const [showAudioTourModal, setShowAudioTourModal] = useState(false);
+
+  // Live Disaster & Crowd Command Store
+  const { activeAlerts, triggerEmergencyModal, festivalSurgeActive } = useCommandControlStore();
   const [showVaishnoDeviGuide, setShowVaishnoDeviGuide] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
@@ -514,6 +519,64 @@ export const HomePage: React.FC = () => {
       {/* 2. HERO WITH PROMINENT SEARCH */}
       {/* =================================================================== */}
       <section aria-label="Hero Introduction and Search" className="space-y-4 pt-1">
+        {/* Active Emergency Early Warning Banner (Landslide & Disasters) */}
+        {activeAlerts.length > 0 && (
+          <div className="p-3.5 bg-danger/10 border-2 border-danger/40 rounded-2xl shadow-xs space-y-2 animate-in fade-in">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-start gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-danger text-white flex items-center justify-center shrink-0 mt-0.5 animate-pulse">
+                  <HazardTriangle className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-[10px] font-mono font-bold uppercase bg-danger text-white px-2 py-0.5 rounded">
+                      CIVIC EARLY WARNING
+                    </span>
+                    <span className="text-[11px] text-danger font-bold">
+                      {activeAlerts[0].incidentType.toUpperCase()} HAZARD
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-xs sm:text-sm text-ink mt-0.5">
+                    {activeAlerts[0].title}
+                  </h3>
+                </div>
+              </div>
+
+              <button
+                onClick={() => triggerEmergencyModal(activeAlerts[0])}
+                className="shrink-0 text-xs px-3 py-1.5 bg-danger text-white rounded-xl font-bold hover:bg-danger/90 transition-colors shadow-xs"
+              >
+                View Protocol
+              </button>
+            </div>
+
+            <p className="text-[11px] sm:text-xs text-ink/80 leading-relaxed bg-surface/80 p-2 rounded-xl border border-danger/20">
+              <strong>Mandatory Directive:</strong> {activeAlerts[0].actionRequired}
+            </p>
+
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-danger/20 text-xs">
+              <span className="text-[11px] text-stone">
+                Safe Holding Haven: <strong className="text-ink">{activeAlerts[0].safeHoldingArea.name}</strong>
+              </span>
+              <button
+                onClick={() => {
+                  navigate('/map', {
+                    state: {
+                      focusSafeSpot: activeAlerts[0].safeHoldingArea.coordinates,
+                      safeSpotName: activeAlerts[0].safeHoldingArea.name,
+                      hazardCoords: activeAlerts[0].coordinates,
+                    },
+                  });
+                }}
+                className="text-xs text-emerald-700 font-bold hover:underline flex items-center gap-1"
+              >
+                <NavIcon className="w-3.5 h-3.5" />
+                <span>Open Safe Haven on City Map</span>
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="space-y-1.5">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-bold border border-primary/20">
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />

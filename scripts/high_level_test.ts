@@ -324,6 +324,32 @@ const foodSectionContent = fs.existsSync(foodSectionFile) ? fs.readFileSync(food
 assert(foodSectionContent.includes('jain_friendly') && foodSectionContent.includes('pure_veg'), 'Dogri Food Trail with Pure Veg and Jain-Friendly filters is present', 'FOOD');
 
 // -----------------------------------------------------------------------------
+// 8. CIVIC COMMAND, CONTROL & DISASTER MANAGEMENT AUDIT
+// -----------------------------------------------------------------------------
+const commandControlFile = path.resolve(process.cwd(), 'src/stores/commandControlStore.ts');
+const commandControlContent = fs.existsSync(commandControlFile) ? fs.readFileSync(commandControlFile, 'utf8') : '';
+assert(
+  commandControlContent.includes('festivalSurgeActive') &&
+  commandControlContent.includes('landslide') &&
+  commandControlContent.includes('evacuationRoutes') &&
+  commandControlContent.includes('safeCapacity'),
+  'Command & Control Room Store with Live Footfall, Festival Surge & Landslide Warning is present',
+  'SAFETY'
+);
+
+const emergencyModalFile = path.resolve(process.cwd(), 'src/features/safety/EmergencyDisasterModal.tsx');
+const emergencyModalContent = fs.existsSync(emergencyModalFile) ? fs.readFileSync(emergencyModalFile, 'utf8') : '';
+assert(
+  emergencyModalContent.includes('Open Safe Haven on City Map') &&
+  emergencyModalContent.includes('activeEmergencyPopup'),
+  'Global Emergency Disaster Pop-up Modal with Safe Haven City Map navigation is present',
+  'SAFETY'
+);
+
+const dashboardFile = path.resolve(process.cwd(), 'src/features/safety/CommandControlDashboard.tsx');
+assert(fs.existsSync(dashboardFile), 'Crowd Density & Disaster Management Command Dashboard is present', 'SAFETY');
+
+// -----------------------------------------------------------------------------
 // SUMMARY REPORT
 // -----------------------------------------------------------------------------
 console.log('\n====================================================');

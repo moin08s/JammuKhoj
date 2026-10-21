@@ -10,6 +10,7 @@ import { bundleManager } from '@/domain/offline/bundleManager';
 import { useAppStore } from '@/stores/appStore';
 import { PermissionRequestModal } from '@/features/permissions/PermissionRequestModal';
 import { deviceService } from '@/services/deviceService';
+import { EmergencyDisasterModal } from '@/features/safety/EmergencyDisasterModal';
 
 export const AppShell: React.FC = () => {
   const location = useLocation();
@@ -66,6 +67,9 @@ export const AppShell: React.FC = () => {
           isOpen={Boolean((currentUser || isGuest) && !permissionsReviewed)}
           onComplete={() => setPermissionsReviewed(true)}
         />
+
+        {/* Global Emergency Disaster & Landslide Early Warning Modal */}
+        <EmergencyDisasterModal />
       </div>
     </div>
   );

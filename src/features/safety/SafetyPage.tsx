@@ -17,6 +17,7 @@ import type { EmergencyContact, HelpPoint, SafetyGuidance } from '@/data/types';
 import { SEED_EMERGENCY_CONTACTS, SEED_HELP_POINTS, SEED_SAFETY_GUIDANCE } from '@/data/seedData';
 import { DisclaimerNote } from '@/ui/DisclaimerNote';
 import { SourceBadge } from '@/ui/trust/SourceBadge';
+import { CommandControlDashboard } from './CommandControlDashboard';
 
 export const SafetyPage: React.FC = () => {
   const { t } = useTranslation();
@@ -98,6 +99,9 @@ export const SafetyPage: React.FC = () => {
           Verified emergency response contacts, 1-Tap SOS dispatch, and medical aid directory accessible offline at all times.
         </p>
       </div>
+
+      {/* Civic Command & Control Hub: Live Crowd Footfall & Disaster Management */}
+      <CommandControlDashboard />
 
       <DisclaimerNote kind="emergency" />
 
