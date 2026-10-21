@@ -46,6 +46,7 @@ export const AttractionDetail: React.FC = () => {
 
   const [attraction, setAttraction] = useState<Attraction | null>(null);
   const [node, setNode] = useState<Node | null>(null);
+  const [loading, setLoading] = useState(true);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showSpiritualModal, setShowSpiritualModal] = useState(false);
@@ -80,7 +81,10 @@ export const AttractionDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      setLoading(false);
+      return;
+    }
     db.attractions.get(id).then((attr) => {
       if (attr) {
         setAttraction(attr);
@@ -94,18 +98,37 @@ export const AttractionDetail: React.FC = () => {
     }).catch(() => {
       const fallback = JAMMU_ALL_ATTRACTIONS.find((a) => a.id === id);
       if (fallback) setAttraction(fallback);
+    }).finally(() => {
+      setLoading(false);
     });
   }, [id]);
 
+  if (loading) {
+    return (
+      <div className="py-16 text-center text-stone space-y-3">
+        <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin mx-auto" />
+        <p className="text-xs font-semibold">Loading verified attraction details...</p>
+      </div>
+    );
+  }
+
   if (!attraction) {
     return (
-      <div className="py-12 text-center text-stone space-y-3">
-        <p>Loading attraction details...</p>
+      <div className="py-16 text-center text-stone space-y-4 px-4">
+        <div className="w-14 h-14 rounded-full bg-danger/10 text-danger flex items-center justify-center mx-auto">
+          <MapPin size={28} />
+        </div>
+        <div className="space-y-1">
+          <h3 className="font-heading text-base font-bold text-ink">Attraction Not Found</h3>
+          <p className="text-xs text-stone max-w-xs mx-auto">
+            The requested destination could not be located in the Jammu regional offline directory.
+          </p>
+        </div>
         <button
           onClick={() => navigate('/explore')}
-          className="text-primary font-bold text-xs underline apple-press"
+          className="px-4 py-2 bg-primary text-white rounded-xl text-xs font-bold shadow-sm apple-press"
         >
-          Back to Attractions Directory
+          Explore All 36+ Destinations
         </button>
       </div>
     );

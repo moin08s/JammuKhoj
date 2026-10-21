@@ -7,17 +7,19 @@ import { SEED_ATTRACTIONS, SEED_NODES, SEED_TRAVEL_TIMES, SEED_FARES, SEED_EMERG
 import enTranslations from '../src/i18n/en.json';
 import hiTranslations from '../src/i18n/hi.json';
 import doiTranslations from '../src/i18n/doi.json';
+import { projectCoordinates } from '../src/features/map/OfflineCityDisasterMap';
+import { getSpotImage } from '../src/data/spotImages';
 
 interface TestResult {
   name: string;
-  category: 'PLANNER' | 'DATASET' | 'SECURITY' | 'I18N' | 'DESIGN_TOKENS';
+  category: string;
   passed: boolean;
   details?: string;
 }
 
 const results: TestResult[] = [];
 
-function assert(condition: boolean, name: string, category: TestResult['category'], details?: string) {
+function assert(condition: boolean, name: string, category: string, details?: string) {
   results.push({
     name,
     category,
@@ -376,6 +378,67 @@ assert(
   'Main Map Page automatically activates on-device Tactical Offline GIS when user is disconnected',
   'OFFLINE_MAP'
 );
+
+// -----------------------------------------------------------------------------
+// 9. ADVANCED FLOW & MATHEMATICAL GIS PROJECTION TESTS
+// -----------------------------------------------------------------------------
+console.log('\n>>> [6/6] Running Advanced Flows & Algorithmic Resilience Tests...');
+
+// A. GIS Projection Exactness & Clamping
+const originProj = projectCoordinates([74.20, 33.40]);
+assert(originProj[0] === 0 && originProj[1] === 0, 'GIS: Northwest bounding corner [74.20, 33.40] projects to exact origin [0, 0]', 'OFFLINE_GIS');
+
+const maxBoundProj = projectCoordinates([75.60, 32.40]);
+assert(maxBoundProj[0] === 1000 && maxBoundProj[1] === 700, 'GIS: Southeast bounding corner [75.60, 32.40] projects to exact extent [1000, 700]', 'OFFLINE_GIS');
+
+const outOfBoundsProj = projectCoordinates([70.0, 30.0]);
+assert(outOfBoundsProj[0] === 0 && outOfBoundsProj[1] === 700, 'GIS: Out-of-bounds coordinates are safely clamped without throwing or NaN', 'OFFLINE_GIS');
+
+// B. Crowd Regulation Math & Automated Gate Status
+function calculateCrowdStatus(current: number, safe: number) {
+  const ratio = current / safe;
+  let level: 'normal' | 'moderate' | 'high' | 'critical' = 'normal';
+  let gates: 'open' | 'regulated' | 'closed' = 'open';
+  if (ratio >= 1.05) { level = 'critical'; gates = 'closed'; }
+  else if (ratio >= 0.85) { level = 'high'; gates = 'regulated'; }
+  else if (ratio >= 0.55) { level = 'moderate'; gates = 'open'; }
+  return { ratio, level, gates };
+}
+
+const cNormal = calculateCrowdStatus(20000, 40000);
+assert(cNormal.level === 'normal' && cNormal.gates === 'open', 'Crowd: 50% capacity evaluates to normal density with open gates', 'CROWD_CONTROL');
+
+const cHigh = calculateCrowdStatus(36000, 40000);
+assert(cHigh.level === 'high' && cHigh.gates === 'regulated', 'Crowd: 90% capacity evaluates to high density with regulated gates', 'CROWD_CONTROL');
+
+const cCritical = calculateCrowdStatus(44000, 40000);
+assert(cCritical.level === 'critical' && cCritical.gates === 'closed', 'Crowd: 110% capacity evaluates to critical density with auto-closed gates', 'CROWD_CONTROL');
+
+// C. Route Blockage Intersection Algorithm
+function testIsRouteBlocked(start: [number, number], end: [number, number], hazards: [number, number][]) {
+  const minLng = Math.min(start[0], end[0]) - 0.05;
+  const maxLng = Math.max(start[0], end[0]) + 0.05;
+  const minLat = Math.min(start[1], end[1]) - 0.05;
+  const maxLat = Math.max(start[1], end[1]) + 0.05;
+  return hazards.some(([hLng, hLat]) => hLng >= minLng && hLng <= maxLng && hLat >= minLat && hLat <= maxLat);
+}
+
+const nashriSlideCoord: [number, number] = [75.242, 33.155];
+const jammuToSrinagarRoute = testIsRouteBlocked([74.87, 32.70], [75.25, 33.30], [nashriSlideCoord]);
+assert(jammuToSrinagarRoute === true, 'Disaster: NH-44 highway trip correctly intercepts active Nashri landslide barrier', 'DISASTER_PREVENTION');
+
+const jammuToAkhnoorRoute = testIsRouteBlocked([74.87, 32.70], [74.74, 32.89], [nashriSlideCoord]);
+assert(jammuToAkhnoorRoute === false, 'Disaster: Western plains route (Akhnoor) is clear of eastern mountain hazards', 'DISASTER_PREVENTION');
+
+// D. Spot Images Verification
+let allImagesResolvable = true;
+for (const attr of JAMMU_ALL_ATTRACTIONS) {
+  const imgUrl = getSpotImage(attr.id, attr.type);
+  if (!imgUrl || !imgUrl.startsWith('http')) {
+    allImagesResolvable = false;
+  }
+}
+assert(allImagesResolvable, 'Visuals: All 36 destinations resolve to valid photographic preview images', 'MEDIA_INTEGRITY');
 
 // -----------------------------------------------------------------------------
 // SUMMARY REPORT

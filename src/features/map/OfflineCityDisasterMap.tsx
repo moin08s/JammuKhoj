@@ -36,8 +36,15 @@ const SVG_WIDTH = 1000;
 const SVG_HEIGHT = 700;
 
 export function projectCoordinates([lng, lat]: [number, number]): [number, number] {
-  const x = ((lng - LNG_MIN) / (LNG_MAX - LNG_MIN)) * SVG_WIDTH;
-  const y = ((LAT_MAX - lat) / (LAT_MAX - LAT_MIN)) * SVG_HEIGHT;
+  // Guard against undefined or NaN coordinates and clamp within bounding box
+  const safeLng = typeof lng === 'number' && !isNaN(lng) ? lng : (LNG_MIN + LNG_MAX) / 2;
+  const safeLat = typeof lat === 'number' && !isNaN(lat) ? lat : (LAT_MIN + LAT_MAX) / 2;
+
+  const clampedLng = Math.min(Math.max(safeLng, LNG_MIN), LNG_MAX);
+  const clampedLat = Math.min(Math.max(safeLat, LAT_MIN), LAT_MAX);
+
+  const x = ((clampedLng - LNG_MIN) / (LNG_MAX - LNG_MIN)) * SVG_WIDTH;
+  const y = ((LAT_MAX - clampedLat) / (LAT_MAX - LAT_MIN)) * SVG_HEIGHT;
   return [Math.round(x * 10) / 10, Math.round(y * 10) / 10];
 }
 
@@ -75,6 +82,13 @@ export const OfflineCityDisasterMap: React.FC<OfflineCityDisasterMapProps> = ({
     setZoomLevel(zoom);
     setPanOffset({ x: targetX, y: targetY });
   };
+
+  // Auto-focus target coordinate if provided via props/navigation
+  React.useEffect(() => {
+    if (focusTarget && Array.isArray(focusTarget) && focusTarget.length === 2) {
+      handleFocusPoint(focusTarget, 1.8);
+    }
+  }, [focusTarget]);
 
   const handleReset = () => {
     setZoomLevel(compact ? 1 : 1.15);

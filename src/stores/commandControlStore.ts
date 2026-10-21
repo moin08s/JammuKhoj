@@ -344,6 +344,7 @@ export const useCommandControlStore = create<CommandControlState>()(
             if (loc.category === 'temple' || loc.category === 'mountain_track') {
               const newCount = active ? Math.min(loc.maxSurgeCapacity, Math.round(loc.currentCount * 1.35)) : loc.safeCapacity;
               const level: CrowdLevel = active ? (newCount > loc.safeCapacity ? 'high' : 'moderate') : 'normal';
+              const gates: 'open' | 'regulated' | 'closed' = active ? (level === 'high' ? 'regulated' : 'open') : 'open';
 
               return {
                 ...loc,
@@ -351,6 +352,7 @@ export const useCommandControlStore = create<CommandControlState>()(
                 festivalName: active ? festivalName || 'Festival Surge Protocol' : undefined,
                 currentCount: newCount,
                 crowdLevel: level,
+                entryGatesStatus: gates,
                 activeDispatches: active ? loc.activeDispatches + 10 : Math.max(4, loc.activeDispatches - 10),
               };
             }
@@ -369,16 +371,27 @@ export const useCommandControlStore = create<CommandControlState>()(
         set((state) => ({
           locations: state.locations.map((loc) => {
             if (loc.id === locationId) {
-              const ratio = newCount / loc.safeCapacity;
+              const safeCount = Math.max(0, newCount);
+              const ratio = safeCount / loc.safeCapacity;
               let level: CrowdLevel = 'normal';
-              if (ratio >= 1.05) level = 'critical';
-              else if (ratio >= 0.85) level = 'high';
-              else if (ratio >= 0.55) level = 'moderate';
+              let gates: 'open' | 'regulated' | 'closed' = 'open';
+
+              if (ratio >= 1.05) {
+                level = 'critical';
+                gates = 'closed';
+              } else if (ratio >= 0.85) {
+                level = 'high';
+                gates = 'regulated';
+              } else if (ratio >= 0.55) {
+                level = 'moderate';
+                gates = 'open';
+              }
 
               return {
                 ...loc,
-                currentCount: newCount,
+                currentCount: safeCount,
                 crowdLevel: level,
+                entryGatesStatus: gates,
                 lastUpdated: 'Live Feed: Just now',
               };
             }

@@ -143,7 +143,7 @@ export const MapPage: React.FC = () => {
   } | null>(null);
 
   // Command & Control Store Integration for Disaster Hazard & Safe Haven Markers
-  const { activeAlerts, locations: crowdLocations, triggerEmergencyModal } = useCommandControlStore();
+  const { activeAlerts, locations: crowdLocations, triggerEmergencyModal, isRouteBlocked } = useCommandControlStore();
 
   const [copiedLink, setCopiedLink] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -543,11 +543,7 @@ export const MapPage: React.FC = () => {
     const endCoords: [number, number] = [destinationNode.lng, destinationNode.lat];
 
     // DISASTER CHECK: Inspect if chosen route intercepts any active landslide or hazard
-    const blockedHazard = activeAlerts.find(
-      (a) => a.isActive && (a.incidentType === 'landslide' || a.incidentType === 'road_block') &&
-        Math.abs(a.coordinates[0] - ((startCoords[0] + endCoords[0]) / 2)) < 0.25 &&
-        Math.abs(a.coordinates[1] - ((startCoords[1] + endCoords[1]) / 2)) < 0.25
-    );
+    const blockedHazard = isRouteBlocked(startCoords, endCoords);
 
     if (blockedHazard) {
       triggerEmergencyModal(blockedHazard);

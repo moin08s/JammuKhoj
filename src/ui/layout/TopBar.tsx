@@ -88,6 +88,7 @@ export const TopBar: React.FC<TopBarProps> = ({ title, showBack }) => {
       <nav className="hidden md:flex items-center gap-1.5 mx-4" aria-label="Desktop Navigation">
         {[
           { to: '/explore', label: 'Explore' },
+          { to: '/map', label: 'Map & Havens' },
           { to: '/plan', label: 'Trip Planner' },
           { to: '/transport', label: 'Transport' },
           { to: '/safety', label: 'Safety (112)' },
