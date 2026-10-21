@@ -126,6 +126,7 @@ export const MapPage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<
     'all' | 'temples' | 'heritage' | 'valleys' | 'lakes' | 'border' | 'transit'
   >('all');
+  const [offlineSafetyFilter, setOfflineSafetyFilter] = useState<'all' | 'hospitals' | 'safe_havens' | 'police' | 'hazards'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
 
@@ -643,6 +644,7 @@ export const MapPage: React.FC = () => {
           <OfflineCityDisasterMap
             selectedAlert={activeAlerts[0]}
             focusTarget={(routeLocation.state as any)?.focusSafeSpot || (routeLocation.state as any)?.hazardCoords}
+            activeFilterOverride={offlineSafetyFilter}
           />
         </div>
       )}
@@ -794,38 +796,60 @@ export const MapPage: React.FC = () => {
           </div>
         )}
 
-        {/* Scrollable Category Filter Chips - ALL 7 TRAVEL CATEGORIES */}
+        {/* Scrollable Category Filter Chips - Dynamically adapts to Emergency Safety when Offline */}
         <div className="pointer-events-auto flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
-          {[
-            { id: 'all' as const, label: `🌟 All (${attractions.length})` },
-            { id: 'temples' as const, label: '🛕 Temples & Shrines' },
-            { id: 'heritage' as const, label: '🏰 Forts & Palaces' },
-            { id: 'valleys' as const, label: '🌲 Alpine Valleys' },
-            { id: 'lakes' as const, label: '🚣 Lakes & Waterfalls' },
-            { id: 'border' as const, label: '🦅 Border & Wildlife' },
-            { id: 'transit' as const, label: '🚆 Transit Hubs' },
-          ].map((chip) => (
-            <button
-              key={chip.id}
-              onClick={() => setActiveFilter(chip.id)}
-              className={`px-3 py-1.5 rounded-full font-bold whitespace-nowrap shadow-sm border transition-all text-xs shrink-0 ${
-                activeFilter === chip.id
-                  ? 'bg-primary text-white border-primary shadow-md'
-                  : 'bg-card/90 backdrop-blur-md text-stone border-border hover:text-ink'
-              }`}
-            >
-              {chip.label}
-            </button>
-          ))}
+          {forceOfflineMap ? (
+            [
+              { id: 'all' as const, label: '🚨 All Safety (16)' },
+              { id: 'hospitals' as const, label: '🏥 Hospitals & Trauma (7)' },
+              { id: 'safe_havens' as const, label: '🛡️ Safe Havens (5)' },
+              { id: 'police' as const, label: '👮 Police & SDRF (4)' },
+              { id: 'hazards' as const, label: '⚠️ Active Hazard (1)' },
+            ].map((chip) => (
+              <button
+                key={chip.id}
+                onClick={() => setOfflineSafetyFilter(chip.id)}
+                className={`px-3 py-1.5 rounded-full font-bold whitespace-nowrap shadow-sm border transition-all text-xs shrink-0 ${
+                  offlineSafetyFilter === chip.id
+                    ? 'bg-red-600 text-white border-red-500 shadow-md ring-2 ring-red-400/30'
+                    : 'bg-slate-900/90 backdrop-blur-md text-slate-300 border-slate-700 hover:text-white'
+                }`}
+              >
+                {chip.label}
+              </button>
+            ))
+          ) : (
+            [
+              { id: 'all' as const, label: `🌟 All (${attractions.length})` },
+              { id: 'temples' as const, label: '🛕 Temples & Shrines' },
+              { id: 'heritage' as const, label: '🏰 Forts & Palaces' },
+              { id: 'valleys' as const, label: '🌲 Alpine Valleys' },
+              { id: 'lakes' as const, label: '🚣 Lakes & Waterfalls' },
+              { id: 'border' as const, label: '🦅 Border & Wildlife' },
+              { id: 'transit' as const, label: '🚆 Transit Hubs' },
+            ].map((chip) => (
+              <button
+                key={chip.id}
+                onClick={() => setActiveFilter(chip.id)}
+                className={`px-3 py-1.5 rounded-full font-bold whitespace-nowrap shadow-sm border transition-all text-xs shrink-0 ${
+                  activeFilter === chip.id
+                    ? 'bg-primary text-white border-primary shadow-md'
+                    : 'bg-card/90 backdrop-blur-md text-stone border-border hover:text-ink'
+                }`}
+              >
+                {chip.label}
+              </button>
+            ))
+          )}
         </div>
 
         {/* Offline Disaster Navigation Advisory Banner */}
         {forceOfflineMap && (
-          <div className="pointer-events-auto bg-slate-900/95 backdrop-blur-md text-emerald-300 border border-emerald-500/40 rounded-xl px-3 py-1.5 text-[11px] flex items-center justify-between shadow-lg animate-in fade-in">
+          <div className="pointer-events-auto bg-slate-900/95 backdrop-blur-md text-red-300 border border-red-500/40 rounded-xl px-3 py-1.5 text-[11px] flex items-center justify-between shadow-lg animate-in fade-in">
             <div className="flex items-center gap-1.5 truncate">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse shrink-0" />
               <span className="truncate">
-                <strong>Offline Tactical GIS:</strong> Safe havens, road closures, & Katra corridors active.
+                <strong>Offline Safety Map:</strong> Exclusively showing Hospitals, Safe Havens & Police Posts.
               </span>
             </div>
             <button
@@ -833,7 +857,7 @@ export const MapPage: React.FC = () => {
                 setForceOfflineMap(false);
                 setTimeout(() => mapRef.current?.resize(), 150);
               }}
-              className="text-[10px] font-bold text-white underline hover:text-emerald-200 shrink-0 ml-2"
+              className="text-[10px] font-bold text-white underline hover:text-red-200 shrink-0 ml-2"
             >
               Tiles View
             </button>

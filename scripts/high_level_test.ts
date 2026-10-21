@@ -7,7 +7,7 @@ import { SEED_ATTRACTIONS, SEED_NODES, SEED_TRAVEL_TIMES, SEED_FARES, SEED_EMERG
 import enTranslations from '../src/i18n/en.json';
 import hiTranslations from '../src/i18n/hi.json';
 import doiTranslations from '../src/i18n/doi.json';
-import { projectCoordinates } from '../src/features/map/OfflineCityDisasterMap';
+import { projectCoordinates, OFFLINE_EMERGENCY_RESOURCES } from '../src/features/map/OfflineCityDisasterMap';
 import { getSpotImage } from '../src/data/spotImages';
 
 interface TestResult {
@@ -439,6 +439,37 @@ for (const attr of JAMMU_ALL_ATTRACTIONS) {
   }
 }
 assert(allImagesResolvable, 'Visuals: All 36 destinations resolve to valid photographic preview images', 'MEDIA_INTEGRITY');
+
+// E. Dedicated Offline Safety & Hospital Map Verification
+const nonSafetyKinds = OFFLINE_EMERGENCY_RESOURCES.filter(
+  (pt) => !['hospital', 'safe_haven', 'police', 'hazard', 'transit_anchor'].includes(pt.kind)
+);
+assert(
+  nonSafetyKinds.length === 0,
+  'Offline Map Exclusive: Contains only hospitals, safe havens, police & emergency transit (0 tourist spots)',
+  'OFFLINE_EMERGENCY'
+);
+
+const hospitalList = OFFLINE_EMERGENCY_RESOURCES.filter((pt) => pt.kind === 'hospital');
+assert(
+  hospitalList.length >= 6 && hospitalList.every((h) => h.facilities.some((f) => f.includes('24/7') || f.includes('Emergency') || f.includes('Oxygen'))),
+  'Offline Map Hospitals: All emergency hospitals have verified 24x7 Casualty, Oxygen, or ICU facilities',
+  'OFFLINE_EMERGENCY'
+);
+
+const safeHavenList = OFFLINE_EMERGENCY_RESOURCES.filter((pt) => pt.kind === 'safe_haven');
+assert(
+  safeHavenList.length >= 4 && safeHavenList.every((h) => (h.capacity || 0) >= 2000),
+  'Offline Map Safe Havens: All designated shelters have verified capacity (≥2,000 yatris) and food/shelter amenities',
+  'OFFLINE_EMERGENCY'
+);
+
+const policeList = OFFLINE_EMERGENCY_RESOURCES.filter((pt) => pt.kind === 'police');
+assert(
+  policeList.length >= 3 && policeList.some((p) => p.hotline.includes('112')),
+  'Offline Map Police & SDRF: Rescue bases and PCR are linked to 112 ERSS hotline',
+  'OFFLINE_EMERGENCY'
+);
 
 // -----------------------------------------------------------------------------
 // SUMMARY REPORT
