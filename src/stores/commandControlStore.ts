@@ -11,6 +11,7 @@ import {
   securityLimiter,
   securityAudit,
 } from '@/services/securityService';
+import { notificationService } from '@/services/notificationService';
 
 export type AlertSeverity = 'critical' | 'warning' | 'info';
 export type IncidentType = 'landslide' | 'overcrowding' | 'flash_flood' | 'weather' | 'road_block' | 'stampede_risk';
@@ -536,6 +537,13 @@ export const useCommandControlStore = create<CommandControlState>()(
           activeEmergencyPopup: newAlert,
         }));
 
+        // Trigger native device notification (lock-screen siren)
+        notificationService.sendEmergencyAlert(
+          newAlert.title,
+          newAlert.actionRequired,
+          newAlert.safeHoldingArea.name
+        ).catch(() => {});
+
         securityAudit.log(
           'BROADCAST_EMERGENCY_ALERT',
           session.officerId,
@@ -599,6 +607,13 @@ export const useCommandControlStore = create<CommandControlState>()(
             signatureStatus: 'verified',
           },
         });
+
+        // Trigger native device notification (lock-screen siren)
+        notificationService.sendEmergencyAlert(
+          alert.title,
+          alert.actionRequired,
+          alert.safeHoldingArea?.name
+        ).catch(() => {});
       },
 
       dismissEmergencyModal: () => {

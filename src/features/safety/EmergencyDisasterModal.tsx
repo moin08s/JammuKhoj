@@ -22,6 +22,36 @@ import {
 import { useCommandControlStore } from '@/stores/commandControlStore';
 import { OfflineCityDisasterMap } from '@/features/map/OfflineCityDisasterMap';
 import { audioAlertService } from '@/services/audioAlertService';
+import { notificationService } from '@/services/notificationService';
+
+export function calculateBearingAndDistance(
+  fromLng: number,
+  fromLat: number,
+  toLng: number,
+  toLat: number
+): { distanceMeters: number; bearingDeg: number; cardinal: string } {
+  const R = 6371e3; // Earth radius in meters
+  const phi1 = (fromLat * Math.PI) / 180;
+  const phi2 = (toLat * Math.PI) / 180;
+  const deltaPhi = ((toLat - fromLat) * Math.PI) / 180;
+  const deltaLambda = ((toLng - fromLng) * Math.PI) / 180;
+
+  const a =
+    Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+    Math.cos(phi1) * Math.cos(phi2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distanceMeters = Math.round(R * c);
+
+  const y = Math.sin(deltaLambda) * Math.cos(phi2);
+  const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(deltaLambda);
+  const theta = Math.atan2(y, x);
+  const bearingDeg = Math.round((theta * 180) / Math.PI + 360) % 360;
+
+  const cardinals = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  const cardinal = cardinals[Math.round(bearingDeg / 45) % 8];
+
+  return { distanceMeters, bearingDeg, cardinal };
+}
 
 export const EmergencyDisasterModal: React.FC = () => {
   const navigate = useNavigate();
@@ -32,8 +62,21 @@ export const EmergencyDisasterModal: React.FC = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceLang, setVoiceLang] = useState<'hi' | 'doi' | 'en'>('hi');
 
-  // Trigger siren & vibration once on popup emergence
+  const [userPos, setUserPos] = useState<[number, number] | null>(null);
+  const [notificationPerm, setNotificationPerm] = useState<NotificationPermission>(
+    notificationService.getPermission()
+  );
+
+  // Watch GPS and trigger siren & vibration once on popup emergence
   useEffect(() => {
+    if (typeof navigator !== 'undefined' && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setUserPos([pos.coords.longitude, pos.coords.latitude]),
+        () => setUserPos(null),
+        { timeout: 4000 }
+      );
+    }
+
     if (activeEmergencyPopup) {
       audioAlertService.playEmergencySiren(2.5);
     }
@@ -42,6 +85,11 @@ export const EmergencyDisasterModal: React.FC = () => {
       audioAlertService.stopSpeaking();
     };
   }, [activeEmergencyPopup]);
+
+  const handleRequestPush = async () => {
+    const res = await notificationService.requestPermission();
+    setNotificationPerm(res);
+  };
 
   const handlePlayVoice = (lang: 'hi' | 'doi' | 'en' = voiceLang) => {
     if (isSpeaking) {
@@ -88,6 +136,19 @@ export const EmergencyDisasterModal: React.FC = () => {
 
   const isLandslide = activeEmergencyPopup.incidentType === 'landslide';
   const isOvercrowd = activeEmergencyPopup.incidentType === 'overcrowding';
+
+  const originLng = userPos ? userPos[0] : activeEmergencyPopup.coordinates[0];
+  const originLat = userPos ? userPos[1] : activeEmergencyPopup.coordinates[1];
+  const targetLng = activeEmergencyPopup.safeHoldingArea.coordinates[0];
+  const targetLat = activeEmergencyPopup.safeHoldingArea.coordinates[1];
+
+  const { distanceMeters, bearingDeg, cardinal } = calculateBearingAndDistance(
+    originLng,
+    originLat,
+    targetLng,
+    targetLat
+  );
+  const estWalkMin = Math.max(1, Math.round(distanceMeters / 80));
 
   const handleNavigateToSafeHaven = () => {
     dismissEmergencyModal();
@@ -307,6 +368,56 @@ export const EmergencyDisasterModal: React.FC = () => {
               </div>
             )}
           </div>
+
+          {/* Tactical Evacuation Compass HUD */}
+          <div className="p-3 bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border border-emerald-500/40 rounded-xl text-white flex items-center justify-between gap-3 shadow-md">
+            <div className="flex items-center gap-3">
+              <div className="relative w-12 h-12 rounded-full border-2 border-emerald-400/40 bg-emerald-950 flex items-center justify-center shrink-0 shadow-inner">
+                <span className="absolute top-0.5 text-[8px] font-mono text-emerald-400 font-bold">N</span>
+                <span className="absolute bottom-0.5 text-[8px] font-mono text-slate-400 font-bold">S</span>
+                <span className="absolute right-1 text-[8px] font-mono text-slate-400 font-bold">E</span>
+                <span className="absolute left-1 text-[8px] font-mono text-slate-400 font-bold">W</span>
+                <div
+                  style={{ transform: `rotate(${bearingDeg}deg)` }}
+                  className="transition-transform duration-500 ease-out"
+                >
+                  <Navigation className="w-5 h-5 text-emerald-400 drop-shadow" />
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-300 font-bold block">
+                  Tactical Safe Spot Vector
+                </span>
+                <div className="text-sm font-bold flex items-center gap-1.5 mt-0.5">
+                  <span className="text-emerald-400">{distanceMeters > 1000 ? `${(distanceMeters / 1000).toFixed(1)} km` : `${distanceMeters} m`}</span>
+                  <span className="text-white/60">•</span>
+                  <span>~{estWalkMin} min walk</span>
+                  <span className="text-white/60">•</span>
+                  <span className="text-amber-300 font-mono text-xs">{cardinal} ({bearingDeg}°)</span>
+                </div>
+                <span className="text-[10px] text-white/70 block">
+                  Direct heading towards: {activeEmergencyPopup.safeHoldingArea.name}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Lock-Screen Native Notification Permission Bar */}
+          {notificationPerm !== 'granted' && (
+            <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl flex items-center justify-between text-xs text-ink">
+              <span className="text-[11px] text-amber-800 dark:text-amber-300">
+                Receive lock-screen push sirens when phone is in your pocket.
+              </span>
+              <button
+                type="button"
+                onClick={handleRequestPush}
+                className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-bold text-[10px] shrink-0 transition-colors shadow-xs"
+              >
+                Enable Push Alerts
+              </button>
+            </div>
+          )}
 
           {/* Designated Safe Haven Spot */}
           <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl space-y-2">

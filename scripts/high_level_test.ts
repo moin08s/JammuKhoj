@@ -22,6 +22,9 @@ import {
 } from '../src/services/securityService';
 import { useCommandControlStore } from '../src/stores/commandControlStore';
 import { audioAlertService } from '../src/services/audioAlertService';
+import { notificationService } from '../src/services/notificationService';
+import { voiceSearchService } from '../src/services/voiceSearchService';
+import { calculateBearingAndDistance } from '../src/features/safety/EmergencyDisasterModal';
 import { MOUNTAIN_SECTOR_RISKS } from '../src/features/safety/MountainLandslideRadar';
 
 interface TestResult {
@@ -604,6 +607,51 @@ const allSectorsHaveData = MOUNTAIN_SECTOR_RISKS.every(
   (s) => s.rainfallMm >= 0 && !!s.landslideIndex && !!s.advisory && typeof s.roadPassable === 'boolean'
 );
 assert(allSectorsHaveData, 'Weather Radar: All sectors define rainfall, precipitation status, and advisory directives', 'WEATHER_RADAR');
+
+// -----------------------------------------------------------------------------
+// 9. NATIVE PUSH NOTIFICATIONS, TACTICAL COMPASS HUD & SENIOR VOICE SEARCH
+// -----------------------------------------------------------------------------
+console.log('>>> [9/9] Running Push Notification, Tactical Compass HUD & Voice Search Tests...');
+
+// A. Native Push Notification Service Verification
+assert(typeof notificationService.isSupported === 'function', 'Push Notification: isSupported method is defined', 'PUSH_NOTIFICATIONS');
+assert(typeof notificationService.getPermission === 'function', 'Push Notification: getPermission method is defined', 'PUSH_NOTIFICATIONS');
+assert(typeof notificationService.sendEmergencyAlert === 'function', 'Push Notification: sendEmergencyAlert method is defined', 'PUSH_NOTIFICATIONS');
+
+const notifResult = notificationService.sendEmergencyAlert('Test Alert', { body: 'Testing siren push notification' });
+assert(notifResult instanceof Promise, 'Push Notification: sendEmergencyAlert returns asynchronous Promise', 'PUSH_NOTIFICATIONS');
+
+// B. Tactical Proximity Compass HUD & Dynamic Safe Haven Distance Engine
+const katraToBhawan = calculateBearingAndDistance(74.9314, 32.9934, 74.9490, 33.0308);
+assert(
+  katraToBhawan.distanceMeters >= 4000 && katraToBhawan.distanceMeters <= 6000,
+  `Tactical Compass: Katra to Bhawan distance calculated accurately (${katraToBhawan.distanceMeters}m)`,
+  'TACTICAL_COMPASS'
+);
+assert(
+  katraToBhawan.bearingDeg > 0 && katraToBhawan.bearingDeg < 90,
+  `Tactical Compass: Bearing vector is North-East (${katraToBhawan.bearingDeg}°)`,
+  'TACTICAL_COMPASS'
+);
+assert(
+  ['NE', 'N'].includes(katraToBhawan.cardinal),
+  `Tactical Compass: Cardinal direction matches bearing (${katraToBhawan.cardinal})`,
+  'TACTICAL_COMPASS'
+);
+
+const northVector = calculateBearingAndDistance(74.0, 32.0, 74.0, 33.0);
+assert(
+  northVector.bearingDeg === 0 && northVector.cardinal === 'N',
+  'Tactical Compass: Due North trajectory calculates 0° bearing and N cardinal',
+  'TACTICAL_COMPASS'
+);
+
+// C. Senior Pilgrim Voice Search Service Verification
+assert(typeof voiceSearchService.isSupported === 'function', 'Voice Search: isSupported method is defined', 'VOICE_SEARCH');
+assert(typeof voiceSearchService.getIsListening === 'function', 'Voice Search: getIsListening method is defined', 'VOICE_SEARCH');
+assert(!voiceSearchService.getIsListening(), 'Voice Search: Initial listening state is inactive (false)', 'VOICE_SEARCH');
+assert(typeof voiceSearchService.startListening === 'function', 'Voice Search: startListening method is defined', 'VOICE_SEARCH');
+assert(typeof voiceSearchService.stopListening === 'function', 'Voice Search: stopListening method is defined', 'VOICE_SEARCH');
 
 // -----------------------------------------------------------------------------
 // SUMMARY REPORT

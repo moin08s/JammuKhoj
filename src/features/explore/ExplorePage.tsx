@@ -12,6 +12,8 @@ import {
   CheckCircle2,
   Sparkles,
   Camera,
+  Mic,
+  MicOff,
 } from 'lucide-react';
 import { db } from '@/data/db';
 import type { Attraction } from '@/data/types';
@@ -22,6 +24,7 @@ import { FreshnessChip } from '@/ui/trust/FreshnessChip';
 import { GiProductsSection } from '@/features/gi/GiProductsSection';
 import { SpotUploadModal } from '@/features/contribute/SpotUploadModal';
 import { EmptyState } from '@/ui/EmptyState';
+import { voiceSearchService } from '@/services/voiceSearchService';
 
 const ZONE_TABS = [
   { id: 'all', label: 'All Destinations' },
@@ -48,6 +51,24 @@ export const ExplorePage: React.FC = () => {
   const [freeEntryOnly, setFreeEntryOnly] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [isVoiceListening, setIsVoiceListening] = useState(false);
+
+  const toggleVoiceSearch = () => {
+    if (isVoiceListening) {
+      voiceSearchService.stopListening();
+      setIsVoiceListening(false);
+    } else {
+      voiceSearchService.startListening({
+        onResult: (spokenText) => {
+          setSearchQuery(spokenText);
+          saveRecentSearch(spokenText);
+          setIsVoiceListening(false);
+        },
+        onStateChange: (listening) => setIsVoiceListening(listening),
+        onError: () => setIsVoiceListening(false),
+      });
+    }
+  };
 
   useEffect(() => {
     try {
@@ -169,8 +190,8 @@ export const ExplorePage: React.FC = () => {
 
       {/* Search Input with Recent & Popular Searches */}
       <div className="space-y-2">
-        <div className="relative">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone" />
+        <div className="relative flex items-center">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
@@ -179,9 +200,24 @@ export const ExplorePage: React.FC = () => {
               if (e.key === 'Enter') saveRecentSearch(searchQuery);
             }}
             onBlur={() => saveRecentSearch(searchQuery)}
-            placeholder="Search (e.g. Vaishno Devi, Raghunath, Bahu Fort, Patnitop)..."
-            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-border bg-card text-ink text-xs focus:ring-2 focus:ring-primary/40 focus:outline-none"
+            placeholder={isVoiceListening ? "Listening... (बोलिए जैसे: वैष्णो देवी, बावे वाली माता)..." : "Search (e.g. Vaishno Devi, Raghunath, Bahu Fort, Patnitop)..."}
+            className={`w-full pl-9 pr-12 py-2.5 rounded-xl border bg-card text-ink text-xs focus:ring-2 focus:ring-primary/40 focus:outline-none transition-all ${
+              isVoiceListening ? 'border-primary ring-2 ring-primary/30 bg-primary/5' : 'border-border'
+            }`}
           />
+          <button
+            type="button"
+            onClick={toggleVoiceSearch}
+            className={`absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg transition-all ${
+              isVoiceListening
+                ? 'bg-primary text-white animate-pulse shadow-sm'
+                : 'text-stone hover:text-primary hover:bg-surface'
+            }`}
+            title={isVoiceListening ? "Listening... Click to cancel" : "Senior Voice Search (Dogri / Hindi / English)"}
+            aria-label="Voice search"
+          >
+            {isVoiceListening ? <Mic className="w-4 h-4 text-white" /> : <Mic className="w-4 h-4" />}
+          </button>
         </div>
 
         {/* Popular & Recent Chips */}

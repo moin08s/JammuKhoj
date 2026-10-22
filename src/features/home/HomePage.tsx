@@ -45,6 +45,7 @@ import {
   Battery,
   Camera,
   Zap,
+  Mic,
 } from 'lucide-react';
 import { usePlanStore } from '@/stores/planStore';
 import { useAppStore } from '@/stores/appStore';
@@ -61,6 +62,7 @@ import { DogriFoodSection } from '@/features/food/DogriFoodSection';
 import { SpiritualEtiquetteModal } from '@/features/spiritual/SpiritualEtiquetteModal';
 import { AudioTourModal } from '@/features/audio/AudioTourModal';
 import { deviceService } from '@/services/deviceService';
+import { voiceSearchService } from '@/services/voiceSearchService';
 import { TrustBadges } from '@/ui/trust/TrustBadges';
 import { TestimonialSection } from '@/ui/trust/TestimonialSection';
 import { VaishnoDeviYatraGuide } from '@/features/spiritual/VaishnoDeviYatraGuide';
@@ -98,6 +100,23 @@ export const HomePage: React.FC = () => {
   const [primaryInterest, setPrimaryInterest] = useState<'all' | 'pilgrimage' | 'heritage' | 'nature' | 'food'>('all');
   const [showCustomPlannerOptions, setShowCustomPlannerOptions] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isVoiceListening, setIsVoiceListening] = useState(false);
+
+  const toggleVoiceSearch = () => {
+    if (isVoiceListening) {
+      voiceSearchService.stopListening();
+      setIsVoiceListening(false);
+    } else {
+      voiceSearchService.startListening({
+        onResult: (spokenText) => {
+          setSearchQuery(spokenText);
+          setIsVoiceListening(false);
+        },
+        onStateChange: (listening) => setIsVoiceListening(listening),
+        onError: () => setIsVoiceListening(false),
+      });
+    }
+  };
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareData, setShareData] = useState<{ title?: string; text?: string }>({});
   const [showNotifications, setShowNotifications] = useState(false);
@@ -599,27 +618,44 @@ export const HomePage: React.FC = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search places, temples, food and useful services…"
-              className="w-full pl-10 pr-10 py-3.5 rounded-2xl bg-card border border-border text-xs sm:text-sm font-medium text-ink placeholder:text-stone focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary shadow-xs transition-all"
+              placeholder={isVoiceListening ? "Listening... (बोलिए जैसे: रघुनाथ मंदिर, बावे वाली माता)..." : "Search places, temples, food and useful services…"}
+              className={`w-full pl-10 pr-20 py-3.5 rounded-2xl bg-card border text-xs sm:text-sm font-medium text-ink placeholder:text-stone focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary shadow-xs transition-all ${
+                isVoiceListening ? 'border-primary ring-2 ring-primary/30 bg-primary/5' : 'border-border'
+              }`}
               aria-label="Search destinations, temples, food and services"
             />
-            {searchQuery ? (
+            <div className="absolute right-2.5 flex items-center gap-1">
               <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 p-1 rounded-full text-stone hover:text-ink"
-                aria-label="Clear search"
+                type="button"
+                onClick={toggleVoiceSearch}
+                className={`p-2 rounded-xl transition-all ${
+                  isVoiceListening
+                    ? 'bg-primary text-white animate-pulse shadow-sm'
+                    : 'text-stone hover:text-primary hover:bg-surface'
+                }`}
+                title={isVoiceListening ? "Listening... Tap to stop" : "Senior Voice Search (Dogri / Hindi / English)"}
+                aria-label="Senior Voice Search"
               >
-                <X size={16} />
+                <Mic size={16} />
               </button>
-            ) : (
-              <button
-                onClick={() => navigate('/explore')}
-                className="absolute right-2.5 p-2 rounded-xl bg-surface text-stone hover:text-primary transition-colors"
-                title="Open full filter directory"
-              >
-                <SlidersHorizontal size={15} />
-              </button>
-            )}
+              {searchQuery ? (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="p-1 rounded-full text-stone hover:text-ink"
+                  aria-label="Clear search"
+                >
+                  <X size={16} />
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate('/explore')}
+                  className="p-2 rounded-xl bg-surface text-stone hover:text-primary transition-colors"
+                  title="Open full filter directory"
+                >
+                  <SlidersHorizontal size={15} />
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Search Dropdown Results */}
