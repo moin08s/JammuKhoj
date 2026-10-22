@@ -338,13 +338,14 @@ export const OfflineCityDisasterMap: React.FC<OfflineCityDisasterMapProps> = ({
   focusTarget,
   activeFilterOverride = 'all',
 }) => {
-  const { activeAlerts, triggerEmergencyModal } = useCommandControlStore();
+  const { activeAlerts, locations, triggerEmergencyModal } = useCommandControlStore();
 
   const currentHazard = selectedAlert || activeAlerts[0] || null;
 
   const [activeFilter, setActiveFilter] = useState<'all' | 'hospitals' | 'safe_havens' | 'police' | 'hazards'>(
     activeFilterOverride
   );
+  const [showCrowdHeatmap, setShowCrowdHeatmap] = useState<boolean>(true);
 
   // Sync prop override if supplied
   useEffect(() => {
@@ -510,6 +511,17 @@ export const OfflineCityDisasterMap: React.FC<OfflineCityDisasterMapProps> = ({
               {chip.label}
             </button>
           ))}
+
+          <button
+            onClick={() => setShowCrowdHeatmap(!showCrowdHeatmap)}
+            className={`px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold whitespace-nowrap shadow-md border transition-all shrink-0 flex items-center gap-1 ${
+              showCrowdHeatmap
+                ? 'bg-emerald-700 text-white border-emerald-400 ring-2 ring-emerald-400/30'
+                : 'bg-black/85 backdrop-blur-md text-slate-300 border-slate-700 hover:text-white'
+            }`}
+          >
+            <span>👥 Crowd Heatmap ({showCrowdHeatmap ? 'ON' : 'OFF'})</span>
+          </button>
         </div>
       )}
 
@@ -643,6 +655,87 @@ export const OfflineCityDisasterMap: React.FC<OfflineCityDisasterMapProps> = ({
               YATRA TRACK
             </text>
           </g>
+
+          {/* ======================================================== */}
+          {/* DYNAMIC CROWD DENSITY HEATMAP RADIAL LAYER               */}
+          {/* ======================================================== */}
+          {showCrowdHeatmap && locations && locations.map((loc) => {
+            const [cx, cy] = projectCoordinates(loc.coordinates);
+            const ratio = loc.currentCount / loc.safeCapacity;
+            const isCritical = ratio >= 1.05;
+            const isHigh = ratio >= 0.85 && !isCritical;
+            const isModerate = ratio >= 0.55 && !isHigh && !isCritical;
+
+            let fillColor = '#10B981'; // Green
+            let strokeColor = '#059669';
+            let radius = 28;
+
+            if (isCritical) {
+              fillColor = '#EF4444'; // Red
+              strokeColor = '#DC2626';
+              radius = 42;
+            } else if (isHigh) {
+              fillColor = '#F59E0B'; // Amber
+              strokeColor = '#D97706';
+              radius = 35;
+            } else if (isModerate) {
+              fillColor = '#10B981';
+              strokeColor = '#059669';
+              radius = 29;
+            } else {
+              fillColor = '#06B6D4';
+              strokeColor = '#0891B2';
+              radius = 24;
+            }
+
+            return (
+              <g key={`heatmap-${loc.id}`} opacity="0.85">
+                {/* Outer glowing halo */}
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={radius * 1.3}
+                  fill={fillColor}
+                  fillOpacity={isCritical ? 0.25 : 0.12}
+                  className={isCritical ? 'animate-ping' : ''}
+                />
+                {/* Core density boundary */}
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={radius}
+                  fill={fillColor}
+                  fillOpacity={0.25}
+                  stroke={strokeColor}
+                  strokeWidth={isCritical ? 2.5 : 1.5}
+                  strokeDasharray={isCritical ? '4 3' : undefined}
+                />
+                {/* Floating density badge */}
+                <rect
+                  x={cx - 42}
+                  y={cy - radius - 14}
+                  width="84"
+                  height="13"
+                  rx="3"
+                  fill="#0B1320"
+                  fillOpacity="0.9"
+                  stroke={strokeColor}
+                  strokeWidth="0.8"
+                />
+                <text
+                  x={cx}
+                  y={cy - radius - 5}
+                  textAnchor="middle"
+                  fill="#FFFFFF"
+                  fontSize="7"
+                  fontWeight="bold"
+                  fontFamily="monospace"
+                >
+                  {Math.round(ratio * 100)}% • {loc.entryGatesStatus.toUpperCase()}
+                </text>
+              </g>
+            );
+          })}
 
           {/* ======================================================== */}
           {/* ACTIVE HAZARD ROADBLOCK & DIVERSION VECTOR               */}

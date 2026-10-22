@@ -37,6 +37,7 @@ import { SpotUploadModal } from '@/features/contribute/SpotUploadModal';
 import { SpiritualEtiquetteModal } from '@/features/spiritual/SpiritualEtiquetteModal';
 import { AudioTourModal } from '@/features/audio/AudioTourModal';
 import { LocalTipsCard } from './LocalTipsCard';
+import { audioAlertService } from '@/services/audioAlertService';
 
 export const AttractionDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -54,24 +55,31 @@ export const AttractionDetail: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [selectedGiModal, setSelectedGiModal] = useState<GIProduct | null>(null);
 
-  const isPlayingAudio = isGlobalPlaying && currentTrack?.id === id;
+  const [speechLang, setSpeechLang] = useState<'hi' | 'doi' | 'en'>('en');
+  const [isSpeakingStory, setIsSpeakingStory] = useState(false);
+
+  const isPlayingAudio = isSpeakingStory || (isGlobalPlaying && currentTrack?.id === id);
   const audioProgress = currentTrack?.id === id ? progressSeconds : 48;
 
   const handleToggleAudio = () => {
     if (!attraction) return;
-    if (isPlayingAudio) {
-      pauseTrack();
-    } else if (currentTrack?.id === id) {
-      resumeTrack();
+    if (isSpeakingStory) {
+      audioAlertService.stopSpeaking();
+      setIsSpeakingStory(false);
+      showToast('⏸️ Audio Story Paused');
     } else {
-      playTrack({
-        id: attraction.id,
-        title: `${attraction.name.en} Chronicles`,
-        spotName: attraction.name.en,
-        durationSeconds: 192,
-        language: 'english',
-      });
-      showToast('🎧 Playing Dogra Heritage Audio Chronicles');
+      setIsSpeakingStory(true);
+      const textToSpeak = speechLang === 'hi' || speechLang === 'doi'
+        ? `${attraction.name.hi || attraction.name.en}। ${attraction.summary.hi || attraction.summary.en}`
+        : `${attraction.name.en}. ${attraction.summary.en}`;
+
+      audioAlertService.narrateAttractionStory(
+        attraction.name.en,
+        textToSpeak,
+        speechLang,
+        () => setIsSpeakingStory(false)
+      );
+      showToast(`🎧 Narrating ${attraction.name.en} in ${speechLang.toUpperCase()}`);
     }
   };
 
@@ -380,13 +388,36 @@ export const AttractionDetail: React.FC = () => {
               </div>
             </div>
 
-            <button
-              onClick={handleToggleAudio}
-              className="w-10 h-10 rounded-full bg-[#9E4A0C] text-white flex items-center justify-center shadow-md shadow-[#9E4A0C]/25 hover:bg-[#853E0A] transition-all active:scale-95 shrink-0"
-              title={isPlayingAudio ? 'Pause' : 'Play'}
-            >
-              {isPlayingAudio ? <Pause size={17} /> : <Play size={17} className="ml-0.5" />}
-            </button>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center bg-white/80 dark:bg-black/40 rounded-lg p-0.5 border border-[#BFDBFE]">
+                {(['hi', 'doi', 'en'] as const).map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSpeechLang(lang);
+                      if (isSpeakingStory) {
+                        audioAlertService.stopSpeaking();
+                        setIsSpeakingStory(false);
+                      }
+                    }}
+                    className={`px-1.5 py-0.5 text-[10px] font-bold rounded transition-colors ${
+                      speechLang === lang ? 'bg-[#9E4A0C] text-white' : 'text-[#64748B] hover:text-black'
+                    }`}
+                  >
+                    {lang === 'hi' ? 'हिन्दी' : lang === 'doi' ? 'डोगरी' : 'EN'}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={handleToggleAudio}
+                className="w-10 h-10 rounded-full bg-[#9E4A0C] text-white flex items-center justify-center shadow-md shadow-[#9E4A0C]/25 hover:bg-[#853E0A] transition-all active:scale-95 shrink-0"
+                title={isPlayingAudio ? 'Pause' : 'Play'}
+              >
+                {isPlayingAudio ? <Pause size={17} /> : <Play size={17} className="ml-0.5" />}
+              </button>
+            </div>
           </div>
 
           {/* Audio Slider Progress Bar */}

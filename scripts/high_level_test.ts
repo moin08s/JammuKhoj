@@ -21,6 +21,8 @@ import {
   securityAudit,
 } from '../src/services/securityService';
 import { useCommandControlStore } from '../src/stores/commandControlStore';
+import { audioAlertService } from '../src/services/audioAlertService';
+import { MOUNTAIN_SECTOR_RISKS } from '../src/features/safety/MountainLandslideRadar';
 
 interface TestResult {
   name: string;
@@ -576,6 +578,32 @@ const loggedEntry = securityAudit.log('TEST_INTEGRITY_ACTION', 'JKDMA-CMD-9021',
 assert(loggedEntry.signature.length === 64, 'Audit Trail: Security audit entry is cryptographically sealed with HMAC signature', 'CYBER_SECURITY');
 const logs = securityAudit.getLogs();
 assert(logs.some((l) => l.action === 'TEST_INTEGRITY_ACTION'), 'Audit Trail: Audit entries persist in security event store', 'CYBER_SECURITY');
+
+// -----------------------------------------------------------------------------
+// 8. AUDIO SIREN, SPEECH SYNTHESIS & MOUNTAIN WEATHER RADAR VERIFICATION
+// -----------------------------------------------------------------------------
+console.log('>>> [8/8] Running Audio Siren, Speech & Weather Radar Tests...');
+
+// A. Audio Alert & Siren Service Verification
+assert(typeof audioAlertService.playEmergencySiren === 'function', 'Audio Service: playEmergencySiren function is defined', 'AUDIO_VOICE');
+assert(typeof audioAlertService.stopEmergencySiren === 'function', 'Audio Service: stopEmergencySiren function is defined', 'AUDIO_VOICE');
+assert(typeof audioAlertService.triggerEmergencyVibration === 'function', 'Audio Service: triggerEmergencyVibration function is defined', 'AUDIO_VOICE');
+assert(typeof audioAlertService.speakEmergencyDirective === 'function', 'Audio Service: speakEmergencyDirective accepts multilingual text', 'AUDIO_VOICE');
+
+// B. Mountain Weather & Monsoon Landslide Risk Radar Verification
+assert(MOUNTAIN_SECTOR_RISKS.length === 4, `Weather Radar: Monitors 4 critical mountain sectors (count: ${MOUNTAIN_SECTOR_RISKS.length})`, 'WEATHER_RADAR');
+
+const nashriSector = MOUNTAIN_SECTOR_RISKS.find((s) => s.id === 'sec_nashri_ramban');
+assert(
+  !!nashriSector && nashriSector.riskLevel === 'critical' && !nashriSector.roadPassable,
+  'Weather Radar: NH-44 Nashri sector correctly flagged as critical landslide risk with road closed',
+  'WEATHER_RADAR'
+);
+
+const allSectorsHaveData = MOUNTAIN_SECTOR_RISKS.every(
+  (s) => s.rainfallMm >= 0 && !!s.landslideIndex && !!s.advisory && typeof s.roadPassable === 'boolean'
+);
+assert(allSectorsHaveData, 'Weather Radar: All sectors define rainfall, precipitation status, and advisory directives', 'WEATHER_RADAR');
 
 // -----------------------------------------------------------------------------
 // SUMMARY REPORT

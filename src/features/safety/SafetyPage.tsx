@@ -18,6 +18,7 @@ import { SEED_EMERGENCY_CONTACTS, SEED_HELP_POINTS, SEED_SAFETY_GUIDANCE } from 
 import { DisclaimerNote } from '@/ui/DisclaimerNote';
 import { SourceBadge } from '@/ui/trust/SourceBadge';
 import { CommandControlDashboard } from './CommandControlDashboard';
+import { MountainLandslideRadar } from './MountainLandslideRadar';
 
 export const SafetyPage: React.FC = () => {
   const { t } = useTranslation();
@@ -102,6 +103,9 @@ export const SafetyPage: React.FC = () => {
 
       {/* Civic Command & Control Hub: Live Crowd Footfall & Disaster Management */}
       <CommandControlDashboard />
+
+      {/* Mountain Landslide & Weather Risk Radar */}
+      <MountainLandslideRadar />
 
       <DisclaimerNote kind="emergency" />
 

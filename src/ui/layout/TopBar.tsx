@@ -147,7 +147,7 @@ export const TopBar: React.FC<TopBarProps> = ({ title, showBack }) => {
         {/* Active Commander Badge if authenticated */}
         {commanderSession && (
           <button
-            onClick={() => navigate('/safety')}
+            onClick={() => navigate('/command')}
             className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-emerald-950/90 border border-emerald-500/50 text-emerald-300 text-xs font-bold shadow-xs hover:bg-emerald-900 transition-colors"
             title="Level-4 Disaster Commander Terminal Active"
           >
@@ -241,7 +241,7 @@ export const TopBar: React.FC<TopBarProps> = ({ title, showBack }) => {
                 <button
                   className="w-full px-3.5 py-2.5 rounded-xl flex items-center gap-3 hover:bg-surface text-left transition-colors font-medium text-xs"
                   onClick={() => {
-                    navigate('/safety');
+                    navigate('/command');
                     setMenuOpen(false);
                   }}
                 >

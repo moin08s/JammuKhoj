@@ -15,9 +15,13 @@ import {
   WifiOff,
   Maximize2,
   Map as MapIcon,
+  Volume2,
+  VolumeX,
+  Radio,
 } from 'lucide-react';
 import { useCommandControlStore } from '@/stores/commandControlStore';
 import { OfflineCityDisasterMap } from '@/features/map/OfflineCityDisasterMap';
+import { audioAlertService } from '@/services/audioAlertService';
 
 export const EmergencyDisasterModal: React.FC = () => {
   const navigate = useNavigate();
@@ -25,6 +29,47 @@ export const EmergencyDisasterModal: React.FC = () => {
 
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [showFullMapPreview, setShowFullMapPreview] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [voiceLang, setVoiceLang] = useState<'hi' | 'doi' | 'en'>('hi');
+
+  // Trigger siren & vibration once on popup emergence
+  useEffect(() => {
+    if (activeEmergencyPopup) {
+      audioAlertService.playEmergencySiren(2.5);
+    }
+    return () => {
+      audioAlertService.stopEmergencySiren();
+      audioAlertService.stopSpeaking();
+    };
+  }, [activeEmergencyPopup]);
+
+  const handlePlayVoice = (lang: 'hi' | 'doi' | 'en' = voiceLang) => {
+    if (isSpeaking) {
+      audioAlertService.stopSpeaking();
+      setIsSpeaking(false);
+      return;
+    }
+
+    if (!activeEmergencyPopup) return;
+
+    let voiceText = '';
+    if (lang === 'hi' || lang === 'doi') {
+      voiceText = `सावधान! नागरिक सुरक्षा निर्देश: ${activeEmergencyPopup.actionRequired}। निकटतम सुरक्षित आश्रय स्थल: ${activeEmergencyPopup.safeHoldingArea.name}। आपातकालीन नंबर 112 डायल करें।`;
+    } else {
+      voiceText = `Attention! Emergency civic directive: ${activeEmergencyPopup.actionRequired}. Designated safe holding area: ${activeEmergencyPopup.safeHoldingArea.name}. Dial 112 for emergency assistance.`;
+    }
+
+    setIsSpeaking(true);
+    audioAlertService.speakEmergencyDirective(voiceText, lang, () => {
+      setIsSpeaking(false);
+    });
+  };
+
+  const handleClose = () => {
+    audioAlertService.stopSpeaking();
+    audioAlertService.stopEmergencySiren();
+    dismissEmergencyModal();
+  };
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
@@ -82,7 +127,7 @@ export const EmergencyDisasterModal: React.FC = () => {
             </div>
           </div>
           <button
-            onClick={dismissEmergencyModal}
+            onClick={handleClose}
             className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white"
             aria-label="Dismiss Alert"
           >
@@ -92,6 +137,50 @@ export const EmergencyDisasterModal: React.FC = () => {
 
         {/* Scrollable Content */}
         <div className="p-4 sm:p-5 overflow-y-auto space-y-3.5 text-xs sm:text-sm">
+          {/* Spoken Voice Evacuation Broadcast (Speech Synthesis in Dogri / Hindi / English) */}
+          <div className="p-3 bg-primary/10 border border-primary/30 rounded-xl flex items-center justify-between gap-2 shadow-xs">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <button
+                type="button"
+                onClick={() => handlePlayVoice(voiceLang)}
+                className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-transform active:scale-95 shadow-sm ${
+                  isSpeaking ? 'bg-danger text-white animate-pulse' : 'bg-primary text-white hover:bg-primary-hover'
+                }`}
+                title={isSpeaking ? 'Stop voice broadcast' : 'Play spoken audio directive'}
+              >
+                {isSpeaking ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+              </button>
+              <div className="min-w-0">
+                <span className="font-bold text-xs text-ink block truncate">
+                  {isSpeaking ? 'Speaking Directive Now...' : 'Listen to Spoken Instructions'}
+                </span>
+                <span className="text-[10px] text-stone block">
+                  Voice guidance for rural & senior pilgrims
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1 shrink-0 bg-surface rounded-lg p-0.5 border border-border">
+              {(['hi', 'doi', 'en'] as const).map((lang) => (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => {
+                    setVoiceLang(lang);
+                    handlePlayVoice(lang);
+                  }}
+                  className={`px-2 py-1 rounded text-[10px] font-bold transition-colors ${
+                    voiceLang === lang
+                      ? 'bg-primary text-white'
+                      : 'text-stone hover:text-ink'
+                  }`}
+                >
+                  {lang === 'hi' ? 'हिन्दी' : lang === 'doi' ? 'डोगरी' : 'EN'}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Cryptographic Digital Signature & Anti-Tampering Shield */}
           {activeEmergencyPopup.signatureStatus === 'tampered' ? (
             <div className="p-3 bg-red-950/90 border-2 border-red-500 rounded-xl text-white shadow-md animate-pulse">
@@ -277,7 +366,7 @@ export const EmergencyDisasterModal: React.FC = () => {
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
           <button
-            onClick={dismissEmergencyModal}
+            onClick={handleClose}
             className="py-2 px-4 border border-border bg-surface text-stone font-semibold rounded-xl text-xs sm:text-sm hover:bg-surface-subtle transition-colors"
           >
             Acknowledge & Close
