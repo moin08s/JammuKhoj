@@ -6,7 +6,8 @@
   },
   "nav": {
     "home": "Home",
-    "plan": "Plan",
+    "explore": "Explore",
+    "plan": "1-Tap Plan",
     "map": "Map",
     "transport": "Transport",
     "safety": "Safety"

@@ -7,11 +7,11 @@ export const BottomNav: React.FC = () => {
   const { t } = useTranslation();
 
   const navItems = [
-    { to: '/', label: 'Home', icon: Home, end: true },
-    { to: '/explore', label: 'Explore', icon: Compass, end: false },
-    { to: '/plan', label: '1-Tap Plan', icon: CalendarDays, end: false, badge: '⚡' },
-    { to: '/transport', label: 'Transport', icon: Bus, end: false },
-    { to: '/safety', label: 'Safety', icon: ShieldAlert, end: false },
+    { to: '/', label: t('nav.home'), icon: Home, end: true },
+    { to: '/explore', label: t('nav.explore'), icon: Compass, end: false },
+    { to: '/plan', label: t('nav.plan'), icon: CalendarDays, end: false, badge: '⚡' },
+    { to: '/transport', label: t('nav.transport'), icon: Bus, end: false },
+    { to: '/safety', label: t('nav.safety'), icon: ShieldAlert, end: false },
   ];
 
   return (

@@ -10,6 +10,7 @@ import {
   ArrowRight,
   Sparkles,
   Zap,
+  X,
 } from 'lucide-react';
 import { useAppStore } from '@/stores/appStore';
 import { deviceService } from '@/services/deviceService';
@@ -73,7 +74,18 @@ export const PermissionRequestModal: React.FC<PermissionRequestModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-in fade-in">
-      <div className="bg-card border border-border rounded-3xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl animate-in zoom-in-95 select-none">
+      <div className="bg-card border border-border rounded-3xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl animate-in zoom-in-95 select-none relative">
+        {/* Top-Right Dismiss Button */}
+        <button
+          type="button"
+          onClick={handleSkip}
+          className="absolute top-4 right-4 p-1.5 rounded-full text-stone hover:text-ink hover:bg-surface transition-colors"
+          aria-label="Close setup modal"
+          title="Skip for now"
+        >
+          <X size={18} />
+        </button>
+
         {/* Header */}
         <div className="text-center space-y-1.5">
           <div className="w-12 h-12 rounded-2xl bg-[#174D3C] text-white flex items-center justify-center mx-auto shadow-md shadow-[#174D3C]/25">

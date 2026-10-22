@@ -21,6 +21,7 @@ import { TripPlannerPage } from '@/features/suggestions/TripPlannerPage';
 import { PrivacyPolicyPage } from '@/features/privacy/PrivacyPolicyPage';
 import { CityAnalysisPage } from '@/features/benchmark/CityAnalysisPage';
 import { CommandPortalPage } from '@/features/admin/CommandPortalPage';
+import { NotFoundPage } from '@/ui/NotFoundPage';
 import { useAppStore } from '@/stores/appStore';
 
 // Root Index Component that acts as an intelligent entry gate
@@ -126,7 +127,7 @@ const router = createBrowserRouter([
       },
       {
         path: '*',
-        element: <Navigate to="/" replace />,
+        element: <NotFoundPage />,
       },
     ],
   },
