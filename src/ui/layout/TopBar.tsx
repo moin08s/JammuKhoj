@@ -14,9 +14,11 @@ import {
   Compass,
   CheckCircle2,
   ShieldAlert,
+  ShieldCheck,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '@/stores/appStore';
+import { useCommandControlStore } from '@/stores/commandControlStore';
 
 interface TopBarProps {
   title?: string;
@@ -28,6 +30,7 @@ export const TopBar: React.FC<TopBarProps> = ({ title, showBack }) => {
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme, language, setLanguage, currentUser, connectivity } = useAppStore();
+  const { commanderSession } = useCommandControlStore();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isHome = location.pathname === '/';
@@ -141,6 +144,18 @@ export const TopBar: React.FC<TopBarProps> = ({ title, showBack }) => {
           </button>
         )}
 
+        {/* Active Commander Badge if authenticated */}
+        {commanderSession && (
+          <button
+            onClick={() => navigate('/safety')}
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-emerald-950/90 border border-emerald-500/50 text-emerald-300 text-xs font-bold shadow-xs hover:bg-emerald-900 transition-colors"
+            title="Level-4 Disaster Commander Terminal Active"
+          >
+            <ShieldCheck size={14} className="text-emerald-400" />
+            <span className="truncate max-w-[140px]">{commanderSession.officerName}</span>
+          </button>
+        )}
+
         {/* Language switch quick toggle */}
         <button
           onClick={toggleLanguage}
@@ -221,6 +236,17 @@ export const TopBar: React.FC<TopBarProps> = ({ title, showBack }) => {
                 >
                   <Compass size={16} className="text-amber-600" />
                   <span>Transit & Fare Calculator</span>
+                </button>
+
+                <button
+                  className="w-full px-3.5 py-2.5 rounded-xl flex items-center gap-3 hover:bg-surface text-left transition-colors font-medium text-xs"
+                  onClick={() => {
+                    navigate('/safety');
+                    setMenuOpen(false);
+                  }}
+                >
+                  <ShieldAlert size={16} className="text-danger" />
+                  <span>Civic Command & Officer Portal</span>
                 </button>
 
                 <div className="border-t border-border/80 my-1.5" />

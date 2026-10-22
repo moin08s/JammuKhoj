@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Users,
   ShieldAlert,
@@ -76,6 +76,22 @@ export const CommandControlDashboard: React.FC = () => {
   const [dispatchAction, setDispatchAction] = useState('');
   const [dispatchSafeSpot, setDispatchSafeSpot] = useState('Banihal Transit Safety Concourse');
   const [dispatchFeedback, setDispatchFeedback] = useState<{ success: boolean; msg: string } | null>(null);
+
+  // Auto-Sync Telemetry Simulator
+  const [autoSync, setAutoSync] = useState(false);
+
+  useEffect(() => {
+    if (!autoSync) return;
+    const interval = setInterval(() => {
+      // Pick random location and simulate small natural fluctuation (+/- 80 to 220 pilgrims)
+      const randomLoc = locations[Math.floor(Math.random() * locations.length)];
+      if (!randomLoc) return;
+      const delta = Math.floor(Math.random() * 300) - 120;
+      const newCount = Math.max(1000, randomLoc.currentCount + delta);
+      updateLocationCrowd(randomLoc.id, newCount);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [autoSync, locations, updateLocationCrowd]);
 
   const totalVisitors = locations.reduce((sum, loc) => sum + loc.currentCount, 0);
   const totalSafeCapacity = locations.reduce((sum, loc) => sum + loc.safeCapacity, 0);
@@ -212,6 +228,18 @@ export const CommandControlDashboard: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <button
+              onClick={() => setAutoSync(!autoSync)}
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm ${
+                autoSync
+                  ? 'bg-emerald-400 text-black hover:bg-emerald-300'
+                  : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
+              }`}
+              title="Automatically pulses live telemetry counts every 8 seconds"
+            >
+              <Activity className={`w-3.5 h-3.5 ${autoSync ? 'animate-pulse text-black' : 'text-emerald-400'}`} />
+              <span>{autoSync ? 'Live Sensor Feed (ON)' : 'Live Sensor Feed'}</span>
+            </button>
             <button
               onClick={() => toggleFestivalSurge(!festivalSurgeActive)}
               className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm ${
