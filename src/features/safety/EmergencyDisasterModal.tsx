@@ -92,6 +92,58 @@ export const EmergencyDisasterModal: React.FC = () => {
 
         {/* Scrollable Content */}
         <div className="p-4 sm:p-5 overflow-y-auto space-y-3.5 text-xs sm:text-sm">
+          {/* Cryptographic Digital Signature & Anti-Tampering Shield */}
+          {activeEmergencyPopup.signatureStatus === 'tampered' ? (
+            <div className="p-3 bg-red-950/90 border-2 border-red-500 rounded-xl text-white shadow-md animate-pulse">
+              <div className="flex items-center gap-2 text-red-300 font-bold text-xs uppercase tracking-wide">
+                <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
+                <span>CYBER INTRUSION WARNING: TAMPERED BROADCAST DETECTED</span>
+              </div>
+              <p className="mt-1 text-[11px] text-red-100 leading-relaxed">
+                The HMAC-SHA256 digital signature does not match the official JKDMA central key. This alert content or coordinates have been forged or altered in transit. Citizens are advised to ignore unverified instructions.
+              </p>
+              <div className="mt-1.5 flex items-center gap-2 text-[10px] font-mono text-red-200">
+                <span>DIGEST STATUS: CORRUPTED / REJECTED</span>
+                <span>•</span>
+                <span>SECURITY AUDIT LOGGED</span>
+              </div>
+            </div>
+          ) : activeEmergencyPopup.signatureStatus === 'verified' ? (
+            <div className="p-2.5 bg-emerald-950/50 border border-emerald-500/50 rounded-xl text-xs flex items-center justify-between text-emerald-300 shadow-sm">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div>
+                  <span className="font-bold text-[11px] block text-emerald-200">
+                    CRYPTOGRAPHICALLY VERIFIED CIVIC BROADCAST
+                  </span>
+                  <span className="text-[10px] text-emerald-400/90 font-mono">
+                    Signed by: {activeEmergencyPopup.signedByOfficerId || 'DSP Rajeshwar Singh [JKDMA-CMD-9021]'} • Level-4 Command
+                  </span>
+                </div>
+              </div>
+              <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold shrink-0">
+                HMAC-SHA256 OK
+              </span>
+            </div>
+          ) : (
+            <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs flex items-center justify-between text-amber-700 dark:text-amber-300">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
+                <div>
+                  <span className="font-bold text-[11px] block">
+                    LEGACY / UNVERIFIED BROADCAST NOTICE
+                  </span>
+                  <span className="text-[10px] opacity-90">
+                    Pending cryptographic re-issuance from Central Command.
+                  </span>
+                </div>
+              </div>
+              <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-300 font-bold shrink-0">
+                UNVERIFIED
+              </span>
+            </div>
+          )}
+
           {/* Offline Mode Active Banner */}
           <div className={`p-2.5 rounded-xl border flex items-center justify-between transition-colors ${
             isOffline

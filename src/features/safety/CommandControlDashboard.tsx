@@ -16,8 +16,25 @@ import {
   RefreshCw,
   PlusCircle,
   HelpCircle,
+  ShieldCheck,
+  Lock,
+  Unlock,
+  Key,
+  FileText,
+  Terminal,
+  Radio,
+  Eye,
+  XCircle,
+  X,
+  AlertCircle,
 } from 'lucide-react';
 import { useCommandControlStore, type IncidentType, type AlertSeverity } from '@/stores/commandControlStore';
+import {
+  OFFICIAL_DISASTER_COMMANDER,
+  COMMANDER_ACCESS_PIN,
+  securityLimiter,
+  securityAudit,
+} from '@/services/securityService';
 import { useNavigate } from 'react-router-dom';
 
 export const CommandControlDashboard: React.FC = () => {
@@ -27,6 +44,11 @@ export const CommandControlDashboard: React.FC = () => {
     activeAlerts,
     festivalSurgeActive,
     selectedFestival,
+    commanderSession,
+    authenticateCommander,
+    logoutCommander,
+    signAndBroadcastAlert,
+    injectTamperedAlertTest,
     toggleFestivalSurge,
     updateLocationCrowd,
     simulateIncident,
@@ -34,18 +56,143 @@ export const CommandControlDashboard: React.FC = () => {
     triggerEmergencyModal,
   } = useCommandControlStore();
 
-  const [activeTab, setActiveTab] = useState<'crowd' | 'hazards' | 'evacuation'>('crowd');
+  const [activeTab, setActiveTab] = useState<'crowd' | 'hazards' | 'dispatch' | 'audit' | 'evacuation'>('crowd');
   const [selectedLocationId, setSelectedLocationId] = useState(locations[0].id);
+
+  // Commander Auth Modal State
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [badgeInput, setBadgeInput] = useState('');
+  const [pinInput, setPinInput] = useState('');
+  const [authError, setAuthError] = useState<string | null>(null);
+
+  // Dispatch Form State
+  const [dispatchTitle, setDispatchTitle] = useState('');
+  const [dispatchType, setDispatchType] = useState<IncidentType>('landslide');
+  const [dispatchSeverity, setDispatchSeverity] = useState<AlertSeverity>('critical');
+  const [dispatchLocation, setDispatchLocation] = useState('NH-44 Ramban-Banihal Corridor');
+  const [dispatchCoords, setDispatchCoords] = useState<[number, number]>([75.242, 33.155]);
+  const [dispatchRadius, setDispatchRadius] = useState<number>(3500);
+  const [dispatchDesc, setDispatchDesc] = useState('');
+  const [dispatchAction, setDispatchAction] = useState('');
+  const [dispatchSafeSpot, setDispatchSafeSpot] = useState('Banihal Transit Safety Concourse');
+  const [dispatchFeedback, setDispatchFeedback] = useState<{ success: boolean; msg: string } | null>(null);
 
   const totalVisitors = locations.reduce((sum, loc) => sum + loc.currentCount, 0);
   const totalSafeCapacity = locations.reduce((sum, loc) => sum + loc.safeCapacity, 0);
   const criticalCount = locations.filter((loc) => loc.crowdLevel === 'critical').length;
   const highCount = locations.filter((loc) => loc.crowdLevel === 'high').length;
 
-  const selectedLoc = locations.find((l) => l.id === selectedLocationId) || locations[0];
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError(null);
+    const res = authenticateCommander(badgeInput, pinInput);
+    if (res.success) {
+      setShowAuthModal(false);
+      setBadgeInput('');
+      setPinInput('');
+    } else {
+      setAuthError(res.error || 'Authentication failed');
+    }
+  };
+
+  const handleFillDemoCreds = () => {
+    setBadgeInput(OFFICIAL_DISASTER_COMMANDER.officerId);
+    setPinInput(COMMANDER_ACCESS_PIN);
+    setAuthError(null);
+  };
+
+  const handleBroadcastDispatch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setDispatchFeedback(null);
+
+    if (!dispatchTitle.trim() || !dispatchAction.trim()) {
+      setDispatchFeedback({ success: false, msg: 'Title and Mandatory Traveler Action are required.' });
+      return;
+    }
+
+    const res = signAndBroadcastAlert({
+      title: dispatchTitle,
+      incidentType: dispatchType,
+      severity: dispatchSeverity,
+      locationName: dispatchLocation,
+      coordinates: dispatchCoords,
+      affectedRadiusMeters: dispatchRadius,
+      description: dispatchDesc || `Official hazard directive issued for ${dispatchLocation}.`,
+      actionRequired: dispatchAction,
+      safeHoldingArea: {
+        name: dispatchSafeSpot,
+        coordinates: [dispatchCoords[0] - 0.05, dispatchCoords[1] - 0.05],
+        capacity: 3000,
+        amenities: ['Emergency Potable Water', 'First Aid Station', 'Satellite Telecom Post', 'Relief Langar'],
+      },
+    });
+
+    if (res.success) {
+      setDispatchFeedback({ success: true, msg: `Alert successfully signed and broadcasted across Jammu Division! (HMAC-SHA256 verified)` });
+      setDispatchTitle('');
+      setDispatchDesc('');
+      setDispatchAction('');
+    } else {
+      setDispatchFeedback({ success: false, msg: res.error || 'Failed to dispatch alert.' });
+    }
+  };
+
+  const auditLogs = securityAudit.getLogs();
 
   return (
     <div className="space-y-4 animate-in fade-in duration-150">
+      {/* Officer Clearance Status Bar */}
+      <div className={`p-3 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-sm transition-all ${
+        commanderSession
+          ? 'bg-emerald-950/80 border-emerald-500/50 text-white'
+          : 'bg-amber-500/10 border-amber-500/30 text-ink'
+      }`}>
+        <div className="flex items-center gap-2.5">
+          <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+            commanderSession ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-600'
+          }`}>
+            {commanderSession ? <ShieldCheck className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
+          </div>
+          <div>
+            <div className="flex items-center gap-1.5 font-bold">
+              <span>{commanderSession ? 'COMMANDER CLEARANCE ACTIVE' : 'CIVIC OBSERVER MODE (READ-ONLY)'}</span>
+              {commanderSession && (
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  {commanderSession.clearanceLevel}
+                </span>
+              )}
+            </div>
+            <p className="text-[11px] opacity-80 mt-0.5">
+              {commanderSession
+                ? `${commanderSession.officerName} (${commanderSession.officerId}) • ${commanderSession.department}`
+                : 'Authenticated Commander credentials required to broadcast signed alerts or modify gate protocols.'}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          {commanderSession ? (
+            <button
+              onClick={() => logoutCommander()}
+              className="px-3 py-1.5 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors"
+            >
+              Lock Terminal / Sign Out
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setShowAuthModal(true);
+                setAuthError(null);
+              }}
+              className="px-3.5 py-1.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5"
+            >
+              <Key className="w-3.5 h-3.5" />
+              <span>Officer Login (Level-4)</span>
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-900 border border-emerald-600/30 rounded-2xl p-4 sm:p-5 text-white shadow-lg relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10">
@@ -119,47 +266,71 @@ export const CommandControlDashboard: React.FC = () => {
             <div className="text-lg font-bold font-mono text-amber-400">
               {activeAlerts.length} Active
             </div>
-            <span className="text-[10px] text-white/60">Early warning broadcasted</span>
+            <span className="text-[10px] text-white/60">HMAC-Signed Dispatches</span>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-border text-xs sm:text-sm font-semibold">
+      <div className="flex border-b border-border text-xs sm:text-sm font-semibold overflow-x-auto">
         <button
           onClick={() => setActiveTab('crowd')}
-          className={`pb-2.5 px-3 sm:px-4 border-b-2 transition-colors flex items-center gap-1.5 ${
+          className={`pb-2.5 px-3 sm:px-4 border-b-2 transition-colors flex items-center gap-1.5 shrink-0 ${
             activeTab === 'crowd'
               ? 'border-primary text-primary font-bold'
               : 'border-transparent text-stone hover:text-ink'
           }`}
         >
           <Users className="w-4 h-4" />
-          <span>Location Crowd Regulator ({locations.length})</span>
+          <span>Crowd Regulator ({locations.length})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('hazards')}
-          className={`pb-2.5 px-3 sm:px-4 border-b-2 transition-colors flex items-center gap-1.5 ${
+          className={`pb-2.5 px-3 sm:px-4 border-b-2 transition-colors flex items-center gap-1.5 shrink-0 ${
             activeTab === 'hazards'
               ? 'border-primary text-primary font-bold'
               : 'border-transparent text-stone hover:text-ink'
           }`}
         >
           <AlertTriangle className="w-4 h-4 text-amber-600" />
-          <span>Landslide & Hazard Alerter ({activeAlerts.length})</span>
+          <span>Hazards Alerter ({activeAlerts.length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('dispatch')}
+          className={`pb-2.5 px-3 sm:px-4 border-b-2 transition-colors flex items-center gap-1.5 shrink-0 ${
+            activeTab === 'dispatch'
+              ? 'border-primary text-primary font-bold'
+              : 'border-transparent text-stone hover:text-ink'
+          }`}
+        >
+          <Radio className="w-4 h-4 text-red-500" />
+          <span>Emergency Dispatcher</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('audit')}
+          className={`pb-2.5 px-3 sm:px-4 border-b-2 transition-colors flex items-center gap-1.5 shrink-0 ${
+            activeTab === 'audit'
+              ? 'border-primary text-primary font-bold'
+              : 'border-transparent text-stone hover:text-ink'
+          }`}
+        >
+          <Terminal className="w-4 h-4 text-emerald-500" />
+          <span>Cyber Security Audit</span>
         </button>
 
         <button
           onClick={() => setActiveTab('evacuation')}
-          className={`pb-2.5 px-3 sm:px-4 border-b-2 transition-colors flex items-center gap-1.5 ${
+          className={`pb-2.5 px-3 sm:px-4 border-b-2 transition-colors flex items-center gap-1.5 shrink-0 ${
             activeTab === 'evacuation'
               ? 'border-primary text-primary font-bold'
               : 'border-transparent text-stone hover:text-ink'
           }`}
         >
           <ShieldAlert className="w-4 h-4 text-emerald-600" />
-          <span>Safe Evacuation Havens</span>
+          <span>Safe Havens</span>
         </button>
       </div>
 
@@ -286,20 +457,29 @@ export const CommandControlDashboard: React.FC = () => {
             <div>
               <h3 className="font-bold text-sm text-ink flex items-center gap-1.5">
                 <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
-                Active Early Warning Dispatcher
+                Active Early Warning Dispatcher & Threat Simulator
               </h3>
               <p className="text-xs text-stone mt-0.5">
-                Automatically triggers high-priority audio & visual pop-up banners for travelers approaching danger zones.
+                Cryptographically verifies alerts before displaying on citizens' screens. Block forged alerts from bad actors.
               </p>
             </div>
 
-            <div className="flex items-center gap-1.5 shrink-0">
+            <div className="flex flex-wrap items-center gap-1.5 shrink-0">
               <button
                 onClick={() => simulateIncident('landslide', 'loc_vaishno_devi_bhawan')}
                 className="px-2.5 py-1.5 text-xs bg-danger text-white rounded-lg font-bold hover:bg-danger/90 transition-colors flex items-center gap-1"
               >
                 <PlusCircle className="w-3.5 h-3.5" />
-                <span>Simulate Mountain Landslide</span>
+                <span>Simulate Landslide</span>
+              </button>
+
+              <button
+                onClick={() => injectTamperedAlertTest(activeAlerts[0]?.id || 'alert_landslide_nh44')}
+                className="px-2.5 py-1.5 text-xs bg-red-950 border border-red-500 text-red-200 rounded-lg font-bold hover:bg-red-900 transition-colors flex items-center gap-1"
+                title="Simulates a forged or tampered packet to demonstrate client cryptographic rejection."
+              >
+                <AlertCircle className="w-3.5 h-3.5 text-red-400" />
+                <span>Test Tampered Attack Detection</span>
               </button>
             </div>
           </div>
@@ -312,11 +492,16 @@ export const CommandControlDashboard: React.FC = () => {
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className="text-[10px] font-mono font-bold uppercase bg-danger/15 text-danger px-2 py-0.5 rounded">
                         {alert.severity} • {alert.incidentType.toUpperCase()}
                       </span>
                       <span className="text-[10px] text-stone">Issued: {alert.issuedAt}</span>
+                      {alert.signedByOfficerId && (
+                        <span className="text-[10px] font-mono bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded font-bold">
+                          Signed by: {alert.signedByOfficerId}
+                        </span>
+                      )}
                     </div>
                     <h4 className="font-bold text-sm sm:text-base text-ink mt-1">{alert.title}</h4>
                     <span className="text-xs text-stone flex items-center gap-1 mt-0.5">
@@ -383,7 +568,216 @@ export const CommandControlDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 3: Safe Evacuation Havens Directory */}
+      {/* Tab 3: Officer Emergency Dispatcher (Cryptographically Signed) */}
+      {activeTab === 'dispatch' && (
+        <div className="space-y-4">
+          {!commanderSession ? (
+            <div className="p-6 bg-surface border border-border rounded-2xl text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-amber-500/15 text-amber-600 mx-auto flex items-center justify-center">
+                <Lock className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-base text-ink">Disaster Commander Clearance Required</h3>
+              <p className="text-xs text-stone max-w-md mx-auto">
+                Only authenticated Level-4 Disaster Commanders can initiate division-wide emergency broadcasts. Please log in with your official officer credentials.
+              </p>
+              <button
+                onClick={() => {
+                  setShowAuthModal(true);
+                  setAuthError(null);
+                }}
+                className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-xs shadow-sm transition-all"
+              >
+                Authenticate Commander Account
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleBroadcastDispatch} className="p-4 sm:p-5 bg-surface border border-border rounded-2xl shadow-sm space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-border">
+                <div className="flex items-center gap-2">
+                  <Radio className="w-5 h-5 text-red-500 animate-pulse" />
+                  <div>
+                    <h3 className="font-bold text-sm sm:text-base text-ink">Broadcast Signed Civic Emergency Alert</h3>
+                    <span className="text-[11px] text-stone">
+                      Dispatched under authority of {commanderSession.officerName} [{commanderSession.officerId}]
+                    </span>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-bold">
+                  HMAC SIGNING READY
+                </span>
+              </div>
+
+              {dispatchFeedback && (
+                <div className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
+                  dispatchFeedback.success
+                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300'
+                    : 'bg-danger/10 border-danger/30 text-danger'
+                }`}>
+                  {dispatchFeedback.success ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <AlertTriangle className="w-4 h-4 shrink-0" />}
+                  <span>{dispatchFeedback.msg}</span>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                  <label className="text-xs font-bold text-ink block mb-1">Alert Headline / Title</label>
+                  <input
+                    type="text"
+                    value={dispatchTitle}
+                    onChange={(e) => setDispatchTitle(e.target.value)}
+                    placeholder="e.g. URGENT: Flash Flood Alert at Tawi River Causeway"
+                    className="w-full px-3 py-2 bg-surface-subtle border border-border rounded-xl text-xs text-ink focus:outline-none focus:ring-1 focus:ring-primary"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-ink block mb-1">Incident Type</label>
+                  <select
+                    value={dispatchType}
+                    onChange={(e) => setDispatchType(e.target.value as IncidentType)}
+                    className="w-full px-3 py-2 bg-surface-subtle border border-border rounded-xl text-xs text-ink focus:outline-none focus:ring-1 focus:ring-primary"
+                  >
+                    <option value="landslide">Mountain Landslide</option>
+                    <option value="overcrowding">Corridor Overcrowding / Surge</option>
+                    <option value="flash_flood">Flash Flood / Cloudburst</option>
+                    <option value="weather">Severe Mountain Blizzard / Weather</option>
+                    <option value="road_block">Highway Road Block / Bridge Closure</option>
+                    <option value="stampede_risk">Stampede Risk Avoidance</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-ink block mb-1">Target Location Zone</label>
+                  <input
+                    type="text"
+                    value={dispatchLocation}
+                    onChange={(e) => setDispatchLocation(e.target.value)}
+                    placeholder="e.g. NH-44 Banihal Sector"
+                    className="w-full px-3 py-2 bg-surface-subtle border border-border rounded-xl text-xs text-ink focus:outline-none focus:ring-1 focus:ring-primary"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-ink block mb-1">Designated Safe Evacuation Haven</label>
+                  <input
+                    type="text"
+                    value={dispatchSafeSpot}
+                    onChange={(e) => setDispatchSafeSpot(e.target.value)}
+                    placeholder="e.g. Banihal Community Relief Concourse"
+                    className="w-full px-3 py-2 bg-surface-subtle border border-border rounded-xl text-xs text-ink focus:outline-none focus:ring-1 focus:ring-primary"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-ink block mb-1">Mandatory Citizen Action Required</label>
+                <textarea
+                  value={dispatchAction}
+                  onChange={(e) => setDispatchAction(e.target.value)}
+                  placeholder="e.g. HALT ALL VEHICULAR MOVEMENT. Turn vehicles into Banihal Rest Area immediately."
+                  rows={2}
+                  className="w-full px-3 py-2 bg-surface-subtle border border-border rounded-xl text-xs text-ink focus:outline-none focus:ring-1 focus:ring-primary"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-ink block mb-1">Description / Detailed Situation Brief</label>
+                <textarea
+                  value={dispatchDesc}
+                  onChange={(e) => setDispatchDesc(e.target.value)}
+                  placeholder="Details regarding road clearance teams, estimated delay, and langar facilities..."
+                  rows={2}
+                  className="w-full px-3 py-2 bg-surface-subtle border border-border rounded-xl text-xs text-ink focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div className="pt-2 flex items-center justify-between">
+                <span className="text-[11px] text-stone flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Payload will be cryptographically sealed with HMAC-SHA256 upon submission.</span>
+                </span>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-danger hover:bg-danger/90 text-white rounded-xl font-bold text-xs shadow-md transition-all flex items-center gap-1.5"
+                >
+                  <Radio className="w-3.5 h-3.5" />
+                  <span>Sign & Broadcast Emergency Alert</span>
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      )}
+
+      {/* Tab 4: Cyber Security Audit Trail */}
+      {activeTab === 'audit' && (
+        <div className="space-y-3">
+          <div className="p-3 bg-surface border border-border rounded-xl text-xs flex items-center justify-between">
+            <div>
+              <h3 className="font-bold text-sm text-ink flex items-center gap-1.5">
+                <Terminal className="w-4 h-4 text-emerald-600" />
+                Immutable Cryptographic Audit Trail
+              </h3>
+              <p className="text-stone text-[11px] mt-0.5">
+                Cryptographically records all commander logins, signature verifications, and intrusion attempts.
+              </p>
+            </div>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-subtle border border-border font-bold">
+              {auditLogs.length} Events Tracked
+            </span>
+          </div>
+
+          <div className="space-y-2">
+            {auditLogs.length === 0 ? (
+              <div className="p-8 text-center text-stone text-xs">
+                No security audit events recorded yet in this session.
+              </div>
+            ) : (
+              auditLogs.map((log) => {
+                let badgeStyle = 'bg-emerald-500/15 text-emerald-700 border-emerald-500/30';
+                if (log.status === 'TAMPER_DETECTED' || log.status === 'BLOCKED') {
+                  badgeStyle = 'bg-danger/15 text-danger border-danger/30 animate-pulse';
+                } else if (log.status === 'FAILED') {
+                  badgeStyle = 'bg-amber-500/15 text-amber-700 border-amber-500/30';
+                }
+
+                return (
+                  <div key={log.id} className="p-3 bg-surface border border-border rounded-xl text-xs space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded border uppercase ${badgeStyle}`}>
+                          {log.status}
+                        </span>
+                        <strong className="text-ink font-mono text-[11px]">{log.action}</strong>
+                      </div>
+                      <span className="text-[10px] text-stone font-mono">
+                        {new Date(log.timestamp).toLocaleTimeString()}
+                      </span>
+                    </div>
+
+                    <p className="text-stone text-[11px] leading-relaxed">
+                      {log.details}
+                    </p>
+
+                    <div className="flex items-center justify-between pt-1 border-t border-border/50 text-[10px] font-mono text-stone">
+                      <span>Officer ID: <strong>{log.officerId}</strong></span>
+                      <span className="truncate max-w-[200px]" title={log.signature}>
+                        HMAC: {log.signature.slice(0, 16)}...
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Tab 5: Safe Evacuation Havens Directory */}
       {activeTab === 'evacuation' && (
         <div className="space-y-3">
           <div className="p-3 bg-emerald-500/10 border border-emerald-500/25 rounded-xl text-xs space-y-1">
@@ -439,6 +833,92 @@ export const CommandControlDashboard: React.FC = () => {
                 </div>
               ))
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Commander Authentication Gateway Modal */}
+      {showAuthModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-md bg-surface border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col text-ink">
+            <div className="bg-gradient-to-r from-emerald-950 to-slate-900 p-4 text-white flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                  <Key className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm">Disaster Commander Authentication</h3>
+                  <span className="text-[10px] text-emerald-300 font-mono">JKDMA Level-4 Command Gateway</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowAuthModal(false)}
+                className="p-1 text-white/70 hover:text-white rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleLogin} className="p-4 sm:p-5 space-y-3.5">
+              {authError && (
+                <div className="p-2.5 rounded-xl bg-danger/10 border border-danger/30 text-danger text-xs flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 shrink-0" />
+                  <span>{authError}</span>
+                </div>
+              )}
+
+              <div>
+                <label className="text-xs font-bold text-ink block mb-1">Officer Badge ID</label>
+                <input
+                  type="text"
+                  value={badgeInput}
+                  onChange={(e) => setBadgeInput(e.target.value)}
+                  placeholder="e.g. JKDMA-CMD-9021"
+                  className="w-full px-3 py-2 bg-surface-subtle border border-border rounded-xl text-xs text-ink uppercase font-mono focus:outline-none focus:ring-1 focus:ring-primary"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-ink block mb-1">Security PIN / Access Key</label>
+                <input
+                  type="password"
+                  value={pinInput}
+                  onChange={(e) => setPinInput(e.target.value)}
+                  placeholder="Enter 6-digit PIN"
+                  className="w-full px-3 py-2 bg-surface-subtle border border-border rounded-xl text-xs text-ink font-mono focus:outline-none focus:ring-1 focus:ring-primary"
+                  required
+                />
+              </div>
+
+              <div className="p-2.5 bg-surface-subtle rounded-xl border border-border/80 text-[11px] text-stone space-y-1">
+                <div className="flex items-center justify-between font-bold text-ink">
+                  <span>Authorized Personnel:</span>
+                  <span className="text-emerald-700 dark:text-emerald-400">DSP Rajeshwar Singh</span>
+                </div>
+                <div>Station: JKDMA Central Command, Jammu HQ</div>
+                <div className="text-[10px] text-amber-700 dark:text-amber-400">
+                  Rate limiting: 5 failed attempts will lock terminal for 15 minutes.
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={handleFillDemoCreds}
+                  className="flex-1 py-2 px-3 border border-border rounded-xl text-xs font-semibold text-stone hover:bg-surface-subtle transition-colors"
+                >
+                  Auto-fill Demo Credentials
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2 px-3 bg-primary hover:bg-primary-hover text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-1.5"
+                >
+                  <Unlock className="w-3.5 h-3.5" />
+                  <span>Authenticate</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

@@ -2,7 +2,7 @@ export type SourceType = 'official' | 'verified_partner' | 'third_party' | 'comm
 export type VerificationStatus = 'verified' | 'unverified' | 'disputed';
 export type FreshnessState = 'fresh' | 'aging' | 'stale';
 
-export type UserRole = 'visitor' | 'business';
+export type UserRole = 'visitor' | 'business' | 'disaster_commander';
 
 export interface BusinessProfile {
   businessName: string;

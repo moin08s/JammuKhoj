@@ -9,6 +9,18 @@ import hiTranslations from '../src/i18n/hi.json';
 import doiTranslations from '../src/i18n/doi.json';
 import { projectCoordinates, OFFLINE_EMERGENCY_RESOURCES } from '../src/features/map/OfflineCityDisasterMap';
 import { getSpotImage } from '../src/data/spotImages';
+import {
+  sha256,
+  hmacSha256,
+  OFFICIAL_DISASTER_COMMANDER,
+  COMMANDER_ACCESS_PIN,
+  signAlertPayload,
+  verifyAlertIntegrity,
+  sanitizeText,
+  securityLimiter,
+  securityAudit,
+} from '../src/services/securityService';
+import { useCommandControlStore } from '../src/stores/commandControlStore';
 
 interface TestResult {
   name: string;
@@ -470,6 +482,100 @@ assert(
   'Offline Map Police & SDRF: Rescue bases and PCR are linked to 112 ERSS hotline',
   'OFFLINE_EMERGENCY'
 );
+
+// -----------------------------------------------------------------------------
+// 7. CYBER SECURITY, CRYPTOGRAPHIC SIGNING & RBAC COMMAND VERIFICATION
+// -----------------------------------------------------------------------------
+console.log('>>> [7/7] Running Cyber Security & Cryptographic Dispatch Tests...');
+
+// A. SHA-256 and HMAC-SHA256 Math Verification
+const hashTest = sha256('JAMMU_KHOJ_SECURE_2026');
+assert(hashTest.length === 64, 'Crypto: SHA-256 produces 64-character hex digest', 'CYBER_SECURITY');
+
+const hmacTest = hmacSha256('TEST_SECRET_KEY', 'EMERGENCY_BROADCAST_PAYLOAD');
+assert(hmacTest.length === 64, 'Crypto: HMAC-SHA256 produces 64-character authenticated hash', 'CYBER_SECURITY');
+
+// B. Disaster Commander Profile & Account Integrity
+assert(
+  OFFICIAL_DISASTER_COMMANDER.officerId === 'JKDMA-CMD-9021' &&
+  OFFICIAL_DISASTER_COMMANDER.clearanceLevel === 'Level-4-Disaster-Command' &&
+  COMMANDER_ACCESS_PIN === 'JK9112',
+  'RBAC Account: Official Disaster Commander profile (DSP Rajeshwar Singh / JKDMA-CMD-9021) active with Level-4 clearance',
+  'CYBER_SECURITY'
+);
+
+// C. Digital Payload Signing & Verification
+const testTime = 1761105000000;
+const testPayload = {
+  title: 'TEST EVACUATION: Landslide at Ramban Sector',
+  incidentType: 'landslide',
+  severity: 'critical',
+  locationName: 'NH-44 Ramban',
+  coordinates: [75.24, 33.15] as [number, number],
+  actionRequired: 'HALT TRAVEL IMMEDIATELY',
+  safeHoldingAreaName: 'Udhampur Yatri Niwas',
+  timestamp: testTime,
+};
+
+const signedResult = signAlertPayload(testPayload, OFFICIAL_DISASTER_COMMANDER.officerId);
+assert(signedResult.signature.length === 64, 'Signing: signAlertPayload generates valid 64-char HMAC signature', 'CYBER_SECURITY');
+
+const validCheck = verifyAlertIntegrity({
+  ...testPayload,
+  signature: signedResult.signature,
+  signedByOfficerId: OFFICIAL_DISASTER_COMMANDER.officerId,
+  issuedTimestamp: testTime,
+  safeHoldingArea: { name: testPayload.safeHoldingAreaName },
+});
+assert(validCheck.isValid && validCheck.status === 'verified', 'Anti-Tampering: Genuine signed alert successfully verifies integrity', 'CYBER_SECURITY');
+
+// D. Tampered Alert Rejection Test (Simulated Cyber Injection)
+const tamperedCheck = verifyAlertIntegrity({
+  ...testPayload,
+  coordinates: [75.99, 33.99], // Attacker modified coordinates
+  signature: signedResult.signature,
+  signedByOfficerId: OFFICIAL_DISASTER_COMMANDER.officerId,
+  issuedTimestamp: testTime,
+  safeHoldingArea: { name: testPayload.safeHoldingAreaName },
+});
+assert(!tamperedCheck.isValid && tamperedCheck.status === 'tampered', 'Anti-Tampering: Tampered coordinate modification is detected and rejected with status "tampered"', 'CYBER_SECURITY');
+
+// E. Unsigned Alert Rejection Test
+const unsignedCheck = verifyAlertIntegrity({
+  ...testPayload,
+  safeHoldingArea: { name: testPayload.safeHoldingAreaName },
+});
+assert(!unsignedCheck.isValid && unsignedCheck.status === 'unverified', 'Anti-Tampering: Unsigned alert is flagged as unverified', 'CYBER_SECURITY');
+
+// F. Commander Authentication & Brute-Force Rate Limiting
+securityLimiter.reset();
+const authSuccess = useCommandControlStore.getState().authenticateCommander('JKDMA-CMD-9021', 'JK9112');
+assert(authSuccess.success && useCommandControlStore.getState().commanderSession?.officerId === 'JKDMA-CMD-9021', 'Commander Auth: Valid credentials authenticate successfully', 'CYBER_SECURITY');
+
+useCommandControlStore.getState().logoutCommander();
+assert(useCommandControlStore.getState().commanderSession === null, 'Commander Auth: Logout terminates active commander session', 'CYBER_SECURITY');
+
+// Failed attempts test
+securityLimiter.reset();
+const fail1 = useCommandControlStore.getState().authenticateCommander('JKDMA-CMD-9021', 'WRONG_PIN');
+assert(!fail1.success && fail1.remainingAttempts === 4, 'Rate Limiter: Failed PIN attempt decrements remaining attempts (4 left)', 'CYBER_SECURITY');
+
+for (let i = 0; i < 4; i++) {
+  securityLimiter.recordFailure();
+}
+assert(securityLimiter.isLocked(), 'Rate Limiter: 5 failed attempts locks commander account', 'CYBER_SECURITY');
+securityLimiter.reset(); // Reset after test
+
+// G. XSS Input Sanitization
+const dirtyInput = '<script>alert("hacked")</script>javascript:void(0)<img src=x onerror=alert(1)>Emergency at Katra';
+const sanitized = sanitizeText(dirtyInput);
+assert(!sanitized.includes('<script>') && !sanitized.includes('javascript:') && !sanitized.includes('onerror'), 'XSS Sanitization: Malicious tags, javascript schemes, and inline handlers are neutralized', 'CYBER_SECURITY');
+
+// H. Immutable Security Audit Trail
+const loggedEntry = securityAudit.log('TEST_INTEGRITY_ACTION', 'JKDMA-CMD-9021', 'Integration test audit assertion', 'SUCCESS');
+assert(loggedEntry.signature.length === 64, 'Audit Trail: Security audit entry is cryptographically sealed with HMAC signature', 'CYBER_SECURITY');
+const logs = securityAudit.getLogs();
+assert(logs.some((l) => l.action === 'TEST_INTEGRITY_ACTION'), 'Audit Trail: Audit entries persist in security event store', 'CYBER_SECURITY');
 
 // -----------------------------------------------------------------------------
 // SUMMARY REPORT

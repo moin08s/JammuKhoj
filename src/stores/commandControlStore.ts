@@ -1,5 +1,16 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import {
+  OFFICIAL_DISASTER_COMMANDER,
+  COMMANDER_ACCESS_PIN,
+  type DisasterCommanderProfile,
+  type AlertSigningPayload,
+  signAlertPayload,
+  verifyAlertIntegrity,
+  sanitizeText,
+  securityLimiter,
+  securityAudit,
+} from '@/services/securityService';
 
 export type AlertSeverity = 'critical' | 'warning' | 'info';
 export type IncidentType = 'landslide' | 'overcrowding' | 'flash_flood' | 'weather' | 'road_block' | 'stampede_risk';
@@ -51,6 +62,14 @@ export interface DisasterHazardAlert {
   issuedAt: string;
   issuedBy: string; // e.g., 'J&K Disaster Management Authority / SMVDSB'
   emergencyHotline: string;
+
+  // Cryptographic Security & Anti-Tampering Attributes
+  signature?: string;
+  signedByOfficerId?: string;
+  signatureStatus?: 'verified' | 'unverified' | 'tampered';
+  payloadHash?: string;
+  issuedTimestamp?: number;
+  securityClearance?: string;
 }
 
 export interface ControlRoomStats {
@@ -70,8 +89,35 @@ interface CommandControlState {
   selectedFestival: string;
   activeEmergencyPopup: DisasterHazardAlert | null;
   dismissedAlertIds: string[];
-  
+
+  // Authenticated Special Commander Session
+  commanderSession: DisasterCommanderProfile | null;
+
   // Actions
+  authenticateCommander: (
+    officerId: string,
+    pin: string
+  ) => { success: boolean; error?: string; remainingAttempts?: number; lockoutSeconds?: number };
+  logoutCommander: () => void;
+  signAndBroadcastAlert: (alertData: {
+    title: string;
+    incidentType: IncidentType;
+    severity: AlertSeverity;
+    locationName: string;
+    coordinates: [number, number];
+    affectedRadiusMeters: number;
+    description: string;
+    actionRequired: string;
+    alternativeRouteName?: string;
+    safeHoldingArea: {
+      name: string;
+      coordinates: [number, number];
+      capacity: number;
+      amenities: string[];
+    };
+    emergencyHotline?: string;
+  }) => { success: boolean; alert?: DisasterHazardAlert; error?: string };
+  injectTamperedAlertTest: (alertId: string) => void;
   triggerEmergencyModal: (alert: DisasterHazardAlert) => void;
   dismissEmergencyModal: () => void;
   dismissAlertBanner: (id: string) => void;
@@ -266,6 +312,33 @@ export const INITIAL_MONITORED_LOCATIONS: LocationCrowdState[] = [
   },
 ];
 
+// Pre-calculated Cryptographic Signatures for Initial Live Hazard Alerts
+const alert1Timestamp = 1761105000000;
+const alert1SigningPayload: AlertSigningPayload = {
+  title: 'EMERGENCY: Active Landslide & Shooting Stones at NH-44 Nashri-Chanderkote',
+  incidentType: 'landslide',
+  severity: 'critical',
+  locationName: 'NH-44 Mountain Highway (Nashri - Ramban Sector)',
+  coordinates: [75.242, 33.155],
+  actionRequired: 'HALT TRAVEL IMMEDIATELY. Do not approach Nashri tunnel approach. Divert vehicles to designated safe holding concourses at Udhampur Yatri Niwas or Chanderkote Shelter.',
+  safeHoldingAreaName: 'Udhampur Highway Civic Yatri Niwas Complex',
+  timestamp: alert1Timestamp,
+};
+const alert1Sig = signAlertPayload(alert1SigningPayload, OFFICIAL_DISASTER_COMMANDER.officerId);
+
+const alert2Timestamp = 1761111300000;
+const alert2SigningPayload: AlertSigningPayload = {
+  title: 'CROWD SURGE ADVISORY: Ardhkuwari Corridor Exceeding Safe Density',
+  incidentType: 'overcrowding',
+  severity: 'warning',
+  locationName: 'Ardhkuwari Junction & Garbhjoon Queue Area',
+  coordinates: [74.958, 33.008],
+  actionRequired: 'Yatris requested to rest at Adhkuwari Main Holding Sheds. Entry through Sector 2 gated at 30-minute regulated intervals. Direct onward yatra via Alternate Tarakote Track.',
+  safeHoldingAreaName: 'Adhkuwari Shed Sector 4 Open Amphitheatre',
+  timestamp: alert2Timestamp,
+};
+const alert2Sig = signAlertPayload(alert2SigningPayload, OFFICIAL_DISASTER_COMMANDER.officerId);
+
 // Initial Real-Time Hazard Alerts (including active mountain landslide & road blocks)
 export const INITIAL_HAZARD_ALERTS: DisasterHazardAlert[] = [
   {
@@ -289,6 +362,12 @@ export const INITIAL_HAZARD_ALERTS: DisasterHazardAlert[] = [
     issuedAt: '21 Oct 2026, 09:30 AM',
     issuedBy: 'J&K Disaster Management Authority (JKDMA) & Traffic Police HQ',
     emergencyHotline: '01992-272728 / 112',
+    signature: alert1Sig.signature,
+    signedByOfficerId: OFFICIAL_DISASTER_COMMANDER.officerId,
+    signatureStatus: 'verified',
+    payloadHash: alert1Sig.payloadHash,
+    issuedTimestamp: alert1Timestamp,
+    securityClearance: OFFICIAL_DISASTER_COMMANDER.clearanceLevel,
   },
   {
     id: 'alert_surge_ardhkuwari',
@@ -311,6 +390,12 @@ export const INITIAL_HAZARD_ALERTS: DisasterHazardAlert[] = [
     issuedAt: '21 Oct 2026, 11:15 AM',
     issuedBy: 'SMVDSB Central Control Room, Katra',
     emergencyHotline: '01991-232075',
+    signature: alert2Sig.signature,
+    signedByOfficerId: OFFICIAL_DISASTER_COMMANDER.officerId,
+    signatureStatus: 'verified',
+    payloadHash: alert2Sig.payloadHash,
+    issuedTimestamp: alert2Timestamp,
+    securityClearance: OFFICIAL_DISASTER_COMMANDER.clearanceLevel,
   },
 ];
 
@@ -323,9 +408,197 @@ export const useCommandControlStore = create<CommandControlState>()(
       selectedFestival: 'Navratri Maha Parv / Annual Vaishno Devi Pilgrimage Surge',
       activeEmergencyPopup: INITIAL_HAZARD_ALERTS[0], // Active on boot to guarantee emergency awareness
       dismissedAlertIds: [],
+      commanderSession: null,
+
+      authenticateCommander: (officerId, pin) => {
+        if (securityLimiter.isLocked()) {
+          const lockoutSeconds = securityLimiter.getLockoutSeconds();
+          return {
+            success: false,
+            error: `Commander account temporarily locked out for security. Try again in ${lockoutSeconds}s.`,
+            lockoutSeconds,
+          };
+        }
+
+        const cleanOfficerId = sanitizeText(officerId).toUpperCase();
+        const cleanPin = pin.trim();
+
+        if (
+          cleanOfficerId === OFFICIAL_DISASTER_COMMANDER.officerId &&
+          cleanPin === COMMANDER_ACCESS_PIN
+        ) {
+          securityLimiter.reset();
+          set({ commanderSession: OFFICIAL_DISASTER_COMMANDER });
+          securityAudit.log(
+            'AUTH_LOGIN',
+            cleanOfficerId,
+            `DSP Rajeshwar Singh authenticated with Level-4 Disaster Command Clearance.`,
+            'SUCCESS'
+          );
+          return { success: true };
+        }
+
+        const failure = securityLimiter.recordFailure();
+        securityAudit.log(
+          'AUTH_FAILED',
+          cleanOfficerId || 'ANONYMOUS',
+          `Unauthorized authentication attempt with invalid PIN. Failure count: ${5 - failure.remainingAttempts}`,
+          failure.locked ? 'BLOCKED' : 'FAILED'
+        );
+
+        return {
+          success: false,
+          error: failure.locked
+            ? 'Access locked! 5 consecutive failed authorization attempts detected. Locked for 15 minutes.'
+            : `Invalid Officer Badge ID or Security PIN. ${failure.remainingAttempts} attempts remaining.`,
+          remainingAttempts: failure.remainingAttempts,
+          lockoutSeconds: failure.lockoutSeconds,
+        };
+      },
+
+      logoutCommander: () => {
+        const session = get().commanderSession;
+        if (session) {
+          securityAudit.log(
+            'AUTH_LOGOUT',
+            session.officerId,
+            `Commander session terminated normally by user.`,
+            'SUCCESS'
+          );
+        }
+        set({ commanderSession: null });
+      },
+
+      signAndBroadcastAlert: (alertData) => {
+        const session = get().commanderSession;
+        if (!session) {
+          securityAudit.log(
+            'UNAUTHORIZED_DISPATCH_ATTEMPT',
+            'ANONYMOUS',
+            `Blocked attempt to dispatch emergency alert without active Disaster Commander credentials.`,
+            'BLOCKED'
+          );
+          return {
+            success: false,
+            error: 'Authorization Required: Only authenticated Disaster Commanders can broadcast civic emergency alerts.',
+          };
+        }
+
+        const safeTitle = sanitizeText(alertData.title);
+        const safeLocation = sanitizeText(alertData.locationName);
+        const safeDesc = sanitizeText(alertData.description);
+        const safeAction = sanitizeText(alertData.actionRequired);
+        const safeHoldingName = sanitizeText(alertData.safeHoldingArea.name);
+        const timestamp = Date.now();
+
+        const signingPayload: AlertSigningPayload = {
+          title: safeTitle,
+          incidentType: alertData.incidentType,
+          severity: alertData.severity,
+          locationName: safeLocation,
+          coordinates: alertData.coordinates,
+          actionRequired: safeAction,
+          safeHoldingAreaName: safeHoldingName,
+          timestamp,
+        };
+
+        const { signature, payloadHash } = signAlertPayload(signingPayload, session.officerId);
+
+        const newAlert: DisasterHazardAlert = {
+          id: `alert_cmd_${timestamp}`,
+          title: safeTitle,
+          incidentType: alertData.incidentType,
+          severity: alertData.severity,
+          locationName: safeLocation,
+          coordinates: alertData.coordinates,
+          affectedRadiusMeters: alertData.affectedRadiusMeters,
+          description: safeDesc,
+          actionRequired: safeAction,
+          alternativeRouteName: alertData.alternativeRouteName ? sanitizeText(alertData.alternativeRouteName) : undefined,
+          safeHoldingArea: {
+            ...alertData.safeHoldingArea,
+            name: safeHoldingName,
+          },
+          isActive: true,
+          issuedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          issuedBy: `${session.department} • Ref: ${session.officerId}`,
+          emergencyHotline: alertData.emergencyHotline ? sanitizeText(alertData.emergencyHotline) : '112 / 0191-2544570',
+          signature,
+          signedByOfficerId: session.officerId,
+          signatureStatus: 'verified',
+          payloadHash,
+          issuedTimestamp: timestamp,
+          securityClearance: session.clearanceLevel,
+        };
+
+        set((state) => ({
+          activeAlerts: [newAlert, ...state.activeAlerts],
+          activeEmergencyPopup: newAlert,
+        }));
+
+        securityAudit.log(
+          'BROADCAST_EMERGENCY_ALERT',
+          session.officerId,
+          `Cryptographically signed emergency alert "${safeTitle}" broadcasted across Jammu Division. HMAC signature: ${signature.slice(0, 16)}...`,
+          'SUCCESS'
+        );
+
+        return { success: true, alert: newAlert };
+      },
+
+      injectTamperedAlertTest: (alertId) => {
+        const target = get().activeAlerts.find((a) => a.id === alertId) || get().activeAlerts[0];
+        if (!target) return;
+
+        // Create a tampered copy with corrupted coordinates / forged instructions
+        const tamperedAlert: DisasterHazardAlert = {
+          ...target,
+          id: `tampered_${Date.now()}`,
+          title: `[FORGED / TAMPERED] ${target.title}`,
+          locationName: 'FORGED EVACUATION ZONE - ATTACK SIMULATION',
+          coordinates: [75.999, 33.999], // Diverted coordinates
+          actionRequired: 'DANGER: Tampered payload injected by adversary simulating spoofing attack.',
+          // Keep old signature so HMAC digest check will fail!
+          signature: target.signature || 'invalid_fake_signature_aabbccddeeff00112233',
+          signatureStatus: 'tampered',
+        };
+
+        securityAudit.log(
+          'CYBER_INTRUSION_DETECTED',
+          target.signedByOfficerId || 'SPOOFED_ATTACKER',
+          `Tampered alert payload detected! Cryptographic digest verification failed. Alert marked as tampered.`,
+          'TAMPER_DETECTED'
+        );
+
+        set({ activeEmergencyPopup: tamperedAlert });
+      },
 
       triggerEmergencyModal: (alert) => {
-        set({ activeEmergencyPopup: alert });
+        const integrity = verifyAlertIntegrity(alert);
+        if (!integrity.isValid) {
+          const status = integrity.status;
+          securityAudit.log(
+            'ALERT_VERIFICATION_CHECK',
+            alert.signedByOfficerId || 'UNVERIFIED',
+            `Emergency modal inspection: Alert flagged as ${status.toUpperCase()}. Reason: ${integrity.reason}`,
+            status === 'tampered' ? 'TAMPER_DETECTED' : 'BLOCKED'
+          );
+
+          set({
+            activeEmergencyPopup: {
+              ...alert,
+              signatureStatus: status,
+            },
+          });
+          return;
+        }
+
+        set({
+          activeEmergencyPopup: {
+            ...alert,
+            signatureStatus: 'verified',
+          },
+        });
       },
 
       dismissEmergencyModal: () => {
@@ -404,27 +677,53 @@ export const useCommandControlStore = create<CommandControlState>()(
         const loc = get().locations.find((l) => l.id === locationId);
         if (!loc) return;
 
+        const session = get().commanderSession || OFFICIAL_DISASTER_COMMANDER;
+        const timestamp = Date.now();
+        const title = `CRITICAL HAZARD: Active ${type.toUpperCase().replace('_', ' ')} Alert at ${loc.name.en}`;
+        const actionRequired = `EVACUATE AREA IMMEDIATELY. Do not proceed toward ${loc.name.en}. Report to designated safe haven: ${loc.evacuationRoutes[0]?.safeSpotName || 'Nearby Police Post'}.`;
+        const safeHoldingAreaName = loc.evacuationRoutes[0]?.safeSpotName || 'District Civic Relief Centre';
+
+        const { signature, payloadHash } = signAlertPayload(
+          {
+            title,
+            incidentType: type,
+            severity,
+            locationName: loc.name.en,
+            coordinates: loc.coordinates,
+            actionRequired,
+            safeHoldingAreaName,
+            timestamp,
+          },
+          session.officerId
+        );
+
         const newAlert: DisasterHazardAlert = {
-          id: `sim_alert_${Date.now()}`,
-          title: `CRITICAL HAZARD: Active ${type.toUpperCase().replace('_', ' ')} Alert at ${loc.name.en}`,
+          id: `sim_alert_${timestamp}`,
+          title,
           incidentType: type,
           severity,
           locationName: loc.name.en,
           coordinates: loc.coordinates,
           affectedRadiusMeters: type === 'landslide' ? 3000 : 800,
           description: `Disaster management automated sensors detected ${type.replace('_', ' ')} incident near ${loc.name.en}. Immediate cordon established. Follow evacuation vectors.`,
-          actionRequired: `EVACUATE AREA IMMEDIATELY. Do not proceed toward ${loc.name.en}. Report to designated safe haven: ${loc.evacuationRoutes[0]?.safeSpotName || 'Nearby Police Post'}.`,
+          actionRequired,
           alternativeRouteName: 'Designated Safe Haven Corridor #1',
           safeHoldingArea: {
-            name: loc.evacuationRoutes[0]?.safeSpotName || 'District Civic Relief Centre',
+            name: safeHoldingAreaName,
             coordinates: loc.evacuationRoutes[0]?.safeSpotCoords || [74.868, 32.726],
             capacity: 2500,
             amenities: ['First Aid Team', 'Satellite SOS', 'Emergency Water', 'Evacuation Shuttles'],
           },
           isActive: true,
           issuedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          issuedBy: 'J&K Emergency Response & Disaster Management Control Room',
+          issuedBy: `${session.department} • Ref: ${session.officerId}`,
           emergencyHotline: '112 / 0191-2544570',
+          signature,
+          signedByOfficerId: session.officerId,
+          signatureStatus: 'verified',
+          payloadHash,
+          issuedTimestamp: timestamp,
+          securityClearance: session.clearanceLevel,
         };
 
         set((state) => ({
