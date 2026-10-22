@@ -249,13 +249,13 @@ export const ItineraryPage: React.FC = () => {
       />
 
       {/* Metrics & Circuit Summary Card */}
-      <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-3">
+      <div className="bg-card rounded-2xl p-4 border border-border shadow-xs space-y-3 text-ink">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
               {result.bucket.toUpperCase()} Circuit
             </span>
-            <span className="text-xs font-medium text-slate-600">
+            <span className="text-xs font-medium text-stone">
               {result.timeline.filter((s) => s.type === 'visit').length} Verified Stops
             </span>
           </div>
@@ -265,34 +265,34 @@ export const ItineraryPage: React.FC = () => {
             onClick={() => setIsSeniorMode(!isSeniorMode)}
             className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all border ${
               isSeniorMode
-                ? 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs'
-                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-800 shadow-2xs'
+                : 'bg-surface text-stone border-border hover:bg-surface/80 hover:text-ink'
             }`}
             title="Toggle Senior Mode for gentle walking pace and rest advice"
           >
             <span>🧓 Senior Ease Mode</span>
-            <span className={`w-2 h-2 rounded-full ${isSeniorMode ? 'bg-amber-600' : 'bg-slate-300'}`} />
+            <span className={`w-2 h-2 rounded-full ${isSeniorMode ? 'bg-amber-600' : 'bg-stone-300 dark:bg-stone-700'}`} />
           </button>
         </div>
 
         {/* 3 Metric Pills */}
         <div className="grid grid-cols-3 gap-2 text-center text-xs">
-          <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-            <div className="text-[10px] text-slate-500 font-medium">Est. Walking</div>
-            <div className="font-bold text-slate-800 tabular-nums">~{result.totalWalkKm} km</div>
+          <div className="p-2 rounded-xl bg-surface border border-border">
+            <div className="text-[10px] text-stone font-medium">Est. Walking</div>
+            <div className="font-bold text-ink tabular-nums">~{result.totalWalkKm} km</div>
           </div>
-          <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-            <div className="text-[10px] text-slate-500 font-medium">Return Buffer</div>
-            <div className="font-bold text-amber-700 tabular-nums">{result.assumptions.departureBuffer || 45} mins</div>
+          <div className="p-2 rounded-xl bg-surface border border-border">
+            <div className="text-[10px] text-stone font-medium">Return Buffer</div>
+            <div className="font-bold text-amber-700 dark:text-amber-400 tabular-nums">{result.assumptions.departureBuffer || 45} mins</div>
           </div>
-          <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-            <div className="text-[10px] text-slate-500 font-medium">Est. Transport</div>
-            <div className="font-bold text-emerald-700 tabular-nums">₹120 - ₹250</div>
+          <div className="p-2 rounded-xl bg-surface border border-border">
+            <div className="text-[10px] text-stone font-medium">Est. Transport</div>
+            <div className="font-bold text-emerald-700 dark:text-emerald-400 tabular-nums">₹120 - ₹250</div>
           </div>
         </div>
 
         {isSeniorMode && (
-          <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2">
+          <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-900 dark:text-amber-200 text-xs flex items-start gap-2">
             <span className="text-sm">💡</span>
             <div>
               <strong>Senior Mode Active:</strong> Walking pace is cushioned with +25% rest buffers. Battery car & elevator accessible spots are prioritized.
@@ -314,7 +314,7 @@ export const ItineraryPage: React.FC = () => {
 
           <button
             onClick={handlePrintSummary}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold transition-all"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-card border border-border text-stone hover:text-ink hover:bg-surface text-xs font-semibold transition-all"
             title="Print or save as PDF"
           >
             <span>Print / PDF</span>
@@ -360,7 +360,7 @@ export const ItineraryPage: React.FC = () => {
             className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
               isSaved
                 ? 'bg-success text-white border-success'
-                : 'bg-white text-slate-700 border-slate-200 hover:border-primary/40'
+                : 'bg-card text-stone border-border hover:border-primary/40 hover:text-ink'
             }`}
           >
             {isSaved ? <CheckCircle2 size={13} /> : <Bookmark size={13} />}
@@ -369,7 +369,7 @@ export const ItineraryPage: React.FC = () => {
 
           <button
             onClick={handleShare}
-            className="p-1.5 rounded-xl bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
+            className="p-1.5 rounded-xl bg-card text-stone hover:text-ink border border-border"
             title="Copy plan summary to clipboard"
           >
             <Share2 size={14} />

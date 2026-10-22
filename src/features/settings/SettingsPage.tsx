@@ -131,12 +131,12 @@ export const SettingsPage: React.FC = () => {
       </div>
 
       {/* 2. User Account Card */}
-      <div className="bg-white border border-[#EBE4DC] rounded-2xl p-4 shadow-sm flex items-center gap-3.5">
+      <div className="bg-card border border-border rounded-2xl p-4 shadow-sm flex items-center gap-3.5">
         <div className="relative shrink-0">
-          <div className="w-13 h-13 rounded-full bg-[#FCEFE7] border-2 border-[#F3D7C5] flex items-center justify-center text-[#9E4A0C] font-heading font-black text-lg shadow-inner">
+          <div className="w-13 h-13 rounded-full bg-surface border-2 border-border flex items-center justify-center text-[#9E4A0C] dark:text-amber-400 font-heading font-black text-lg shadow-inner">
             {userInitials}
           </div>
-          <span className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-[#15803D] ring-2 ring-white"></span>
+          <span className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-[#15803D] ring-2 ring-card"></span>
         </div>
 
         <div className="flex-1 min-w-0">
@@ -145,17 +145,17 @@ export const SettingsPage: React.FC = () => {
               <span>{userName}</span>
               <ShieldCheck size={14} className="text-[#15803D] shrink-0" />
             </h3>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FCEFE7] text-[#9E4A0C] border border-[#F3D7C5] shrink-0">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#9E4A0C] dark:text-amber-400 border border-amber-500/20 shrink-0">
               {currentUser ? 'Signed In' : '1-Tap Guest'}
             </span>
           </div>
 
-          <div className="text-xs text-stone-600 mt-0.5 flex items-center gap-1">
+          <div className="text-xs text-stone mt-0.5 flex items-center gap-1">
             <span>{currentUser?.email || 'Field Pilgrim & Explorer'}</span>
           </div>
 
           <div className="mt-2 flex items-center justify-between gap-2 flex-wrap">
-            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#F0FDF4] border border-[#DCFCE7] text-[11px] font-semibold text-[#15803D]">
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
               <CheckCircle2 size={12} className="text-[#15803D]" />
               <span>Offline Pack: 184 MB ready</span>
             </div>
@@ -178,28 +178,28 @@ export const SettingsPage: React.FC = () => {
       {/* Switch to Business / Local Artisan Portal */}
       <div
         onClick={() => navigate('/business')}
-        className="bg-white border border-[#EBE4DC] rounded-2xl p-3.5 shadow-sm hover:border-[#9E4A0C]/40 cursor-pointer transition-all flex items-center justify-between gap-3 group"
+        className="bg-card border border-border rounded-2xl p-3.5 shadow-sm hover:border-[#9E4A0C]/40 cursor-pointer transition-all flex items-center justify-between gap-3 group"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#FCEFE7] text-[#9E4A0C] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-[#9E4A0C] dark:text-amber-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <Store size={18} />
           </div>
           <div>
-            <h4 className="font-heading font-bold text-sm text-ink group-hover:text-[#9E4A0C] transition-colors">
+            <h4 className="font-heading font-bold text-sm text-ink group-hover:text-[#9E4A0C] dark:group-hover:text-amber-400 transition-colors">
               Dogra Artisan & Shopkeeper Portal
             </h4>
-            <p className="text-[11px] text-stone-600">
+            <p className="text-[11px] text-stone">
               List Basohli crafts, saffron & certified stores
             </p>
           </div>
         </div>
-        <ChevronRight size={18} className="text-stone-400 group-hover:text-[#9E4A0C] transition-colors" />
+        <ChevronRight size={18} className="text-stone group-hover:text-[#9E4A0C] dark:group-hover:text-amber-400 transition-colors" />
       </div>
 
       {/* 3. Language Selector */}
-      <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-3 shadow-sm">
+      <section className="bg-card border border-border rounded-2xl p-4 space-y-3 shadow-sm">
         <h3 className="font-heading text-sm font-bold text-ink flex items-center gap-1.5">
-          <Globe size={16} className="text-[#9E4A0C]" />
+          <Globe size={16} className="text-[#9E4A0C] dark:text-amber-400" />
           <span>Application Language (भाषा)</span>
         </h3>
         <div className="grid grid-cols-3 gap-2">
@@ -208,7 +208,7 @@ export const SettingsPage: React.FC = () => {
             className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all ${
               language === 'en'
                 ? 'bg-[#9E4A0C] text-white border-[#9E4A0C] shadow-xs'
-                : 'bg-stone-50 border-stone-200 text-stone-700 hover:text-ink'
+                : 'bg-surface border-border text-stone hover:text-ink'
             }`}
           >
             English
@@ -218,7 +218,7 @@ export const SettingsPage: React.FC = () => {
             className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all ${
               language === 'hi'
                 ? 'bg-[#9E4A0C] text-white border-[#9E4A0C] shadow-xs'
-                : 'bg-stone-50 border-stone-200 text-stone-700 hover:text-ink'
+                : 'bg-surface border-border text-stone hover:text-ink'
             }`}
           >
             हिन्दी (Hindi)
@@ -228,7 +228,7 @@ export const SettingsPage: React.FC = () => {
             className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all ${
               language === 'doi'
                 ? 'bg-[#9E4A0C] text-white border-[#9E4A0C] shadow-xs'
-                : 'bg-stone-50 border-stone-200 text-stone-700 hover:text-ink'
+                : 'bg-surface border-border text-stone hover:text-ink'
             }`}
           >
             डोगरी (Dogri)
@@ -237,32 +237,32 @@ export const SettingsPage: React.FC = () => {
       </section>
 
       {/* 4. Accessibility & Vision (WCAG 2.1 AA) */}
-      <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-3 shadow-sm text-xs">
+      <section className="bg-card border border-border rounded-2xl p-4 space-y-3 shadow-sm text-xs">
         <div className="flex items-center justify-between">
           <h3 className="font-heading text-sm font-bold text-ink flex items-center gap-1.5">
-            <Sparkles size={16} className="text-[#9E4A0C]" />
+            <Sparkles size={16} className="text-[#9E4A0C] dark:text-amber-400" />
             <span>Accessibility & Display (सुगमता)</span>
           </h3>
-          <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold text-[10px] border border-blue-200">
+          <span className="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-bold text-[10px] border border-blue-200 dark:border-blue-800">
             WCAG 2.1 AA
           </span>
         </div>
 
-        <div className="space-y-2.5 divide-y divide-stone-100">
+        <div className="space-y-2.5 divide-y divide-border">
           <div className="pt-1 flex items-center justify-between gap-3">
             <div>
               <div className="font-semibold text-ink">High Contrast Mode</div>
-              <div className="text-[11px] text-stone-500">Sharper borders and deep 7:1 contrast for bright sunlight</div>
+              <div className="text-[11px] text-stone">Sharper borders and deep 7:1 contrast for bright sunlight</div>
             </div>
             <button
               onClick={() => setHighContrast(!highContrast)}
               className={`w-11 h-6 rounded-full transition-colors relative ${
-                highContrast ? 'bg-[#9E4A0C]' : 'bg-stone-300'
+                highContrast ? 'bg-[#9E4A0C]' : 'bg-surface border border-border'
               }`}
               aria-label="Toggle High Contrast"
             >
               <span
-                className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${
+                className={`absolute top-1 left-1 bg-white dark:bg-stone-200 w-4 h-4 rounded-full transition-transform ${
                   highContrast ? 'translate-x-5' : 'translate-x-0'
                 }`}
               />
@@ -272,17 +272,17 @@ export const SettingsPage: React.FC = () => {
           <div className="pt-2 flex items-center justify-between gap-3">
             <div>
               <div className="font-semibold text-ink">Large Text (Dynamic Scaling)</div>
-              <div className="text-[11px] text-stone-500">Increases base text size for comfortable reading without clipping</div>
+              <div className="text-[11px] text-stone">Increases base text size for comfortable reading without clipping</div>
             </div>
             <button
               onClick={() => setLargeText(!largeText)}
               className={`w-11 h-6 rounded-full transition-colors relative ${
-                largeText ? 'bg-[#9E4A0C]' : 'bg-stone-300'
+                largeText ? 'bg-[#9E4A0C]' : 'bg-surface border border-border'
               }`}
               aria-label="Toggle Large Text"
             >
               <span
-                className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${
+                className={`absolute top-1 left-1 bg-white dark:bg-stone-200 w-4 h-4 rounded-full transition-transform ${
                   largeText ? 'translate-x-5' : 'translate-x-0'
                 }`}
               />
@@ -292,17 +292,17 @@ export const SettingsPage: React.FC = () => {
           <div className="pt-2 flex items-center justify-between gap-3">
             <div>
               <div className="font-semibold text-ink">Senior Pilgrim Ease Mode</div>
-              <div className="text-[11px] text-stone-500">Larger touch targets (≥52px), simple itineraries, and minimal walking</div>
+              <div className="text-[11px] text-stone">Larger touch targets (≥52px), simple itineraries, and minimal walking</div>
             </div>
             <button
               onClick={() => setSeniorMode(!seniorMode)}
               className={`w-11 h-6 rounded-full transition-colors relative ${
-                seniorMode ? 'bg-[#9E4A0C]' : 'bg-stone-300'
+                seniorMode ? 'bg-[#9E4A0C]' : 'bg-surface border border-border'
               }`}
               aria-label="Toggle Senior Pilgrim Mode"
             >
               <span
-                className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${
+                className={`absolute top-1 left-1 bg-white dark:bg-stone-200 w-4 h-4 rounded-full transition-transform ${
                   seniorMode ? 'translate-x-5' : 'translate-x-0'
                 }`}
               />
@@ -312,18 +312,18 @@ export const SettingsPage: React.FC = () => {
       </section>
 
       {/* 5. Offline Pack Diagnostics */}
-      <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-3 shadow-sm text-xs">
+      <section className="bg-card border border-border rounded-2xl p-4 space-y-3 shadow-sm text-xs">
         <div className="flex items-center justify-between">
           <h3 className="font-heading text-sm font-bold text-ink flex items-center gap-1.5">
-            <Download size={16} className="text-[#9E4A0C]" />
+            <Download size={16} className="text-[#9E4A0C] dark:text-amber-400" />
             <span>Vector Map Pack v4.2 Storage</span>
           </h3>
-          <span className="px-2 py-0.5 rounded-full bg-[#15803D]/15 text-[#15803D] font-bold text-[10px]">
+          <span className="px-2 py-0.5 rounded-full bg-[#15803D]/15 text-[#15803D] dark:text-emerald-400 font-bold text-[10px]">
             Installed
           </span>
         </div>
 
-        <div className="p-3 bg-stone-50 border border-stone-200/70 rounded-xl space-y-1.5 text-stone-600 text-[11px]">
+        <div className="p-3 bg-surface border border-border rounded-xl space-y-1.5 text-stone text-[11px]">
           <div className="flex justify-between">
             <span>Vector Engine:</span>
             <strong className="text-ink">MapLibre GL Offline Tile Engine</strong>
@@ -343,7 +343,7 @@ export const SettingsPage: React.FC = () => {
         </div>
 
         {updateMsg && (
-          <div className="p-2 rounded-xl bg-[#FCEFE7] text-[#9E4A0C] font-semibold text-[11px] animate-in fade-in">
+          <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[#9E4A0C] dark:text-amber-400 font-semibold text-[11px] animate-in fade-in">
             {updateMsg}
           </div>
         )}
@@ -351,7 +351,7 @@ export const SettingsPage: React.FC = () => {
         <button
           onClick={handleUpdateCheck}
           disabled={isUpdating}
-          className="w-full py-2.5 rounded-xl border border-[#9E4A0C] text-[#9E4A0C] font-bold text-xs hover:bg-[#FCEFE7] transition-all flex items-center justify-center gap-1.5"
+          className="w-full py-2.5 rounded-xl border border-[#9E4A0C] text-[#9E4A0C] dark:text-amber-400 font-bold text-xs hover:bg-surface transition-all flex items-center justify-center gap-1.5"
         >
           <RotateCcw size={13} className={isUpdating ? 'animate-spin' : ''} />
           <span>{isUpdating ? 'Verifying...' : 'Check & Sync Latest Pack'}</span>
@@ -359,23 +359,23 @@ export const SettingsPage: React.FC = () => {
       </section>
 
       {/* 6. What Works Offline Capability Matrix */}
-      <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-2.5 shadow-sm text-xs">
+      <section className="bg-card border border-border rounded-2xl p-4 space-y-2.5 shadow-sm text-xs">
         <h3 className="font-heading text-sm font-bold text-ink flex items-center gap-1.5">
-          <Wifi size={16} className="text-[#9E4A0C]" />
+          <Wifi size={16} className="text-[#9E4A0C] dark:text-amber-400" />
           <span>Offline Guarantees & Features</span>
         </h3>
-        <div className="divide-y divide-stone-100">
+        <div className="divide-y divide-border">
           {capabilityMatrix.map((item) => (
             <div key={item.featureKey} className="py-2 flex items-start justify-between gap-3">
               <div>
                 <div className="font-semibold text-ink">{item.label}</div>
-                <div className="text-[11px] text-stone-500 mt-0.5">{item.notes}</div>
+                <div className="text-[11px] text-stone mt-0.5">{item.notes}</div>
               </div>
               <span
                 className={`px-2 py-0.5 rounded-full text-[10px] font-bold shrink-0 ${
                   item.capability === 'works_offline'
-                    ? 'bg-[#DCFCE7] text-[#15803D]'
-                    : 'bg-amber-100 text-amber-800'
+                    ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
+                    : 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
                 }`}
               >
                 {item.capability === 'works_offline' ? 'Offline OK' : 'Online Sync'}
@@ -386,61 +386,61 @@ export const SettingsPage: React.FC = () => {
       </section>
 
       {/* 7. Verification Audit & Corrections Log (SECURITY.md §10.3) */}
-      <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-2.5 shadow-sm text-xs">
+      <section className="bg-card border border-border rounded-2xl p-4 space-y-2.5 shadow-sm text-xs">
         <div
           onClick={() => setShowCorrections(!showCorrections)}
           className="flex items-center justify-between cursor-pointer select-none"
         >
           <h3 className="font-heading text-sm font-bold text-ink flex items-center gap-1.5">
-            <CheckCircle2 size={16} className="text-[#15803D]" />
+            <CheckCircle2 size={16} className="text-[#15803D] dark:text-emerald-400" />
             <span>Audit & Corrections Log (सत्यापन लॉग)</span>
           </h3>
-          <span className="text-[11px] font-bold text-[#9E4A0C]">
+          <span className="text-[11px] font-bold text-[#9E4A0C] dark:text-amber-400">
             {showCorrections ? 'Hide' : 'View (3 Verified)'}
           </span>
         </div>
 
         {showCorrections && (
-          <div className="pt-2 space-y-2 text-[11px] text-stone-600 animate-in fade-in">
-            <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200 space-y-1">
+          <div className="pt-2 space-y-2 text-[11px] text-stone animate-in fade-in">
+            <div className="p-2.5 rounded-xl bg-surface border border-border space-y-1">
               <div className="font-bold text-ink flex items-center justify-between">
                 <span>RTO Prepaid Taxi & Auto Notification</span>
-                <span className="text-emerald-700 font-semibold text-[10px]">17 Oct 2026</span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-semibold text-[10px]">17 Oct 2026</span>
               </div>
               <p>Tariffs from Platform 1 prepaid booth (Jammu Tawi to Katra ₹1,650; City Forts ₹250–₹350) audited by field desk.</p>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200 space-y-1">
+            <div className="p-2.5 rounded-xl bg-surface border border-border space-y-1">
               <div className="font-bold text-ink flex items-center justify-between">
                 <span>National Emergency 112 & Helpline Check</span>
-                <span className="text-emerald-700 font-semibold text-[10px]">17 Oct 2026</span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-semibold text-[10px]">17 Oct 2026</span>
               </div>
               <p>ERSS 112, Police 100, Ambulance 108, Tourist Helpline 1363 verified two-person signed protocol.</p>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200 space-y-1">
+            <div className="p-2.5 rounded-xl bg-surface border border-border space-y-1">
               <div className="font-bold text-ink flex items-center justify-between">
                 <span>Shrine Board RFID & Katra Corridor</span>
-                <span className="text-emerald-700 font-semibold text-[10px]">17 Oct 2026</span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-semibold text-[10px]">17 Oct 2026</span>
               </div>
               <p>Yatra Registration RFID card checkpoint operational timings confirmed with SMVD Shrine Board desk.</p>
             </div>
 
-            <p className="text-[10px] text-stone-500 italic pt-1">
-              Noticed a discrepancy or outdated tariff? Email <a href="mailto:corrections@jammukhoj.in" className="text-[#9E4A0C] font-bold underline">corrections@jammukhoj.in</a> for rapid audit patch.
+            <p className="text-[10px] text-stone italic pt-1">
+              Noticed a discrepancy or outdated tariff? Email <a href="mailto:corrections@jammukhoj.in" className="text-[#9E4A0C] dark:text-amber-400 font-bold underline">corrections@jammukhoj.in</a> for rapid audit patch.
             </p>
           </div>
         )}
       </section>
 
       {/* 7.5 Global & Indian City Tourism Benchmark Hub */}
-      <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-3 shadow-sm text-xs text-stone-600">
+      <section className="bg-card border border-border rounded-2xl p-4 space-y-3 shadow-sm text-xs text-stone">
         <div className="flex items-center justify-between">
           <h3 className="font-heading font-bold text-sm text-ink flex items-center gap-1.5">
-            <Globe size={16} className="text-[#9E4A0C]" />
+            <Globe size={16} className="text-[#9E4A0C] dark:text-amber-400" />
             <span>Global & Indian City Analysis Hub</span>
           </h3>
-          <span className="text-[10px] bg-amber-50 text-amber-800 font-bold px-2 py-0.5 rounded-full border border-amber-200">
+          <span className="text-[10px] bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 font-bold px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
             20 World Cities
           </span>
         </div>
@@ -459,13 +459,13 @@ export const SettingsPage: React.FC = () => {
       </section>
 
       {/* 8. Storage Quota & Local Audit Logging */}
-      <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-3 shadow-sm text-xs text-stone-600">
+      <section className="bg-card border border-border rounded-2xl p-4 space-y-3 shadow-sm text-xs text-stone">
         <div className="flex items-center justify-between">
           <h3 className="font-heading font-bold text-sm text-ink flex items-center gap-1.5">
-            <HardDrive size={16} className="text-[#9E4A0C]" />
+            <HardDrive size={16} className="text-[#9E4A0C] dark:text-amber-400" />
             <span>Local Device Storage & Audit Logs</span>
           </h3>
-          <span className="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded-full border border-blue-200">
+          <span className="text-[10px] bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-bold px-2 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
             {storageUsageMb} MB Used
           </span>
         </div>
@@ -477,7 +477,7 @@ export const SettingsPage: React.FC = () => {
         <div className="pt-1 flex gap-2">
           <button
             onClick={() => setShowLogsModal(true)}
-            className="flex-1 py-2 px-3 rounded-xl border border-stone-300 hover:border-forest-700 text-ink font-bold text-xs bg-stone-50 hover:bg-stone-100 transition-all flex items-center justify-center gap-1.5"
+            className="flex-1 py-2 px-3 rounded-xl border border-border text-ink font-bold text-xs bg-surface hover:bg-surface/80 transition-all flex items-center justify-center gap-1.5"
           >
             <span>Inspect Diagnostic Logs ({recentLogs.length})</span>
           </button>
@@ -485,13 +485,13 @@ export const SettingsPage: React.FC = () => {
       </section>
 
       {/* 9. Privacy & Google Play Compliance */}
-      <section className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-3 shadow-sm text-xs text-stone-600">
+      <section className="bg-card border border-border rounded-2xl p-4 space-y-3 shadow-sm text-xs text-stone">
         <div className="flex items-center justify-between">
           <h3 className="font-heading font-bold text-sm text-ink flex items-center gap-1.5">
-            <ShieldCheck size={16} className="text-[#15803D]" />
+            <ShieldCheck size={16} className="text-[#15803D] dark:text-emerald-400" />
             <span>Google Play Data Safety & Privacy</span>
           </h3>
-          <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+          <span className="text-[10px] bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
             Play Store Compliant
           </span>
         </div>
@@ -509,13 +509,13 @@ export const SettingsPage: React.FC = () => {
           </button>
           <button
             onClick={() => navigate('/privacy')}
-            className="py-2.5 px-3 rounded-xl border border-[#9E4A0C] text-[#9E4A0C] font-bold text-xs hover:bg-[#FCEFE7] transition-all text-center"
+            className="py-2.5 px-3 rounded-xl border border-[#9E4A0C] text-[#9E4A0C] dark:text-amber-400 font-bold text-xs hover:bg-surface transition-all text-center"
           >
             Privacy Policy
           </button>
           <button
             onClick={() => setShowTermsModal(true)}
-            className="py-2.5 px-3 rounded-xl border border-stone-300 text-stone-700 font-bold text-xs hover:bg-stone-50 transition-all text-center"
+            className="py-2.5 px-3 rounded-xl border border-border text-stone font-bold text-xs hover:bg-surface transition-all text-center"
           >
             Terms of Use
           </button>
@@ -536,17 +536,17 @@ export const SettingsPage: React.FC = () => {
       {/* Clear Confirm Modal */}
       {showClearModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-white border border-[#EBE4DC] rounded-3xl p-5 max-w-sm w-full space-y-3 shadow-2xl">
+          <div className="bg-card border border-border rounded-3xl p-5 max-w-sm w-full space-y-3 shadow-2xl text-ink">
             <h4 className="font-heading text-base font-bold text-ink">
               Delete Account & Reset Database?
             </h4>
-            <p className="text-xs text-stone-600 leading-relaxed">
+            <p className="text-xs text-stone leading-relaxed">
               In accordance with Google Play Store User Data policy, this permanently deletes your profile, cached attractions, custom preferences, and saved itineraries from this device.
             </p>
             <div className="flex gap-2 pt-2">
               <button
                 onClick={() => setShowClearModal(false)}
-                className="flex-1 py-2 rounded-xl border border-stone-300 text-xs font-semibold hover:bg-stone-50"
+                className="flex-1 py-2 rounded-xl border border-border text-stone hover:text-ink text-xs font-semibold hover:bg-surface"
               >
                 Cancel
               </button>
@@ -564,7 +564,7 @@ export const SettingsPage: React.FC = () => {
       {/* Diagnostic Logs Inspection Modal */}
       {showLogsModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-white dark:bg-stone-900 border border-[#EBE4DC] dark:border-stone-800 rounded-3xl p-5 max-w-md w-full space-y-3 shadow-2xl max-h-[80vh] flex flex-col">
+          <div className="bg-card border border-border rounded-3xl p-5 max-w-md w-full space-y-3 shadow-2xl max-h-[80vh] flex flex-col text-ink">
             <div className="flex items-center justify-between pb-2 border-b border-border">
               <h4 className="font-heading text-base font-bold text-ink">
                 Device Diagnostic Logs ({recentLogs.length})
@@ -590,17 +590,17 @@ export const SettingsPage: React.FC = () => {
                     key={log.id || idx}
                     className={`p-2 rounded-lg border ${
                       log.level === 'error'
-                        ? 'bg-red-50 border-red-200 text-red-900'
+                        ? 'bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400'
                         : log.level === 'warn'
-                        ? 'bg-amber-50 border-amber-200 text-amber-900'
-                        : 'bg-stone-50 border-stone-200 text-stone-800'
+                        ? 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-400'
+                        : 'bg-surface border-border text-stone'
                     }`}
                   >
                     <div className="flex items-center justify-between text-[10px] opacity-75">
                       <span className="font-bold uppercase">[{log.level}] {log.category}</span>
                       <span>{new Date(log.timestamp).toLocaleTimeString()}</span>
                     </div>
-                    <div className="mt-1 font-semibold">{log.message}</div>
+                    <div className="mt-1 font-semibold text-ink">{log.message}</div>
                     {log.data && <div className="mt-0.5 opacity-70 truncate">{log.data}</div>}
                   </div>
                 ))
@@ -613,7 +613,7 @@ export const SettingsPage: React.FC = () => {
                   await logger.clearLogs();
                   setRecentLogs([]);
                 }}
-                className="flex-1 py-2 rounded-xl border border-stone-300 text-xs font-semibold hover:bg-stone-50"
+                className="flex-1 py-2 rounded-xl border border-border text-stone hover:text-ink text-xs font-semibold hover:bg-surface"
               >
                 Clear Log Buffer
               </button>

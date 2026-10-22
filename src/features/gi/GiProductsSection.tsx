@@ -97,7 +97,7 @@ export const GiProductsSection: React.FC<GiProductsSectionProps> = ({
 
                 {/* Top Badge */}
                 <div className="absolute top-2.5 left-2.5">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-[#F3C969] text-[#1C2923] shadow-xs">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-[#F3C969] dark:bg-amber-400 text-[#1C2923] dark:text-stone-950 shadow-xs">
                     <ShieldCheck size={10} /> {prod.giStatus}
                   </span>
                 </div>
@@ -105,7 +105,7 @@ export const GiProductsSection: React.FC<GiProductsSectionProps> = ({
                 {/* Bottom Overlay Title on Image */}
                 <div className="absolute bottom-2 left-2.5 right-2.5 text-white">
                   <div className="text-[10px] text-white/80 flex items-center gap-1">
-                    <MapPin size={10} className="text-[#F3C969]" />
+                    <MapPin size={10} className="text-[#F3C969] dark:text-amber-300" />
                     <span className="truncate">{prod.district}</span>
                   </div>
                   <h3 className="font-heading font-bold text-sm leading-tight truncate">

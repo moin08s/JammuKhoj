@@ -49,51 +49,51 @@ export const EmergencySosModal: React.FC<EmergencySosModalProps> = ({ isOpen, on
 
   return (
     <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in select-none">
-      <div className="bg-white border-2 border-red-500 rounded-3xl p-5 max-w-sm w-full space-y-4 shadow-2xl animate-in zoom-in-95">
+      <div className="bg-card border-2 border-red-500 rounded-3xl p-5 max-w-sm w-full space-y-4 shadow-2xl animate-in zoom-in-95 text-ink">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-red-100 pb-3">
+        <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center animate-pulse">
+            <div className="w-10 h-10 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center animate-pulse">
               <ShieldAlert size={22} />
             </div>
             <div>
-              <h3 className="font-heading font-black text-base text-red-700 leading-tight">
+              <h3 className="font-heading font-black text-base text-red-600 dark:text-red-400 leading-tight">
                 Emergency Pilgrim SOS
               </h3>
-              <p className="text-[11px] text-stone-500 font-semibold">100% Offline GPS Broadcast</p>
+              <p className="text-[11px] text-stone font-semibold">100% Offline GPS Broadcast</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1 rounded-full text-stone-400 hover:bg-stone-100">
+          <button onClick={onClose} className="p-1 rounded-full text-stone hover:bg-surface">
             <X size={18} />
           </button>
         </div>
 
         {/* Live GPS Coordinates Box */}
-        <div className="p-3 bg-red-50/70 border border-red-200 rounded-2xl space-y-1.5">
-          <div className="flex items-center justify-between text-xs font-bold text-red-900">
+        <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-2xl space-y-1.5">
+          <div className="flex items-center justify-between text-xs font-bold text-red-900 dark:text-red-300">
             <span className="flex items-center gap-1">
-              <MapPin size={14} className="text-red-600" />
+              <MapPin size={14} className="text-red-600 dark:text-red-400" />
               <span>Current GPS Fix:</span>
             </span>
-            <span className="text-[10px] bg-red-200 text-red-800 px-2 py-0.5 rounded-full font-mono">
+            <span className="text-[10px] bg-red-500/20 text-red-800 dark:text-red-300 px-2 py-0.5 rounded-full font-mono">
               OFFLINE READY
             </span>
           </div>
 
-          <div className="font-mono text-xs font-bold text-ink bg-white p-2 rounded-xl border border-red-100 flex items-center justify-between">
+          <div className="font-mono text-xs font-bold text-ink bg-surface p-2 rounded-xl border border-border flex items-center justify-between">
             <span>
               {latStr}° N, {lngStr}° E
             </span>
             <button
               onClick={handleCopy}
-              className="text-[11px] text-stone-600 hover:text-red-600 flex items-center gap-1"
+              className="text-[11px] text-stone hover:text-red-600 flex items-center gap-1"
               title="Copy Coordinates"
             >
-              {copied ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
+              {copied ? <Check size={13} className="text-emerald-500" /> : <Copy size={13} />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
             </button>
           </div>
-          <p className="text-[10px] text-stone-600 leading-tight">
+          <p className="text-[10px] text-stone leading-tight">
             Nearest Landmark: Jammu Tawi Central Corridor (Zone 1)
           </p>
         </div>
@@ -120,21 +120,21 @@ export const EmergencySosModal: React.FC<EmergencySosModalProps> = ({ isOpen, on
         </div>
 
         {/* Secondary Helplines Grid */}
-        <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-stone-100">
+        <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border">
           <a
             href="tel:01991232029"
-            className="p-2 rounded-xl bg-stone-50 border border-stone-200 text-center hover:bg-stone-100 transition-colors"
+            className="p-2 rounded-xl bg-surface border border-border text-center hover:bg-surface/80 transition-colors"
           >
             <div className="font-bold text-ink text-[11px]">Katra Yatra Helpline</div>
-            <div className="text-[10px] text-stone-500 font-mono">01991-232029</div>
+            <div className="text-[10px] text-stone font-mono">01991-232029</div>
           </a>
 
           <a
             href="tel:01912459048"
-            className="p-2 rounded-xl bg-stone-50 border border-stone-200 text-center hover:bg-stone-100 transition-colors"
+            className="p-2 rounded-xl bg-surface border border-border text-center hover:bg-surface/80 transition-colors"
           >
             <div className="font-bold text-ink text-[11px]">Jammu Traffic Police</div>
-            <div className="text-[10px] text-stone-500 font-mono">0191-2459048</div>
+            <div className="text-[10px] text-stone font-mono">0191-2459048</div>
           </a>
         </div>
       </div>

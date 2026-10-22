@@ -310,8 +310,8 @@ export const ExplorePage: React.FC = () => {
             onClick={() => setSeniorFriendlyOnly(!seniorFriendlyOnly)}
             className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold border transition-all ${
               seniorFriendlyOnly
-                ? 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs font-bold'
-                : 'bg-white text-stone border-border hover:border-primary/40'
+                ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-800 shadow-2xs font-bold'
+                : 'bg-card text-stone border-border hover:border-primary/40 hover:text-ink'
             }`}
             title="Show destinations with low walking or senior-friendly access"
           >
@@ -322,8 +322,8 @@ export const ExplorePage: React.FC = () => {
             onClick={() => setFreeEntryOnly(!freeEntryOnly)}
             className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold border transition-all ${
               freeEntryOnly
-                ? 'bg-emerald-100 text-emerald-900 border-emerald-300 shadow-2xs font-bold'
-                : 'bg-white text-stone border-border hover:border-primary/40'
+                ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 shadow-2xs font-bold'
+                : 'bg-card text-stone border-border hover:border-primary/40 hover:text-ink'
             }`}
             title="Show free entry destinations"
           >

@@ -91,7 +91,7 @@ export const PermissionRequestModal: React.FC<PermissionRequestModalProps> = ({
           <div className="w-12 h-12 rounded-2xl bg-[#174D3C] text-white flex items-center justify-center mx-auto shadow-md shadow-[#174D3C]/25">
             <ShieldCheck size={26} />
           </div>
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#F3C969] text-[#1C2923]">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#F3C969] dark:bg-amber-400 text-[#1C2923] dark:text-stone-950">
             <Sparkles size={11} /> Device & Privacy Setup
           </span>
           <h2 className="font-heading text-xl font-bold text-ink">

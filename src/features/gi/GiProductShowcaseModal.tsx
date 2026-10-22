@@ -53,7 +53,7 @@ export const GiProductShowcaseModal: React.FC<GiProductShowcaseModalProps> = ({
 
           <div className="absolute bottom-3 left-4 right-4 text-white space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#F3C969] text-[#1C2923] shadow-xs">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#F3C969] dark:bg-amber-400 text-[#1C2923] dark:text-stone-950 shadow-xs">
                 <ShieldCheck size={12} /> {product.giStatus}
               </span>
               {product.giApplicationNo && (

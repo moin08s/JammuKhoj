@@ -183,7 +183,7 @@ export const TravelloStories: React.FC = () => {
               {/* Timed Progress Bar */}
               <div className="w-full h-1 bg-white/30 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-white rounded-full transition-all duration-100 ease-linear"
+                  className="h-full bg-white dark:bg-white rounded-full transition-all duration-100 ease-linear"
                   style={{ width: `${progress}%` }}
                 />
               </div>

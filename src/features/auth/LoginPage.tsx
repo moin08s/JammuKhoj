@@ -141,7 +141,7 @@ export const LoginPage: React.FC = () => {
               </div>
             )}
             {currentUser.authProvider === 'google' && (
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white shadow-md border border-slate-200 flex items-center justify-center">
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-card shadow-md border border-border flex items-center justify-center">
                 <GoogleIcon size={14} />
               </div>
             )}
@@ -157,7 +157,7 @@ export const LoginPage: React.FC = () => {
             <p className="text-xs text-stone flex items-center justify-center gap-1.5 mt-0.5">
               <span>{currentUser.email}</span>
               {currentUser.authProvider === 'google' && (
-                <span className="text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded font-semibold border border-blue-200">
+                <span className="text-[10px] text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.2 rounded font-semibold border border-blue-200 dark:border-blue-800">
                   Gmail Verified
                 </span>
               )}

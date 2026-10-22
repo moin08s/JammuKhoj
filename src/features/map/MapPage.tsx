@@ -743,9 +743,9 @@ export const MapPage: React.FC = () => {
         </div>
 
         {/* Search Bar Input */}
-        <div className="pointer-events-auto bg-white rounded-full shadow-md border border-[#E7E5E4] px-3 py-2 flex items-center justify-between text-xs text-[#78716C]">
+        <div className="pointer-events-auto bg-card rounded-full shadow-md border border-border px-3 py-2 flex items-center justify-between text-xs text-stone">
           <div className="flex items-center gap-2 flex-1">
-            <Search size={15} className="text-[#78716C]" />
+            <Search size={15} className="text-stone" />
             <input
               type="text"
               value={searchQuery}
@@ -755,13 +755,13 @@ export const MapPage: React.FC = () => {
                 setShowSearchDropdown(true);
               }}
               placeholder="Search map (35+ spots offline)"
-              className="w-full bg-transparent outline-none text-xs text-[#1C1917] placeholder:text-[#78716C]"
+              className="w-full bg-transparent outline-none text-xs text-ink placeholder:text-stone"
             />
           </div>
 
           <button
             onClick={() => setIsListView(!isListView)}
-            className="w-7 h-7 rounded-full bg-[#F5F5F4] flex items-center justify-center text-[#78716C] hover:text-[#9E4A0C]"
+            className="w-7 h-7 rounded-full bg-surface flex items-center justify-center text-stone hover:text-[#9E4A0C] dark:hover:text-amber-400"
             title={isListView ? 'Switch to Map' : 'Switch to List'}
           >
             <SlidersHorizontal size={13} />
@@ -1006,15 +1006,15 @@ export const MapPage: React.FC = () => {
 
       {/* Interactive Bottom Sheet (Matching Stitch Screen 3) */}
       {selectedPoi && (
-        <div className="absolute bottom-16 left-2 right-2 z-40 bg-white/95 backdrop-blur-md border border-[#E7E5E4] rounded-3xl p-3.5 shadow-2xl animate-in slide-in-from-bottom-6 max-w-lg mx-auto space-y-2.5">
+        <div className="absolute bottom-16 left-2 right-2 z-40 bg-card/95 backdrop-blur-md border border-border rounded-3xl p-3.5 shadow-2xl animate-in slide-in-from-bottom-6 max-w-lg mx-auto space-y-2.5 text-ink">
           {/* Drag Handle */}
-          <div className="w-10 h-1 bg-[#D6D3D1] rounded-full mx-auto mb-1" />
+          <div className="w-10 h-1 bg-border rounded-full mx-auto mb-1" />
 
           {selectedPoi.type === 'attraction' ? (
             <div className="space-y-2.5">
               <div className="flex items-start gap-3">
                 {/* Left Thumbnail with photo badge */}
-                <div className="relative w-20 h-20 rounded-2xl overflow-hidden shrink-0 bg-[#F5F5F4]">
+                <div className="relative w-20 h-20 rounded-2xl overflow-hidden shrink-0 bg-surface">
                   <img
                     src={getSpotImage(selectedPoi.data.id, selectedPoi.data.type)}
                     alt={selectedPoi.data.name?.en}
@@ -1032,30 +1032,30 @@ export const MapPage: React.FC = () => {
                 {/* Right Details */}
                 <div className="min-w-0 flex-1 space-y-0.5">
                   <div className="flex items-center justify-between">
-                    <span className="px-2 py-0.2 rounded-full bg-[#FFF1F2] text-[#B91C1C] text-[9px] font-bold uppercase tracking-wider">
+                    <span className="px-2 py-0.2 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 text-[9px] font-bold uppercase tracking-wider">
                       Dogra Heritage • 1860 AD
                     </span>
-                    <span className="text-[11px] font-bold text-[#1C1917] flex items-center gap-0.5">
+                    <span className="text-[11px] font-bold text-ink flex items-center gap-0.5">
                       <Star size={11} className="text-amber-500 fill-amber-500" />
                       <span>4.8 (2.4k)</span>
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-extrabold text-base text-[#1C1917] truncate leading-tight">
+                  <h3 className="font-heading font-extrabold text-base text-ink truncate leading-tight">
                     {selectedPoi.data.name?.en}
                   </h3>
-                  <div className="text-[11px] text-[#78716C] truncate">
+                  <div className="text-[11px] text-stone truncate">
                     {selectedPoi.data.name?.hi} • Heart of Jammu Old City
                   </div>
 
-                  <div className="flex items-center gap-2 text-[11px] text-[#44403C] font-semibold pt-0.5">
-                    <span className="flex items-center gap-1 text-[#9E4A0C]">
+                  <div className="flex items-center gap-2 text-[11px] text-stone font-semibold pt-0.5">
+                    <span className="flex items-center gap-1 text-[#9E4A0C] dark:text-amber-400">
                       <Navigation size={11} />
                       <span>1.8 km (approx 7 min)</span>
                     </span>
                   </div>
 
-                  <div className="text-[11px] text-[#059669] font-bold flex items-center gap-1">
+                  <div className="text-[11px] text-[#059669] dark:text-emerald-400 font-bold flex items-center gap-1">
                     <Clock size={11} />
                     <span>Open • Closes 9:00 PM</span>
                   </div>
@@ -1063,14 +1063,14 @@ export const MapPage: React.FC = () => {
 
                 <button
                   onClick={() => setSelectedPoi(null)}
-                  className="w-7 h-7 rounded-full bg-[#F5F5F4] text-[#78716C] hover:text-[#1C1917] flex items-center justify-center shrink-0"
+                  className="w-7 h-7 rounded-full bg-surface text-stone hover:text-ink flex items-center justify-center shrink-0"
                 >
                   <X size={14} />
                 </button>
               </div>
 
               {/* Free Entry Check Tag */}
-              <div className="flex items-center gap-1.5 text-[11px] text-[#15803D] bg-[#F0FDF4] p-2 rounded-xl border border-[#DCFCE7]">
+              <div className="flex items-center gap-1.5 text-[11px] text-[#15803D] dark:text-emerald-400 bg-emerald-500/10 p-2 rounded-xl border border-emerald-500/20">
                 <CheckCircle2 size={13} className="shrink-0" />
                 <span className="truncate">Free Entry • Shoe Locker & Pilgrim Counter available</span>
               </div>
@@ -1091,7 +1091,7 @@ export const MapPage: React.FC = () => {
 
                 <button
                   onClick={() => navigate(`/explore/${selectedPoi.data.id}`)}
-                  className="py-2.5 px-3.5 rounded-xl border border-[#E7E5E4] text-[#1C1917] text-xs font-bold hover:bg-[#F5F5F4] flex items-center gap-1.5 transition-colors"
+                  className="py-2.5 px-3.5 rounded-xl border border-border text-ink text-xs font-bold hover:bg-surface flex items-center gap-1.5 transition-colors"
                 >
                   <span>🎧 Audio</span>
                 </button>
@@ -1100,7 +1100,7 @@ export const MapPage: React.FC = () => {
                   onClick={() => {
                     toggleFavorite(selectedPoi.data.id);
                   }}
-                  className="w-10 h-10 rounded-xl bg-[#F5F5F4] border border-[#E7E5E4] text-[#44403C] hover:text-[#9E4A0C] flex items-center justify-center transition-colors shrink-0"
+                  className="w-10 h-10 rounded-xl bg-surface border border-border text-stone hover:text-[#9E4A0C] dark:hover:text-amber-400 flex items-center justify-center transition-colors shrink-0"
                   title="Bookmark"
                 >
                   <Bookmark
@@ -1112,18 +1112,18 @@ export const MapPage: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-2">
-              <div className="flex items-start justify-between gap-3 border-b border-[#F0F0F0] pb-2">
+              <div className="flex items-start justify-between gap-3 border-b border-border pb-2">
                 <div>
-                  <h4 className="font-heading font-bold text-base text-[#1C1917]">
+                  <h4 className="font-heading font-bold text-base text-ink">
                     {selectedPoi.data.name?.en || selectedPoi.data.name}
                   </h4>
-                  <div className="text-xs text-[#78716C] capitalize">
+                  <div className="text-xs text-stone capitalize">
                     {selectedPoi.type === 'departure' ? '🚆 Transit Departure Hub' : '🏥 Emergency Point'}
                   </div>
                 </div>
                 <button
                   onClick={() => setSelectedPoi(null)}
-                  className="p-1.5 rounded-full bg-[#F5F5F4] text-[#78716C] hover:text-[#1C1917]"
+                  className="p-1.5 rounded-full bg-surface text-stone hover:text-ink"
                 >
                   <X size={15} />
                 </button>

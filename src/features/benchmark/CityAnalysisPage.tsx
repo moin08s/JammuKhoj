@@ -417,13 +417,13 @@ export const CityAnalysisPage: React.FC = () => {
             <div
               key={idx}
               onClick={() => setSelectedCity(isSelected ? null : city)}
-              className={`bg-white border rounded-2xl overflow-hidden shadow-xs cursor-pointer transition-all ${
-                isSelected ? 'border-[#9E4A0C] ring-2 ring-[#9E4A0C]/15' : 'border-[#EBE4DC] hover:border-stone-300'
+              className={`bg-card border rounded-2xl overflow-hidden shadow-xs cursor-pointer transition-all ${
+                isSelected ? 'border-[#9E4A0C] ring-2 ring-[#9E4A0C]/15' : 'border-border hover:border-border/80'
               }`}
             >
               <div className="p-3.5 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-stone-100 border border-stone-200 flex items-center justify-center text-xl shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center text-xl shrink-0">
                     {city.flag}
                   </div>
 
@@ -432,18 +432,18 @@ export const CityAnalysisPage: React.FC = () => {
                       <span className="font-heading font-bold text-sm text-ink truncate">
                         {city.name}
                       </span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-stone-100 text-stone-600 font-medium">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-surface text-stone border border-border font-medium">
                         {city.country}
                       </span>
                     </div>
-                    <div className="text-[11px] text-stone-500 truncate">
+                    <div className="text-[11px] text-stone truncate">
                       {city.keyInnovation}
                     </div>
                   </div>
                 </div>
 
                 <div className="text-right shrink-0">
-                  <div className="text-xs font-black text-[#9E4A0C]">
+                  <div className="text-xs font-black text-[#9E4A0C] dark:text-amber-400">
                     {Math.round(
                       (city.walkabilityScore +
                         city.transitClarityScore +
@@ -454,12 +454,12 @@ export const CityAnalysisPage: React.FC = () => {
                     )}
                     /100
                   </div>
-                  <div className="text-[10px] text-stone-400">Overall Index</div>
+                  <div className="text-[10px] text-stone">Overall Index</div>
                 </div>
               </div>
 
               {isSelected && (
-                <div className="p-3.5 pt-0 border-t border-[#F1E9E0] bg-stone-50/50 space-y-3 text-xs animate-in fade-in">
+                <div className="p-3.5 pt-0 border-t border-border bg-surface/50 space-y-3 text-xs animate-in fade-in">
                   {/* Scores Metrics Bar */}
                   <div className="space-y-2 pt-2">
                     <div className="text-[11px] font-bold text-ink uppercase tracking-wider text-stone-500">
@@ -522,7 +522,7 @@ export const CityAnalysisPage: React.FC = () => {
                   </div>
 
                   {/* Top Benchmark App */}
-                  <div className="p-2.5 rounded-xl bg-white border border-[#EBE4DC] space-y-1">
+                  <div className="p-2.5 rounded-xl bg-card border border-border space-y-1 text-ink">
                     <div className="text-[11px]">
                       <strong>Benchmark App:</strong> {city.topAppBenchmark}
                     </div>
@@ -532,9 +532,9 @@ export const CityAnalysisPage: React.FC = () => {
                   </div>
 
                   {/* JammuKhoj Integration Strategy */}
-                  <div className="p-2.5 rounded-xl bg-[#FAF6F0] border border-[#F3D7C5] text-[11px] text-[#9E4A0C] space-y-0.5">
+                  <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-[#9E4A0C] dark:text-amber-400 space-y-0.5">
                     <strong>JammuKhoj Integration:</strong>
-                    <p className="text-stone-700">{city.jammuKhojAdoption}</p>
+                    <p className="text-stone">{city.jammuKhojAdoption}</p>
                   </div>
                 </div>
               )}

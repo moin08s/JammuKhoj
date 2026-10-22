@@ -52,7 +52,7 @@ export const LocalTipsCard: React.FC<LocalTipsProps> = ({ attraction }) => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-amber-50/70 via-white to-amber-50/30 rounded-3xl p-4 border border-amber-200/80 shadow-xs space-y-3">
+    <div className="bg-gradient-to-br from-amber-50/70 via-white to-amber-50/30 dark:from-stone-900 dark:via-stone-900/90 dark:to-stone-850 rounded-3xl p-4 border border-amber-200/80 dark:border-border shadow-xs space-y-3 text-ink">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-xs">
@@ -60,35 +60,35 @@ export const LocalTipsCard: React.FC<LocalTipsProps> = ({ attraction }) => {
           </div>
           <div>
             <h3 className="font-serif font-bold text-ink text-sm">Tips from Local Dogra Residents</h3>
-            <p className="text-[11px] text-slate-500">Unspoken local advice & insider navigation</p>
+            <p className="text-[11px] text-stone">Unspoken local advice & insider navigation</p>
           </div>
         </div>
 
-        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold flex items-center gap-1">
-          <ShieldCheck className="w-3 h-3 text-emerald-600" />
+        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-semibold flex items-center gap-1">
+          <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
           Verified Oct 2026
         </span>
       </div>
 
-      <ul className="space-y-2 text-xs text-slate-700">
+      <ul className="space-y-2 text-xs text-ink">
         {tips.map((tip, idx) => (
-          <li key={idx} className="flex items-start gap-2 bg-white/80 p-2.5 rounded-xl border border-amber-100">
-            <span className="text-amber-600 font-bold shrink-0 mt-0.5">•</span>
+          <li key={idx} className="flex items-start gap-2 bg-card p-2.5 rounded-xl border border-border">
+            <span className="text-amber-600 dark:text-amber-400 font-bold shrink-0 mt-0.5">•</span>
             <span className="leading-relaxed">{tip}</span>
           </li>
         ))}
       </ul>
 
       {/* Nearby Food Tip */}
-      <div className="p-3 rounded-2xl bg-white border border-amber-200/70 text-xs flex items-start gap-2.5">
-        <div className="w-7 h-7 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center shrink-0 mt-0.5">
+      <div className="p-3 rounded-2xl bg-card border border-border text-xs flex items-start gap-2.5">
+        <div className="w-7 h-7 rounded-lg bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 flex items-center justify-center shrink-0 mt-0.5">
           <Utensils className="w-3.5 h-3.5" />
         </div>
         <div>
-          <div className="font-bold text-slate-800 text-[11px] uppercase tracking-wider text-orange-950">
+          <div className="font-bold text-[11px] uppercase tracking-wider text-orange-950 dark:text-amber-400">
             Recommended Nearby Food Spot
           </div>
-          <p className="text-slate-600 mt-0.5 leading-relaxed text-[11px]">
+          <p className="text-stone mt-0.5 leading-relaxed text-[11px]">
             {nearbyFood}
           </p>
         </div>

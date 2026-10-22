@@ -796,7 +796,7 @@ export const HomePage: React.FC = () => {
           <div className="pt-1 flex items-center gap-3">
             <button
               type="button"
-              className="px-4 py-2 rounded-xl bg-white text-amber-950 font-bold text-xs shadow-sm hover:bg-amber-100 transition-colors flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl bg-white dark:bg-amber-100 text-amber-950 font-bold text-xs shadow-sm hover:bg-amber-100 dark:hover:bg-white transition-colors flex items-center gap-1.5"
             >
               <span>Open Complete Yatra Portal</span>
               <ArrowRight size={14} />
@@ -1373,18 +1373,18 @@ export const HomePage: React.FC = () => {
         {/* Spiritual Etiquette Card */}
         <div
           onClick={() => setShowSpiritualModal(true)}
-          className="p-3.5 rounded-2xl bg-gradient-to-br from-[#FFF9F3] to-[#FCEFE7] border border-[#F3D7C5] text-ink cursor-pointer hover:border-[#9E4A0C] transition-all apple-press shadow-xs flex flex-col justify-between"
+          className="p-3.5 rounded-2xl bg-gradient-to-br from-[#FFF9F3] to-[#FCEFE7] dark:from-stone-900 dark:to-stone-850 border border-[#F3D7C5] dark:border-stone-800 text-ink cursor-pointer hover:border-[#9E4A0C] dark:hover:border-amber-500/50 transition-all apple-press shadow-xs flex flex-col justify-between"
         >
           <div className="space-y-1.5">
             <div className="w-8 h-8 rounded-xl bg-amber-600 text-white flex items-center justify-center">
               <Flower2 size={16} />
             </div>
-            <h4 className="font-heading font-bold text-sm text-ink">Temple & Darshan Rules</h4>
-            <p className="text-[11px] text-stone-600 leading-snug">
+            <h4 className="font-heading font-bold text-sm text-ink dark:text-white">Temple & Darshan Rules</h4>
+            <p className="text-[11px] text-stone-600 dark:text-stone-300 leading-snug">
               Official dress codes, shoe lockers, aarti timings, and mobile scanning rules for top temples.
             </p>
           </div>
-          <div className="pt-2 text-xs font-bold text-[#9E4A0C] flex items-center gap-1">
+          <div className="pt-2 text-xs font-bold text-[#9E4A0C] dark:text-amber-400 flex items-center gap-1">
             <span>View shrine guide</span>
             <ArrowRight size={13} />
           </div>

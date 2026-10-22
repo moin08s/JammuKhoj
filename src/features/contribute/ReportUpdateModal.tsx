@@ -48,12 +48,12 @@ export const ReportUpdateModal: React.FC<ReportUpdateModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div 
-        className="bg-white rounded-3xl max-w-md w-full p-5 shadow-2xl border border-slate-100 space-y-4"
+        className="bg-card rounded-3xl max-w-md w-full p-5 shadow-2xl border border-border space-y-4 text-ink"
         role="dialog"
         aria-modal="true"
         aria-labelledby="report-modal-title"
       >
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
               <Edit3 className="w-4 h-4" />
@@ -62,7 +62,7 @@ export const ReportUpdateModal: React.FC<ReportUpdateModalProps> = ({
               <h3 id="report-modal-title" className="font-serif font-bold text-sm text-ink">
                 Suggest Correction or Update
               </h3>
-              <p className="text-[11px] text-slate-500 truncate max-w-[220px]">
+              <p className="text-[11px] text-stone truncate max-w-[220px]">
                 {spotName}
               </p>
             </div>
@@ -71,7 +71,7 @@ export const ReportUpdateModal: React.FC<ReportUpdateModalProps> = ({
           <button
             onClick={onClose}
             aria-label="Close modal"
-            className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-full text-stone hover:text-ink hover:bg-surface transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -79,18 +79,18 @@ export const ReportUpdateModal: React.FC<ReportUpdateModalProps> = ({
 
         {submitted ? (
           <div className="py-8 text-center space-y-2 animate-in fade-in">
-            <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <h4 className="font-serif font-bold text-base text-ink">Thank you, Yatri!</h4>
-            <p className="text-xs text-slate-500 max-w-xs mx-auto">
+            <p className="text-xs text-stone max-w-xs mx-auto">
               Your suggestion has been logged for our local Jammu research team to verify and update in the next offline data bundle.
             </p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
             <div className="space-y-1.5">
-              <label className="font-semibold text-slate-700">What needs an update?</label>
+              <label className="font-semibold text-stone">What needs an update?</label>
               <div className="grid grid-cols-2 gap-1.5">
                 {[
                   { id: 'fare', label: 'Tariff / Fare', icon: BadgeIndianRupee },
@@ -108,7 +108,7 @@ export const ReportUpdateModal: React.FC<ReportUpdateModalProps> = ({
                       className={`p-2 rounded-xl border flex items-center gap-2 font-medium transition-all ${
                         isSelected
                           ? 'bg-primary-soft text-primary border-primary font-bold shadow-2xs'
-                          : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                          : 'bg-surface text-stone border-border hover:text-ink hover:bg-surface/80'
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -120,7 +120,7 @@ export const ReportUpdateModal: React.FC<ReportUpdateModalProps> = ({
             </div>
 
             <div className="space-y-1">
-              <label htmlFor="report-details" className="font-semibold text-slate-700">
+              <label htmlFor="report-details" className="font-semibold text-stone">
                 Correction Details / New Information:
               </label>
               <textarea
@@ -130,12 +130,12 @@ export const ReportUpdateModal: React.FC<ReportUpdateModalProps> = ({
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
                 placeholder="e.g. Fare for Katra prepaid auto has changed to ₹120, or temple morning aarti now opens at 6:00 AM..."
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-ink focus:ring-2 focus:ring-primary/40 focus:outline-none placeholder:text-slate-400"
+                className="w-full p-2.5 rounded-xl border border-border bg-surface text-xs text-ink focus:ring-2 focus:ring-primary/40 focus:outline-none placeholder:text-stone/60"
               />
             </div>
 
             <div className="space-y-1">
-              <label htmlFor="report-email" className="font-semibold text-slate-700">
+              <label htmlFor="report-email" className="font-semibold text-stone">
                 Email / Mobile (Optional, for verification credit):
               </label>
               <input
@@ -144,7 +144,7 @@ export const ReportUpdateModal: React.FC<ReportUpdateModalProps> = ({
                 value={contactEmail}
                 onChange={(e) => setContactEmail(e.target.value)}
                 placeholder="your.email@example.com"
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-ink focus:ring-2 focus:ring-primary/40 focus:outline-none placeholder:text-slate-400"
+                className="w-full p-2.5 rounded-xl border border-border bg-surface text-xs text-ink focus:ring-2 focus:ring-primary/40 focus:outline-none placeholder:text-stone/60"
               />
             </div>
 
@@ -152,7 +152,7 @@ export const ReportUpdateModal: React.FC<ReportUpdateModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors"
+                className="px-4 py-2 rounded-xl border border-border text-stone font-medium hover:bg-surface hover:text-ink transition-colors"
               >
                 Cancel
               </button>

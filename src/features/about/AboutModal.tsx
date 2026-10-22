@@ -12,7 +12,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div 
-        className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 flex flex-col"
+        className="bg-card text-ink rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-border flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-labelledby="about-modal-title"
@@ -68,57 +68,57 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
               <h3 className="font-serif text-base text-ink">The 4 Guarantees of JammuKhoj</h3>
             </div>
             <div className="grid grid-cols-1 gap-2.5 text-xs">
-              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-surface border border-border">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold text-slate-800">100% Offline Resilience:</span>
-                  <p className="text-slate-600 mt-0.5">Everything—maps, phone numbers, Matador routes, and itineraries—functions without an internet connection.</p>
+                  <span className="font-semibold text-ink">100% Offline Resilience:</span>
+                  <p className="text-stone mt-0.5">Everything—maps, phone numbers, Matador routes, and itineraries—functions without an internet connection.</p>
                 </div>
               </div>
-              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-surface border border-border">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold text-slate-800">Verified Fares Matrix:</span>
-                  <p className="text-slate-600 mt-0.5">Direct official rates from Transport Commissioner notifications and ground surveys, preventing tourist gouging.</p>
+                  <span className="font-semibold text-ink">Verified Fares Matrix:</span>
+                  <p className="text-stone mt-0.5">Direct official rates from Transport Commissioner notifications and ground surveys, preventing tourist gouging.</p>
                 </div>
               </div>
-              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-surface border border-border">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold text-slate-800">Senior Pilgrim Safety First:</span>
-                  <p className="text-slate-600 mt-0.5">Automated return-by buffers ensure passengers never miss their train or flight at Jammu Tawi or Satwari Airport.</p>
+                  <span className="font-semibold text-ink">Senior Pilgrim Safety First:</span>
+                  <p className="text-stone mt-0.5">Automated return-by buffers ensure passengers never miss their train or flight at Jammu Tawi or Satwari Airport.</p>
                 </div>
               </div>
-              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-surface border border-border">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold text-slate-800">Cultural & GI Preservation:</span>
-                  <p className="text-slate-600 mt-0.5">Promoting authentic Geographical Indication (GI) products like Basohli paintings, Pashmina, and Dogra culinary spots.</p>
+                  <span className="font-semibold text-ink">Cultural & GI Preservation:</span>
+                  <p className="text-stone mt-0.5">Promoting authentic Geographical Indication (GI) products like Basohli paintings, Pashmina, and Dogra culinary spots.</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Who Built It */}
-          <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/60 space-y-2">
-            <div className="flex items-center gap-2 text-amber-900 font-bold">
+          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-2">
+            <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-bold">
               <Users className="w-4 h-4" />
-              <h4 className="font-serif text-sm">Who Built JammuKhoj?</h4>
+              <h4 className="font-heading text-sm">Who Built JammuKhoj?</h4>
             </div>
-            <p className="text-xs text-amber-950/80 leading-relaxed">
+            <p className="text-xs text-stone leading-relaxed">
               JammuKhoj is built with devotion by local software engineers, cultural researchers, and volunteers based in Jammu. We collaborate with regional transport unions, shopkeepers, and local elders to ensure all data remains accurate and respectful of local traditions.
             </p>
           </div>
 
           {/* Feedback & Community */}
-          <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+          <div className="pt-2 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-stone">
             <div className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-primary" />
+              <MapPin className="w-3.5 h-3.5 text-primary dark:text-emerald-400" />
               <span>Jammu & Kashmir, India</span>
             </div>
             <a 
               href="mailto:contact@jammukhoj.in"
-              className="inline-flex items-center gap-1.5 text-primary hover:underline font-medium"
+              className="inline-flex items-center gap-1.5 text-primary dark:text-emerald-400 hover:underline font-medium"
             >
               <Mail className="w-3.5 h-3.5" />
               contact@jammukhoj.in
@@ -127,7 +127,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="p-4 bg-slate-50 border-t border-slate-100 rounded-b-3xl flex justify-end">
+        <div className="p-4 bg-surface border-t border-border rounded-b-3xl flex justify-end">
           <button
             onClick={onClose}
             className="px-5 py-2 rounded-xl bg-primary text-white font-medium text-xs hover:bg-primary-dark transition-colors"

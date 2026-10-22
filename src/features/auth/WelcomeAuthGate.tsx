@@ -174,10 +174,10 @@ export const WelcomeAuthGate: React.FC = () => {
       <div className="my-auto py-3 space-y-4">
         {/* Apple-styled Hero Banner */}
         <div className="relative rounded-3xl overflow-hidden p-5 text-white shadow-lg bg-gradient-to-br from-[#174D3C] via-[#123E38] to-[#0B251E]">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-[#F3C969]/15 rounded-full blur-2xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-[#F3C969]/15 dark:bg-amber-400/20 rounded-full blur-2xl pointer-events-none" />
 
           <div className="relative z-10 space-y-1.5">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-[#F3C969] text-[#1C2923] shadow-xs">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-[#F3C969] dark:bg-amber-400 text-[#1C2923] dark:text-stone-950 shadow-xs">
               <Sparkles size={11} /> Smart Tourism & Vaishno Devi Companion
             </span>
             <h1 className="font-heading text-xl font-bold leading-tight">

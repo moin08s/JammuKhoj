@@ -74,7 +74,7 @@ export const StationQuickRoutes: React.FC = () => {
   const filtered = QUICK_ROUTES.filter((r) => r.origin === filter);
 
   return (
-    <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-3">
+    <div className="bg-card rounded-2xl p-4 border border-border shadow-xs space-y-3 text-ink">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           {filter === 'station' ? (
@@ -87,13 +87,13 @@ export const StationQuickRoutes: React.FC = () => {
           </h3>
         </div>
 
-        <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-xs">
+        <div className="flex items-center gap-1 bg-surface p-0.5 rounded-xl border border-border text-xs">
           <button
             onClick={() => setFilter('station')}
             className={`px-2.5 py-1 rounded-lg font-semibold transition-all flex items-center gap-1 ${
               filter === 'station'
-                ? 'bg-white text-primary shadow-xs'
-                : 'text-slate-600 hover:text-ink'
+                ? 'bg-card text-ink shadow-xs'
+                : 'text-stone hover:text-ink'
             }`}
           >
             <Train className="w-3 h-3" />
@@ -103,8 +103,8 @@ export const StationQuickRoutes: React.FC = () => {
             onClick={() => setFilter('airport')}
             className={`px-2.5 py-1 rounded-lg font-semibold transition-all flex items-center gap-1 ${
               filter === 'airport'
-                ? 'bg-white text-primary shadow-xs'
-                : 'text-slate-600 hover:text-ink'
+                ? 'bg-card text-ink shadow-xs'
+                : 'text-stone hover:text-ink'
             }`}
           >
             <Plane className="w-3 h-3" />
@@ -115,12 +115,12 @@ export const StationQuickRoutes: React.FC = () => {
 
       <div className="space-y-2.5">
         {filtered.map((route, idx) => (
-          <div key={idx} className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
+          <div key={idx} className="p-3.5 rounded-xl bg-surface border border-border space-y-2">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 font-bold text-xs text-slate-800">
+              <div className="flex items-center gap-1.5 font-bold text-xs text-ink">
                 <MapPin className="w-3.5 h-3.5 text-primary" />
                 <span>To {route.destination}</span>
-                <span className="text-[11px] font-normal text-slate-500">({route.duration})</span>
+                <span className="text-[11px] font-normal text-stone">({route.duration})</span>
               </div>
             </div>
 
@@ -130,8 +130,8 @@ export const StationQuickRoutes: React.FC = () => {
                   key={i}
                   className={`p-2 rounded-lg border text-[11px] ${
                     m.recommended
-                      ? 'bg-emerald-50/70 border-emerald-300 text-emerald-950 font-medium'
-                      : 'bg-white border-slate-200 text-slate-700'
+                      ? 'bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-800 text-emerald-950 dark:text-emerald-300 font-medium'
+                      : 'bg-card border-border text-ink'
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -142,15 +142,15 @@ export const StationQuickRoutes: React.FC = () => {
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center justify-between mt-1 text-slate-600">
-                    <span className="font-bold text-slate-800">{m.fare}</span>
+                  <div className="flex items-center justify-between mt-1 text-stone">
+                    <span className="font-bold text-ink">{m.fare}</span>
                     <span>{m.time}</span>
                   </div>
                 </div>
               ))}
             </div>
 
-            <p className="text-[11px] text-slate-500 leading-relaxed italic bg-white/70 p-2 rounded-lg border border-slate-100">
+            <p className="text-[11px] text-stone leading-relaxed italic bg-card/70 p-2 rounded-lg border border-border">
               💡 {route.tips}
             </p>
           </div>

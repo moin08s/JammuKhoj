@@ -141,12 +141,12 @@ export const SavedPage: React.FC = () => {
       </div>
 
       {/* 2. User Profile Card */}
-      <div className="bg-white border border-[#EBE4DC] rounded-2xl p-4 shadow-sm flex items-center gap-3.5">
+      <div className="bg-card border border-border rounded-2xl p-4 shadow-sm flex items-center gap-3.5 text-ink">
         <div className="relative shrink-0">
-          <div className="w-13 h-13 rounded-full bg-[#FCEFE7] border-2 border-[#F3D7C5] flex items-center justify-center text-[#9E4A0C] font-heading font-black text-lg shadow-inner">
+          <div className="w-13 h-13 rounded-full bg-surface border-2 border-border flex items-center justify-center text-[#9E4A0C] dark:text-amber-400 font-heading font-black text-lg shadow-inner">
             {userInitials}
           </div>
-          <span className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-[#15803D] ring-2 ring-white"></span>
+          <span className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-[#15803D] ring-2 ring-card"></span>
         </div>
 
         <div className="flex-1 min-w-0">
@@ -156,25 +156,25 @@ export const SavedPage: React.FC = () => {
               <ShieldCheck size={14} className="text-[#15803D] shrink-0" />
             </h3>
             {currentUser?.authProvider === 'google' ? (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 shrink-0">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 shrink-0">
                 Google Account Synced
               </span>
             ) : (
               <button
                 onClick={() => setShowGoogleModal(true)}
-                className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white text-stone-700 border border-stone-300 hover:border-[#9E4A0C] hover:text-[#9E4A0C] shrink-0 flex items-center gap-1 shadow-2xs"
+                className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-surface text-stone border border-border hover:border-[#9E4A0C] hover:text-ink shrink-0 flex items-center gap-1 shadow-2xs"
               >
                 <span>G Login & Sync</span>
               </button>
             )}
           </div>
 
-          <div className="text-xs text-stone-600 mt-0.5 flex items-center gap-1">
+          <div className="text-xs text-stone mt-0.5 flex items-center gap-1">
             <span>{currentUser?.email || 'Pilgrim / Heritage Explorer'}</span>
           </div>
 
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
-            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#F0FDF4] border border-[#DCFCE7] text-[11px] font-semibold text-[#15803D]">
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
               <CheckCircle2 size={12} className="text-[#15803D]" />
               <span>Offline Pack: 184 MB downloaded</span>
             </div>
@@ -182,7 +182,7 @@ export const SavedPage: React.FC = () => {
             {currentUser?.authProvider !== 'google' && (
               <button
                 onClick={() => setShowGoogleModal(true)}
-                className="text-[11px] font-bold text-[#9E4A0C] hover:underline"
+                className="text-[11px] font-bold text-[#9E4A0C] dark:text-amber-400 hover:underline"
               >
                 Sign in with Google
               </button>
@@ -192,13 +192,13 @@ export const SavedPage: React.FC = () => {
       </div>
 
       {/* 3. Segmented Navigation Tabs */}
-      <div className="flex items-center gap-1.5 bg-[#F5F5F4] p-1 rounded-2xl border border-[#E7E5E4] text-xs font-bold">
+      <div className="flex items-center gap-1.5 bg-surface p-1 rounded-2xl border border-border text-xs font-bold">
         <button
           onClick={() => setActiveTab('spots')}
           className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1 ${
             activeTab === 'spots'
               ? 'bg-[#9E4A0C] text-white shadow-xs'
-              : 'text-stone-600 hover:text-ink'
+              : 'text-stone hover:text-ink'
           }`}
         >
           <Bookmark size={13} />
@@ -293,8 +293,8 @@ export const SavedPage: React.FC = () => {
 
           {/* Destination Card 1: Bhaderwah & Jai Valley */}
           {savedSpots.bhaderwah && (filterCategory === 'all' || filterCategory === 'nature') && (
-            <div className="bg-white border border-[#EBE4DC] rounded-2xl overflow-hidden shadow-sm group">
-              <div className="relative h-44 w-full overflow-hidden bg-stone-100">
+            <div className="bg-card border border-border text-ink rounded-2xl overflow-hidden shadow-sm group">
+              <div className="relative h-44 w-full overflow-hidden bg-surface">
                 <img
                   src={JAMMU_SPOT_IMAGES.attr_bhaderwah}
                   alt="Bhaderwah & Jai Valley"
@@ -314,7 +314,7 @@ export const SavedPage: React.FC = () => {
                 {/* Bookmark Button */}
                 <button
                   onClick={(e) => toggleSpotBookmark('bhaderwah', e)}
-                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center text-red-600 hover:scale-110 transition-transform"
+                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-card dark:bg-stone-800 border border-border shadow-md flex items-center justify-center text-red-600 hover:scale-110 transition-transform"
                 >
                   <Bookmark size={15} fill="currentColor" />
                 </button>
@@ -331,15 +331,15 @@ export const SavedPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-3 bg-white flex items-center justify-between text-xs border-t border-[#F1E9E0]">
-                <div className="flex items-center gap-1.5 text-[#15803D] font-bold">
+              <div className="p-3 bg-card flex items-center justify-between text-xs border-t border-border">
+                <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
                   <CheckCircle2 size={14} />
                   <span>Offline map saved</span>
                 </div>
 
                 <button
                   onClick={() => navigate('/map')}
-                  className="px-3 py-1.5 rounded-full bg-[#FCEFE7] text-[#9E4A0C] font-bold text-xs hover:bg-[#F3D7C5] transition-colors flex items-center gap-1"
+                  className="px-3 py-1.5 rounded-full bg-amber-500/10 text-[#9E4A0C] dark:text-amber-400 font-bold text-xs hover:bg-amber-500/20 border border-amber-500/20 transition-colors flex items-center gap-1"
                 >
                   <span>View Route</span>
                   <ChevronRight size={13} />
@@ -352,9 +352,9 @@ export const SavedPage: React.FC = () => {
           {savedSpots.raghunath && (filterCategory === 'all' || filterCategory === 'pilgrimage') && (
             <div
               onClick={() => navigate('/explore/attr_raghunath_temple')}
-              className="bg-white border border-[#EBE4DC] rounded-2xl p-3.5 shadow-sm hover:border-[#9E4A0C]/40 cursor-pointer transition-all flex items-center gap-3.5 group"
+              className="bg-card border border-border text-ink rounded-2xl p-3.5 shadow-sm hover:border-[#9E4A0C]/40 cursor-pointer transition-all flex items-center gap-3.5 group"
             >
-              <div className="w-14 h-14 rounded-2xl overflow-hidden shrink-0 relative border border-[#EBE4DC] bg-stone-100 shadow-xs">
+              <div className="w-14 h-14 rounded-2xl overflow-hidden shrink-0 relative border border-border bg-surface shadow-xs">
                 <img
                   src={JAMMU_SPOT_IMAGES.attr_raghunath_temple}
                   alt="Shri Raghunath Temple"
@@ -367,17 +367,17 @@ export const SavedPage: React.FC = () => {
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded-md bg-[#FCEFE7] text-[#9E4A0C] text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-[#9E4A0C] dark:text-amber-400 border border-amber-500/20 text-[10px] font-bold">
                     Pilgrimage Hub
                   </span>
-                  <span className="text-xs font-bold text-stone-700 flex items-center gap-0.5">
+                  <span className="text-xs font-bold text-stone flex items-center gap-0.5">
                     ★ 4.5
                   </span>
                 </div>
                 <h3 className="font-heading font-bold text-base text-ink mt-1 group-hover:text-[#9E4A0C] transition-colors truncate">
                   Shri Raghunath Temple
                 </h3>
-                <div className="flex items-center gap-1 text-xs text-[#15803D] font-medium mt-0.5">
+                <div className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-0.5">
                   <CheckCircle2 size={13} />
                   <span>Shoelockers confirmed</span>
                 </div>
@@ -394,8 +394,8 @@ export const SavedPage: React.FC = () => {
 
           {/* Destination Card 3: Mansar Sacred Lake */}
           {savedSpots.mansar && (filterCategory === 'all' || filterCategory === 'nature') && (
-            <div className="bg-white border border-[#EBE4DC] rounded-2xl overflow-hidden shadow-sm group">
-              <div className="relative h-44 w-full overflow-hidden bg-stone-100">
+            <div className="bg-card border border-border text-ink rounded-2xl overflow-hidden shadow-sm group">
+              <div className="relative h-44 w-full overflow-hidden bg-surface">
                 <img
                   src={JAMMU_SPOT_IMAGES.attr_mansar_lake}
                   alt="Mansar Sacred Lake"
@@ -413,7 +413,7 @@ export const SavedPage: React.FC = () => {
 
                 <button
                   onClick={(e) => toggleSpotBookmark('mansar', e)}
-                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center text-red-600 hover:scale-110 transition-transform"
+                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-card dark:bg-stone-800 border border-border shadow-md flex items-center justify-center text-red-600 hover:scale-110 transition-transform"
                 >
                   <Bookmark size={15} fill="currentColor" />
                 </button>
@@ -428,15 +428,15 @@ export const SavedPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-3 bg-white flex items-center justify-between text-xs border-t border-[#F1E9E0]">
-                <div className="flex items-center gap-1.5 text-stone-700 font-medium">
-                  <Navigation size={13} className="text-[#9E4A0C]" />
+              <div className="p-3 bg-card flex items-center justify-between text-xs border-t border-border">
+                <div className="flex items-center gap-1.5 text-stone font-medium">
+                  <Navigation size={13} className="text-[#9E4A0C] dark:text-amber-400" />
                   <span>62 km from Jammu City</span>
                 </div>
 
                 <button
                   onClick={() => navigate('/explore/attr_mansar_lake')}
-                  className="text-[#9E4A0C] font-bold hover:underline flex items-center gap-1"
+                  className="text-[#9E4A0C] dark:text-amber-400 font-bold hover:underline flex items-center gap-1"
                 >
                   <span>Explore Guide</span>
                   <ArrowRight size={13} />
@@ -447,8 +447,8 @@ export const SavedPage: React.FC = () => {
 
           {/* Destination Card 4: Suchetgarh Border Post */}
           {savedSpots.suchetgarh && (filterCategory === 'all' || filterCategory === 'border') && (
-            <div className="bg-white border border-[#EBE4DC] rounded-2xl overflow-hidden shadow-sm group">
-              <div className="relative h-44 w-full overflow-hidden bg-stone-100">
+            <div className="bg-card border border-border text-ink rounded-2xl overflow-hidden shadow-sm group">
+              <div className="relative h-44 w-full overflow-hidden bg-surface">
                 <img
                   src={JAMMU_SPOT_IMAGES.attr_suchetgarh_border}
                   alt="Suchetgarh Border Post"
@@ -466,7 +466,7 @@ export const SavedPage: React.FC = () => {
 
                 <button
                   onClick={(e) => toggleSpotBookmark('suchetgarh', e)}
-                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center text-red-600 hover:scale-110 transition-transform"
+                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-card dark:bg-stone-800 border border-border shadow-md flex items-center justify-center text-red-600 hover:scale-110 transition-transform"
                 >
                   <Bookmark size={15} fill="currentColor" />
                 </button>
@@ -481,15 +481,15 @@ export const SavedPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-3 bg-white flex items-center justify-between text-xs border-t border-[#F1E9E0]">
-                <div className="flex items-center gap-1.5 text-stone-700 font-medium">
-                  <Clock size={13} className="text-[#9E4A0C]" />
+              <div className="p-3 bg-card flex items-center justify-between text-xs border-t border-border">
+                <div className="flex items-center gap-1.5 text-stone font-medium">
+                  <Clock size={13} className="text-[#9E4A0C] dark:text-amber-400" />
                   <span>Entry closes 16:30</span>
                 </div>
 
                 <button
                   onClick={() => setShowGuidelinesModal(true)}
-                  className="text-[#9E4A0C] font-bold hover:underline flex items-center gap-1"
+                  className="text-[#9E4A0C] dark:text-amber-400 font-bold hover:underline flex items-center gap-1"
                 >
                   <span>View Pass Guidelines</span>
                   <ArrowRight size={13} />
@@ -524,71 +524,71 @@ export const SavedPage: React.FC = () => {
                     });
                     navigate('/plan/result');
                   }}
-                  className="p-3 bg-white border border-[#EBE4DC] rounded-xl flex items-center justify-between cursor-pointer hover:border-[#9E4A0C]/40 transition-all shadow-xs"
+                  className="p-3 bg-card border border-border rounded-xl flex items-center justify-between cursor-pointer hover:border-[#9E4A0C]/40 transition-all shadow-xs"
                 >
                   <div>
-                    <span className="text-[10px] font-bold uppercase text-[#9E4A0C] bg-[#FCEFE7] px-2 py-0.5 rounded">
+                    <span className="text-[10px] font-bold uppercase text-[#9E4A0C] dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">
                       {p.bucket} Plan
                     </span>
                     <h4 className="font-heading font-bold text-sm text-ink mt-1">{p.title}</h4>
-                    <div className="text-xs text-stone-500 mt-0.5">Return by {p.departureTime}</div>
+                    <div className="text-xs text-stone mt-0.5">Return by {p.departureTime}</div>
                   </div>
-                  <ChevronRight size={16} className="text-stone-400" />
+                  <ChevronRight size={16} className="text-stone" />
                 </div>
               ))}
             </div>
           )}
 
           {/* 5. Offline Data Storage Card */}
-          <div className="bg-white border border-[#EBE4DC] rounded-2xl p-4 space-y-3.5 shadow-sm">
+          <div className="bg-card border border-border rounded-2xl p-4 space-y-3.5 shadow-sm text-ink">
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-xl bg-[#FCEFE7] text-[#9E4A0C] flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-[#9E4A0C] dark:text-amber-400 flex items-center justify-center shrink-0">
                   <HardDrive size={20} />
                 </div>
                 <div>
                   <h3 className="font-heading font-bold text-sm text-ink">
                     Offline Data Storage
                   </h3>
-                  <p className="text-[11px] text-stone-600">
+                  <p className="text-[11px] text-stone">
                     Full topographic map & pilgrimage circuits
                   </p>
                 </div>
               </div>
 
-              <span className="px-2 py-0.5 rounded-full bg-[#E6F7F2] text-[#085444] text-[10px] font-bold border border-[#BCE8DD]">
+              <span className="px-2 py-0.5 rounded-full bg-[#E6F7F2] dark:bg-emerald-950 text-[#085444] dark:text-emerald-300 text-[10px] font-bold border border-[#BCE8DD] dark:border-emerald-800">
                 Vector v2.4
               </span>
             </div>
 
             <div>
-              <div className="flex justify-between text-xs font-semibold text-stone-700 mb-1.5">
+              <div className="flex justify-between text-xs font-semibold text-stone mb-1.5">
                 <span>Jammu Division Full Vector Pack</span>
                 <span className="text-ink font-bold">184 MB</span>
               </div>
-              <div className="w-full h-2 rounded-full bg-stone-100 overflow-hidden">
-                <div className="h-full bg-[#9E4A0C] rounded-full w-full"></div>
+              <div className="w-full h-2 rounded-full bg-surface border border-border overflow-hidden">
+                <div className="h-full bg-[#9E4A0C] dark:bg-amber-500 rounded-full w-full"></div>
               </div>
-              <div className="flex items-center gap-1.5 text-[11px] text-[#15803D] font-bold mt-1.5">
+              <div className="flex items-center gap-1.5 text-[11px] text-[#15803D] dark:text-emerald-400 font-bold mt-1.5">
                 <CheckCircle2 size={13} />
                 <span>100% Up to date • Last verified today</span>
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-2 border-t border-[#F1E9E0]">
-              <div className="flex items-center gap-2 text-xs text-stone-700 font-medium">
-                <Wifi size={15} className="text-[#9E4A0C]" />
+            <div className="flex items-center justify-between pt-2 border-t border-border">
+              <div className="flex items-center gap-2 text-xs text-stone font-medium">
+                <Wifi size={15} className="text-[#9E4A0C] dark:text-amber-400" />
                 <span>Auto-update maps on Wi-Fi</span>
               </div>
               <button
                 type="button"
                 onClick={() => setAutoUpdateWifi(!autoUpdateWifi)}
                 className={`w-11 h-6 rounded-full transition-colors relative ${
-                  autoUpdateWifi ? 'bg-[#9E4A0C]' : 'bg-stone-300'
+                  autoUpdateWifi ? 'bg-[#9E4A0C]' : 'bg-surface border border-border'
                 }`}
               >
                 <span
-                  className={`block w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${
+                  className={`block w-4 h-4 rounded-full bg-white dark:bg-stone-200 shadow-sm transition-transform ${
                     autoUpdateWifi ? 'translate-x-6' : 'translate-x-1'
                   }`}
                 />
@@ -597,7 +597,7 @@ export const SavedPage: React.FC = () => {
 
             <button
               onClick={() => setShowClearModal(true)}
-              className="w-full py-2.5 rounded-xl border border-[#F3D7C5] bg-white text-[#9E4A0C] font-bold text-xs hover:bg-[#FCEFE7] transition-colors flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 rounded-xl border border-border bg-card text-[#9E4A0C] dark:text-amber-400 font-bold text-xs hover:bg-surface transition-colors flex items-center justify-center gap-1.5"
             >
               <Trash2 size={14} />
               <span>Clear offline cache / Reset local data</span>
@@ -610,7 +610,7 @@ export const SavedPage: React.FC = () => {
               <h2 className="font-heading font-black text-base text-ink">
                 Emergency & Directory
               </h2>
-              <span className="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-200 flex items-center gap-1">
+              <span className="text-[10px] font-bold text-red-600 bg-red-500/10 px-2 py-0.5 rounded-full border border-red-500/20 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
                 <span>24x7 Active</span>
               </span>
@@ -619,35 +619,35 @@ export const SavedPage: React.FC = () => {
             <div className="grid grid-cols-3 gap-2.5">
               <a
                 href="tel:112"
-                className="bg-white border border-[#EBE4DC] rounded-xl p-3 text-center space-y-1 hover:border-red-300 transition-colors shadow-xs group"
+                className="bg-card border border-border rounded-xl p-3 text-center space-y-1 hover:border-red-300 transition-colors shadow-xs group text-ink"
               >
-                <div className="w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+                <div className="w-8 h-8 rounded-full bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
                   <ShieldCheck size={16} />
                 </div>
                 <div className="font-heading font-bold text-xs text-ink">112 ERSS</div>
-                <div className="text-[10px] text-stone-500">Police Central</div>
+                <div className="text-[10px] text-stone">Police Central</div>
               </a>
 
               <a
                 href="tel:01991232029"
-                className="bg-white border border-[#EBE4DC] rounded-xl p-3 text-center space-y-1 hover:border-[#9E4A0C]/40 transition-colors shadow-xs group"
+                className="bg-card border border-border rounded-xl p-3 text-center space-y-1 hover:border-[#9E4A0C]/40 transition-colors shadow-xs group text-ink"
               >
-                <div className="w-8 h-8 rounded-full bg-[#FCEFE7] text-[#9E4A0C] flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+                <div className="w-8 h-8 rounded-full bg-amber-500/10 text-[#9E4A0C] dark:text-amber-400 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
                   <PhoneCall size={16} />
                 </div>
                 <div className="font-heading font-bold text-xs text-ink">Tourist Help</div>
-                <div className="text-[10px] text-stone-500">Katra Desk</div>
+                <div className="text-[10px] text-stone">Katra Desk</div>
               </a>
 
               <a
                 href="tel:01912584211"
-                className="bg-white border border-[#EBE4DC] rounded-xl p-3 text-center space-y-1 hover:border-emerald-300 transition-colors shadow-xs group"
+                className="bg-card border border-border rounded-xl p-3 text-center space-y-1 hover:border-emerald-300 transition-colors shadow-xs group text-ink"
               >
-                <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+                <div className="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
                   <span className="font-bold text-base leading-none">✚</span>
                 </div>
                 <div className="font-heading font-bold text-xs text-ink">Hospital</div>
-                <div className="text-[10px] text-stone-500">Jammu Civil</div>
+                <div className="text-[10px] text-stone">Jammu Civil</div>
               </a>
             </div>
           </div>
@@ -655,42 +655,42 @@ export const SavedPage: React.FC = () => {
           {/* 7. Prepaid Taxi Rate Chart Card */}
           <div
             onClick={() => setShowTaxiModal(true)}
-            className="bg-white border border-[#EBE4DC] rounded-2xl p-3.5 shadow-sm hover:border-[#9E4A0C]/40 cursor-pointer transition-all flex items-center justify-between gap-3 group"
+            className="bg-card border border-border rounded-2xl p-3.5 shadow-sm hover:border-[#9E4A0C]/40 cursor-pointer transition-all flex items-center justify-between gap-3 group text-ink"
           >
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-[#EFF6FF] border border-[#DBEAFE] flex items-center justify-center text-[#1D4ED8] shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-11 h-11 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-105 transition-transform">
                 <TaxiIcon size={22} color="#1D4ED8" />
               </div>
 
               <div>
-                <h3 className="font-heading font-bold text-sm text-ink group-hover:text-[#9E4A0C] transition-colors">
+                <h3 className="font-heading font-bold text-sm text-ink group-hover:text-[#9E4A0C] dark:group-hover:text-amber-400 transition-colors">
                   Prepaid Taxi Rate Chart
                 </h3>
-                <p className="text-[11px] text-stone-600 mt-0.5">
+                <p className="text-[11px] text-stone mt-0.5">
                   Govt J&K approved Katra, Patnitop & Airport tariffs
                 </p>
               </div>
             </div>
 
-            <div className="p-2 rounded-lg text-stone-500 group-hover:text-[#9E4A0C] transition-colors">
+            <div className="p-2 rounded-lg text-stone group-hover:text-[#9E4A0C] dark:group-hover:text-amber-400 transition-colors">
               <ChevronRight size={18} />
             </div>
           </div>
 
           {/* 8. App Language Selector */}
-          <div className="bg-white border border-[#EBE4DC] rounded-2xl p-3.5 shadow-sm flex items-center justify-between gap-3">
+          <div className="bg-card border border-border rounded-2xl p-3.5 shadow-sm flex items-center justify-between gap-3 text-ink">
             <div className="flex items-center gap-2 text-xs font-bold text-ink">
-              <span className="text-[#9E4A0C] text-base">文A</span>
+              <span className="text-[#9E4A0C] dark:text-amber-400 text-base">文A</span>
               <span>App Language</span>
             </div>
 
-            <div className="flex items-center bg-[#F1F5F9] p-1 rounded-xl">
+            <div className="flex items-center bg-surface border border-border p-1 rounded-xl">
               <button
                 onClick={() => handleLanguageChange('en')}
                 className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
                   language === 'en'
                     ? 'bg-[#9E4A0C] text-white shadow-xs'
-                    : 'text-stone-600 hover:text-ink'
+                    : 'text-stone hover:text-ink'
                 }`}
               >
                 English
@@ -700,14 +700,14 @@ export const SavedPage: React.FC = () => {
                 className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
                   language === 'hi'
                     ? 'bg-[#9E4A0C] text-white shadow-xs'
-                    : 'text-stone-600 hover:text-ink'
+                    : 'text-stone hover:text-ink'
                 }`}
               >
                 हिंदी
               </button>
               <button
                 onClick={() => handleLanguageChange('hi')}
-                className="px-2.5 py-1 rounded-lg text-xs font-medium text-stone-500 hover:text-ink transition-colors"
+                className="px-2.5 py-1 rounded-lg text-xs font-medium text-stone hover:text-ink transition-colors"
                 title="Dogri localized pack"
               >
                 डोगरी
@@ -723,7 +723,7 @@ export const SavedPage: React.FC = () => {
               <h2 className="font-heading font-black text-lg text-ink">
                 Previous Plan Trips
               </h2>
-              <p className="text-xs text-stone-600">
+              <p className="text-xs text-stone">
                 Saved offline itineraries • Ready for offline field navigation
               </p>
             </div>
@@ -756,14 +756,14 @@ export const SavedPage: React.FC = () => {
                   });
                   navigate('/plan/result');
                 }}
-                className="bg-white border border-[#EBE4DC] rounded-2xl p-4 shadow-sm hover:border-[#9E4A0C]/40 cursor-pointer transition-all space-y-2.5 group"
+                className="bg-card border border-border rounded-2xl p-4 shadow-sm hover:border-[#9E4A0C]/40 cursor-pointer transition-all space-y-2.5 group text-ink"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-[#FCEFE7] text-[#9E4A0C] border border-[#F3D7C5]">
+                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#9E4A0C] dark:text-amber-400 border border-amber-500/20">
                       {plan.bucket} Plan
                     </span>
-                    <h3 className="font-heading font-bold text-base text-ink group-hover:text-[#9E4A0C] transition-colors mt-1">
+                    <h3 className="font-heading font-bold text-base text-ink group-hover:text-[#9E4A0C] dark:group-hover:text-amber-400 transition-colors mt-1">
                       {plan.title}
                     </h3>
                   </div>
@@ -782,26 +782,26 @@ export const SavedPage: React.FC = () => {
                 </div>
 
                 {/* Timeline Route Stops */}
-                <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-stone-600">
+                <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-stone">
                   {plan.timeline
                     .filter((t) => t.type === 'visit' || t.type === 'buffer')
                     .map((item, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 rounded-md bg-stone-50 border border-stone-200 text-stone-700"
+                        className="px-2 py-0.5 rounded-md bg-surface border border-border text-ink"
                       >
                         {item.label}
                       </span>
                     ))}
                 </div>
 
-                <div className="flex items-center justify-between text-xs text-stone-500 pt-2 border-t border-[#F1E9E0]">
+                <div className="flex items-center justify-between text-xs text-stone pt-2 border-t border-border">
                   <div className="flex items-center gap-2">
-                    <Clock size={13} className="text-[#9E4A0C]" />
+                    <Clock size={13} className="text-[#9E4A0C] dark:text-amber-400" />
                     <span>Return by: {plan.departureTime}</span>
                   </div>
 
-                  <div className="flex items-center gap-1 text-[#9E4A0C] font-bold">
+                  <div className="flex items-center gap-1 text-[#9E4A0C] dark:text-amber-400 font-bold">
                     <span>Open Route</span>
                     <ChevronRight size={14} />
                   </div>
@@ -852,18 +852,18 @@ export const SavedPage: React.FC = () => {
             ].map((pack, idx) => (
               <div
                 key={idx}
-                className="bg-white border border-[#EBE4DC] rounded-2xl p-3.5 shadow-sm space-y-2"
+                className="bg-card border border-border rounded-2xl p-3.5 shadow-sm space-y-2 text-ink"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <h4 className="font-heading font-bold text-sm text-ink">{pack.title}</h4>
-                    <p className="text-xs text-stone-500 mt-0.5">{pack.desc}</p>
+                    <p className="text-xs text-stone mt-0.5">{pack.desc}</p>
                   </div>
                   <span className="text-xs font-black text-ink shrink-0">{pack.size}</span>
                 </div>
 
-                <div className="flex items-center justify-between text-xs pt-2 border-t border-[#F1E9E0]">
-                  <span className="text-[#15803D] font-bold flex items-center gap-1">
+                <div className="flex items-center justify-between text-xs pt-2 border-t border-border">
+                  <span className="text-[#15803D] dark:text-emerald-400 font-bold flex items-center gap-1">
                     <CheckCircle2 size={12} />
                     <span>{pack.status}</span>
                   </span>
@@ -871,7 +871,7 @@ export const SavedPage: React.FC = () => {
                     onClick={() => {
                       showToast(`Verified: ${pack.title} checksum valid & cached locally`);
                     }}
-                    className="text-[#9E4A0C] font-bold hover:underline flex items-center gap-1 apple-press"
+                    className="text-[#9E4A0C] dark:text-amber-400 font-bold hover:underline flex items-center gap-1 apple-press"
                   >
                     <RefreshCw size={12} />
                     <span>Re-verify</span>
@@ -891,8 +891,8 @@ export const SavedPage: React.FC = () => {
       {/* MODAL: Prepaid Taxi Rate Chart */}
       {showTaxiModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-white border border-[#EBE4DC] rounded-3xl p-5 max-w-sm w-full space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-stone-200 pb-3">
+          <div className="bg-card border border-border rounded-3xl p-5 max-w-sm w-full space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto text-ink">
+            <div className="flex items-center justify-between border-b border-border pb-3">
               <div className="flex items-center gap-2">
                 <TaxiIcon size={20} color="#9E4A0C" />
                 <h3 className="font-heading font-bold text-base text-ink">
@@ -901,13 +901,13 @@ export const SavedPage: React.FC = () => {
               </div>
               <button
                 onClick={() => setShowTaxiModal(false)}
-                className="p-1 rounded-full text-stone hover:bg-stone-100"
+                className="p-1 rounded-full text-stone hover:bg-surface"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <p className="text-xs text-stone-600">
+            <p className="text-xs text-stone">
               Government of Jammu & Kashmir officially capped point-to-point tariffs. No bargaining required at official station prepaid booths.
             </p>
 
@@ -919,9 +919,9 @@ export const SavedPage: React.FC = () => {
                 { route: 'Jammu ➔ Bhaderwah / Jai Valley', taxi: '₹4,200', car: '₹3,600', bus: '₹260' },
                 { route: 'Jammu City ➔ Suchetgarh Border', taxi: '₹850 (Round)', car: '₹750', bus: '₹35' },
               ].map((item, i) => (
-                <div key={i} className="p-2.5 rounded-xl bg-stone-50 border border-stone-200/70 space-y-1">
+                <div key={i} className="p-2.5 rounded-xl bg-surface border border-border space-y-1">
                   <div className="font-bold text-ink">{item.route}</div>
-                  <div className="flex items-center justify-between text-[11px] text-stone-600 pt-1">
+                  <div className="flex items-center justify-between text-[11px] text-stone pt-1">
                     <span className="flex items-center gap-1">
                       <TaxiIcon size={13} color="#9E4A0C" /> {item.taxi}
                     </span>
@@ -952,38 +952,38 @@ export const SavedPage: React.FC = () => {
       {/* MODAL: Notifications */}
       {showNotifModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-white border border-[#EBE4DC] rounded-3xl p-5 max-w-sm w-full space-y-3.5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-stone-200 pb-2">
+          <div className="bg-card border border-border rounded-3xl p-5 max-w-sm w-full space-y-3.5 shadow-2xl text-ink">
+            <div className="flex items-center justify-between border-b border-border pb-2">
               <h3 className="font-heading font-bold text-base text-ink flex items-center gap-1.5">
-                <Bell size={18} className="text-[#9E4A0C]" />
+                <Bell size={18} className="text-[#9E4A0C] dark:text-amber-400" />
                 <span>Field Advisories</span>
               </h3>
               <button
                 onClick={() => setShowNotifModal(false)}
-                className="p-1 rounded-full text-stone hover:bg-stone-100"
+                className="p-1 rounded-full text-stone hover:bg-surface"
               >
                 <X size={18} />
               </button>
             </div>
 
             <div className="space-y-2.5 text-xs">
-              <div className="p-2.5 rounded-xl bg-[#F0FDF4] border border-[#DCFCE7] space-y-1">
-                <div className="font-bold text-[#15803D]">Vector Map Pack v4.2 Active</div>
-                <div className="text-stone-600 text-[11px]">
+              <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-1">
+                <div className="font-bold text-emerald-700 dark:text-emerald-400">Vector Map Pack v4.2 Active</div>
+                <div className="text-stone text-[11px]">
                   All Jammu division roads and trails are loaded offline into device cache.
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-[#FEF2F2] border border-[#FEE2E2] space-y-1">
-                <div className="font-bold text-red-700">Suchetgarh Border Retreat</div>
-                <div className="text-stone-600 text-[11px]">
+              <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 space-y-1">
+                <div className="font-bold text-red-700 dark:text-red-400">Suchetgarh Border Retreat</div>
+                <div className="text-stone text-[11px]">
                   Ceremony timings scheduled for 17:00 IST today. Public entry closes at 16:30.
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-[#EFF6FF] border border-[#DBEAFE] space-y-1">
-                <div className="font-bold text-blue-700">Vaishno Devi Bhawan Weather</div>
-                <div className="text-stone-600 text-[11px]">
+              <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 space-y-1">
+                <div className="font-bold text-blue-700 dark:text-blue-400">Vaishno Devi Bhawan Weather</div>
+                <div className="text-stone text-[11px]">
                   18°C, clear visibility, cable car and helicopter operations running on schedule.
                 </div>
               </div>
@@ -991,7 +991,7 @@ export const SavedPage: React.FC = () => {
 
             <button
               onClick={() => setShowNotifModal(false)}
-              className="w-full py-2.5 rounded-xl bg-stone-100 text-stone-700 font-bold text-xs hover:bg-stone-200 transition-colors"
+              className="w-full py-2.5 rounded-xl bg-surface border border-border text-stone hover:text-ink font-bold text-xs transition-colors"
             >
               Dismiss
             </button>
@@ -1002,20 +1002,20 @@ export const SavedPage: React.FC = () => {
       {/* MODAL: Suchetgarh Pass Guidelines */}
       {showGuidelinesModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-white border border-[#EBE4DC] rounded-3xl p-5 max-w-sm w-full space-y-3.5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-stone-200 pb-2">
+          <div className="bg-card border border-border rounded-3xl p-5 max-w-sm w-full space-y-3.5 shadow-2xl text-ink">
+            <div className="flex items-center justify-between border-b border-border pb-2">
               <h3 className="font-heading font-bold text-base text-ink">
                 Suchetgarh Border Guidelines
               </h3>
               <button
                 onClick={() => setShowGuidelinesModal(false)}
-                className="p-1 rounded-full text-stone hover:bg-stone-100"
+                className="p-1 rounded-full text-stone hover:bg-surface"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <ul className="text-xs text-stone-600 space-y-2 list-disc pl-4">
+            <ul className="text-xs text-stone space-y-2 list-disc pl-4">
               <li>Carry a valid government photographic ID (Aadhaar, Passport, Voter Card).</li>
               <li>Entry is free for all Indian citizens and international registered tourists.</li>
               <li>Ceremony begins promptly at 17:00 IST; visitor gate closes at 16:30.</li>
@@ -1035,17 +1035,17 @@ export const SavedPage: React.FC = () => {
       {/* MODAL: Clear Cache Confirmation */}
       {showClearModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-white border border-[#EBE4DC] rounded-3xl p-5 max-w-sm w-full space-y-3 shadow-2xl">
+          <div className="bg-card border border-border rounded-3xl p-5 max-w-sm w-full space-y-3 shadow-2xl text-ink">
             <h4 className="font-heading text-base font-bold text-ink">
               Clear Local Cache?
             </h4>
-            <p className="text-xs text-stone-600 leading-relaxed">
+            <p className="text-xs text-stone leading-relaxed">
               This will reset custom cached itineraries on your device. The permanent core vector map and spot directory will be retained.
             </p>
             <div className="flex gap-2 pt-2">
               <button
                 onClick={() => setShowClearModal(false)}
-                className="flex-1 py-2 rounded-xl border border-stone-300 text-xs font-semibold hover:bg-stone-50"
+                className="flex-1 py-2 rounded-xl border border-border text-stone hover:text-ink text-xs font-semibold hover:bg-surface"
               >
                 Cancel
               </button>

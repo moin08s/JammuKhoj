@@ -69,15 +69,15 @@ export const TestimonialSection: React.FC<{ className?: string }> = ({ className
   const item = TESTIMONIALS[currentIndex];
 
   return (
-    <section className={`bg-gradient-to-br from-amber-50/70 via-white to-primary-soft/30 rounded-2xl p-5 border border-amber-200/60 shadow-xs ${className}`}>
+    <section className={`bg-gradient-to-br from-amber-50/70 via-white to-primary-soft/30 dark:from-stone-900 dark:via-stone-900/90 dark:to-stone-850 rounded-2xl p-5 border border-amber-200/60 dark:border-stone-800 shadow-xs ${className}`}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <div className="p-1.5 rounded-lg bg-primary text-white">
             <Heart className="w-4 h-4 fill-white" />
           </div>
           <div>
-            <h3 className="font-serif font-bold text-ink text-base">Traveler Experiences & Trust</h3>
-            <p className="text-xs text-ink-muted">Loved by pilgrims, transit travelers & locals</p>
+            <h3 className="font-heading font-bold text-ink text-base">Traveler Experiences & Trust</h3>
+            <p className="text-xs text-stone">Loved by pilgrims, transit travelers & locals</p>
           </div>
         </div>
 
@@ -85,42 +85,42 @@ export const TestimonialSection: React.FC<{ className?: string }> = ({ className
           <button
             onClick={prev}
             aria-label="Previous testimonial"
-            className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center hover:bg-slate-50 active:scale-95 transition-all text-slate-700"
+            className="w-8 h-8 rounded-full border border-border bg-card flex items-center justify-center hover:bg-surface active:scale-95 transition-all text-stone hover:text-ink"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
           <button
             onClick={next}
             aria-label="Next testimonial"
-            className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center hover:bg-slate-50 active:scale-95 transition-all text-slate-700"
+            className="w-8 h-8 rounded-full border border-border bg-card flex items-center justify-center hover:bg-surface active:scale-95 transition-all text-stone hover:text-ink"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      <div className="bg-white/90 backdrop-blur-xs rounded-xl p-4 border border-slate-100 shadow-xs relative">
-        <Quote className="w-8 h-8 text-amber-200 absolute top-3 right-3 pointer-events-none" />
+      <div className="bg-card backdrop-blur-xs rounded-xl p-4 border border-border shadow-xs relative">
+        <Quote className="w-8 h-8 text-amber-500/20 absolute top-3 right-3 pointer-events-none" />
         
         <div className="flex items-center gap-1 mb-2">
           {Array.from({ length: item.rating }).map((_, i) => (
             <Star key={i} className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
           ))}
-          <span className="text-xs font-semibold text-slate-700 ml-1.5 px-2 py-0.5 rounded-full bg-amber-50 border border-amber-200/80">
+          <span className="text-xs font-semibold text-ink ml-1.5 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300">
             {item.highlight}
           </span>
         </div>
 
-        <p className="text-sm text-slate-700 leading-relaxed italic mb-3">
+        <p className="text-sm text-ink leading-relaxed italic mb-3">
           "{item.text}"
         </p>
 
-        <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+        <div className="flex items-center justify-between pt-2 border-t border-border text-xs">
           <div>
             <div className="font-semibold text-ink">{item.name}</div>
-            <div className="text-ink-muted">{item.role} • {item.location}</div>
+            <div className="text-stone">{item.role} • {item.location}</div>
           </div>
-          <div className="text-[11px] text-slate-400">{item.date}</div>
+          <div className="text-[11px] text-stone">{item.date}</div>
         </div>
       </div>
 
@@ -131,7 +131,7 @@ export const TestimonialSection: React.FC<{ className?: string }> = ({ className
             onClick={() => setCurrentIndex(idx)}
             aria-label={`Go to slide ${idx + 1}`}
             className={`h-1.5 rounded-full transition-all ${
-              idx === currentIndex ? 'w-6 bg-primary' : 'w-2 bg-slate-300'
+              idx === currentIndex ? 'w-6 bg-primary' : 'w-2 bg-stone-300 dark:bg-stone-700'
             }`}
           />
         ))}

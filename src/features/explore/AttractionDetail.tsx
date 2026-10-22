@@ -148,17 +148,17 @@ export const AttractionDetail: React.FC = () => {
   const relatedGiItems = JAMMU_GI_PRODUCTS.filter((p) => p.relatedAttractionIds.includes(attraction.id));
 
   return (
-    <div className="space-y-4 pb-24 text-[#1C1917] select-none font-sans -mx-4 -mt-3">
+    <div className="space-y-4 pb-24 text-ink select-none font-sans -mx-4 -mt-3">
       {/* Toast */}
       {toastMessage && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-[#1C1917] text-white px-4 py-2 rounded-full text-xs font-semibold shadow-xl flex items-center gap-2 animate-in fade-in">
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-[#1C1917] dark:bg-stone-800 text-white px-4 py-2 rounded-full text-xs font-semibold shadow-xl flex items-center gap-2 animate-in fade-in">
           <Check size={14} className="text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* 1. HERO PHOTO WITH TOP FLOATING CONTROLS & BOTTOM BADGES */}
-      <div className="relative w-full h-80 bg-[#F5F5F4] overflow-hidden">
+      <div className="relative w-full h-80 bg-surface overflow-hidden">
         <img
           src={getSpotImage(attraction.id, attraction.type)}
           alt={attraction.name.en}
@@ -175,7 +175,7 @@ export const AttractionDetail: React.FC = () => {
         <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
           <button
             onClick={() => navigate(-1)}
-            className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md text-[#1C1917] flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all"
+            className="w-10 h-10 rounded-full bg-card/90 dark:bg-stone-900/90 backdrop-blur-md text-ink border border-border/50 flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all"
             title="Back"
           >
             <ArrowLeft size={18} />
@@ -185,7 +185,7 @@ export const AttractionDetail: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowUploadModal(true)}
-              className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md text-[#1C1917] flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all"
+              className="w-10 h-10 rounded-full bg-card/90 dark:bg-stone-900/90 backdrop-blur-md text-ink border border-border/50 flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all"
               title="Upload Photo or Suggest Location Correction"
             >
               <Camera size={17} />
@@ -196,15 +196,15 @@ export const AttractionDetail: React.FC = () => {
                 toggleFavorite(attraction.id);
                 showToast(isFavorited ? 'Removed from Saved' : 'Saved to Offline Favorites');
               }}
-              className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md text-[#1C1917] flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all"
+              className="w-10 h-10 rounded-full bg-card/90 dark:bg-stone-900/90 backdrop-blur-md text-ink border border-border/50 flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all"
               title="Save"
             >
-              <Bookmark size={17} className={isFavorited ? 'fill-[#9E4A0C] text-[#9E4A0C]' : ''} />
+              <Bookmark size={17} className={isFavorited ? 'fill-[#9E4A0C] text-[#9E4A0C] dark:fill-amber-400 dark:text-amber-400' : ''} />
             </button>
 
             <button
               onClick={() => setShowShareModal(true)}
-              className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md text-[#1C1917] flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all"
+              className="w-10 h-10 rounded-full bg-card/90 dark:bg-stone-900/90 backdrop-blur-md text-ink border border-border/50 flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all"
               title="Share"
             >
               <Share2 size={17} />
@@ -218,11 +218,11 @@ export const AttractionDetail: React.FC = () => {
             <span>🏛️</span>
             <span>Dogra Heritage Landmark</span>
           </span>
-          <span className="px-3 py-1 rounded-full bg-white/95 text-[#1C1917] text-[11px] font-bold flex items-center gap-1 shadow-sm">
+          <span className="px-3 py-1 rounded-full bg-card/95 text-ink border border-border/40 text-[11px] font-bold flex items-center gap-1 shadow-sm">
             <Star size={12} className="text-amber-500 fill-amber-500" />
             <span>4.9 (1.2k reviews)</span>
           </span>
-          <span className="px-3 py-1 rounded-full bg-white/80 backdrop-blur-md text-[#1C1917] text-[11px] font-bold flex items-center gap-1 shadow-sm">
+          <span className="px-3 py-1 rounded-full bg-card/80 dark:bg-stone-900/80 backdrop-blur-md text-ink border border-border/40 text-[11px] font-bold flex items-center gap-1 shadow-sm">
             <span>🏛️</span>
             <span>French Chateau Architecture</span>
           </span>
@@ -233,90 +233,90 @@ export const AttractionDetail: React.FC = () => {
       <div className="px-4 space-y-4">
         {/* Title & Subhead */}
         <div className="space-y-1">
-          <div className="flex items-center gap-1.5 text-xs text-[#9E4A0C] font-bold">
+          <div className="flex items-center gap-1.5 text-xs text-[#9E4A0C] dark:text-amber-400 font-bold">
             <MapPin size={13} />
             <span>Jammu City • Shivalik Range Foothills</span>
           </div>
-          <h1 className="font-heading text-2xl font-extrabold text-[#1C1917] leading-tight">
+          <h1 className="font-heading text-2xl font-extrabold text-ink leading-tight">
             {attraction.name.en}
           </h1>
-          <div className="text-sm font-semibold text-[#B91C1C]">
+          <div className="text-sm font-semibold text-[#B91C1C] dark:text-red-400">
             {attraction.name.hi || 'अमर महल पैलेस संग्रहालय'}
           </div>
-          <p className="text-xs text-[#57534E] leading-relaxed pt-1">
+          <p className="text-xs text-stone leading-relaxed pt-1">
             {attraction.summary.en} Overlooking the calm curves of the Tawi River valley and forested ridge lines, this magnificent 19th-century royal sandstone residence preserves Dogra sovereignty and Pahari artistic masterworks.
           </p>
         </div>
 
         {/* 3. 2x2 SPECS GRID */}
         <div className="grid grid-cols-2 gap-2.5">
-          <div className="p-3 bg-white border border-[#E7E5E4] rounded-2xl shadow-xs space-y-1">
-            <div className="flex items-center gap-1.5 text-[11px] text-[#78716C] font-semibold">
-              <Clock size={13} className="text-[#9E4A0C]" />
+          <div className="p-3 bg-card border border-border rounded-2xl shadow-xs space-y-1">
+            <div className="flex items-center gap-1.5 text-[11px] text-stone font-semibold">
+              <Clock size={13} className="text-[#9E4A0C] dark:text-amber-400" />
               <span>Built Era</span>
             </div>
-            <div className="font-heading font-extrabold text-base text-[#1C1917]">
+            <div className="font-heading font-extrabold text-base text-ink">
               1890s
             </div>
           </div>
 
-          <div className="p-3 bg-white border border-[#E7E5E4] rounded-2xl shadow-xs space-y-1">
-            <div className="flex items-center gap-1.5 text-[11px] text-[#78716C] font-semibold">
-              <BadgeIndianRupee size={13} className="text-[#059669]" />
+          <div className="p-3 bg-card border border-border rounded-2xl shadow-xs space-y-1">
+            <div className="flex items-center gap-1.5 text-[11px] text-stone font-semibold">
+              <BadgeIndianRupee size={13} className="text-[#059669] dark:text-emerald-400" />
               <span>Entry Fee</span>
             </div>
-            <div className="font-heading font-extrabold text-base text-[#1C1917]">
+            <div className="font-heading font-extrabold text-base text-ink">
               {feeStr}
             </div>
           </div>
 
-          <div className="p-3 bg-white border border-[#E7E5E4] rounded-2xl shadow-xs space-y-1">
-            <div className="flex items-center gap-1.5 text-[11px] text-[#78716C] font-semibold">
-              <Clock size={13} className="text-[#DC2626]" />
+          <div className="p-3 bg-card border border-border rounded-2xl shadow-xs space-y-1">
+            <div className="flex items-center gap-1.5 text-[11px] text-stone font-semibold">
+              <Clock size={13} className="text-[#DC2626] dark:text-red-400" />
               <span>Timings</span>
             </div>
-            <div className="font-heading font-extrabold text-xs text-[#1C1917] leading-tight">
+            <div className="font-heading font-extrabold text-xs text-ink leading-tight">
               10AM–5PM (Mon Closed)
             </div>
           </div>
 
-          <div className="p-3 bg-white border border-[#E7E5E4] rounded-2xl shadow-xs space-y-1">
-            <div className="flex items-center gap-1.5 text-[11px] text-[#78716C] font-semibold">
-              <Accessibility size={13} className="text-[#7C3AED]" />
+          <div className="p-3 bg-card border border-border rounded-2xl shadow-xs space-y-1">
+            <div className="flex items-center gap-1.5 text-[11px] text-stone font-semibold">
+              <Accessibility size={13} className="text-[#7C3AED] dark:text-purple-400" />
               <span>Mobility</span>
             </div>
-            <div className="font-heading font-extrabold text-xs text-[#1C1917]">
+            <div className="font-heading font-extrabold text-xs text-ink">
               Moderate Stairs
             </div>
           </div>
         </div>
 
         {/* 4. CENTERPIECE RELIC CARD (GOLDEN THRONE) */}
-        <div className="p-4 rounded-3xl bg-[#FFFDF5] border border-[#FDE68A] space-y-3 shadow-xs">
+        <div className="p-4 rounded-3xl bg-amber-500/10 border border-amber-500/30 dark:bg-card space-y-3 shadow-xs">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-[#9E4A0C] text-white flex items-center justify-center shrink-0">
               <Crown size={16} />
             </div>
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#9E4A0C]">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#9E4A0C] dark:text-amber-400">
               Centerpiece Relic
             </span>
           </div>
 
           <div>
-            <h3 className="font-heading font-bold text-base text-[#1C1917] leading-tight">
+            <h3 className="font-heading font-bold text-base text-ink leading-tight">
               The 35kg Pure Gold Dogra Throne
             </h3>
-            <p className="text-xs text-[#57534E] leading-relaxed mt-1">
+            <p className="text-xs text-stone leading-relaxed mt-1">
               Crafted entirely in pure gold and resting upon a velvet hexagonal dais, this regal throne symbolizes the reign of Maharaja Hari Singh. Adjoining halls exhibit the renowned Nal-Damyanti miniature series and original Basohli paintings portraying the Ramayana.
             </p>
           </div>
 
-          <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-[#FDE68A]/60 text-xs text-[#92400E]">
+          <div className="flex items-center justify-between p-2 rounded-xl bg-card border border-border text-xs text-amber-700 dark:text-amber-400">
             <div className="flex items-center gap-1.5 font-bold">
               <span>🎨</span>
               <span>Kangra & Basohli Gallery</span>
             </div>
-            <span className="px-2 py-0.5 rounded-full bg-[#FEF3C7] font-extrabold text-[10px]">
+            <span className="px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 font-extrabold text-[10px]">
               47 Miniatures
             </span>
           </div>
@@ -327,14 +327,14 @@ export const AttractionDetail: React.FC = () => {
           <div className="p-4 rounded-3xl bg-[#F7F6F0] dark:bg-card border border-[#E5E5EA] dark:border-border space-y-3 shadow-xs">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="w-8 h-8 rounded-xl bg-[#F3C969] text-[#1C2923] flex items-center justify-center font-bold text-sm shadow-xs">
+                <span className="w-8 h-8 rounded-xl bg-[#F3C969] dark:bg-amber-400/20 text-[#1C2923] dark:text-amber-300 flex items-center justify-center font-bold text-sm shadow-xs">
                   🏷️
                 </span>
                 <div>
                   <h3 className="font-heading font-bold text-sm text-[#1C2923] dark:text-ink">
                     Certified Regional GI Heritage
                   </h3>
-                  <span className="text-[10px] text-[#65736B]">Officially registered Geographical Indications from this area</span>
+                  <span className="text-[10px] text-stone">Officially registered Geographical Indications from this area</span>
                 </div>
               </div>
             </div>
@@ -451,7 +451,7 @@ export const AttractionDetail: React.FC = () => {
         {(attraction.type === 'religious' || attraction.id.toLowerCase().includes('temple') || attraction.id.toLowerCase().includes('bahu') || attraction.id.toLowerCase().includes('peer')) && (
           <div
             onClick={() => setShowSpiritualModal(true)}
-            className="p-3.5 rounded-3xl bg-[#FFF9F3] border border-[#F3D7C5] flex items-center justify-between cursor-pointer hover:border-[#9E4A0C] transition-all shadow-xs"
+            className="p-3.5 rounded-3xl bg-card border border-border flex items-center justify-between cursor-pointer hover:border-[#9E4A0C] dark:hover:border-amber-400 transition-all shadow-xs"
           >
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-full bg-amber-600 text-white flex items-center justify-center shrink-0">
@@ -461,12 +461,12 @@ export const AttractionDetail: React.FC = () => {
                 <h4 className="font-heading font-bold text-xs text-ink">
                   Shrine Darshan Rules & Dress Code
                 </h4>
-                <p className="text-[10px] text-stone-500">
+                <p className="text-[10px] text-stone">
                   Locker locations, prohibited items, footwear token & aarti times
                 </p>
               </div>
             </div>
-            <span className="text-xs font-bold text-[#9E4A0C]">View Guide →</span>
+            <span className="text-xs font-bold text-[#9E4A0C] dark:text-amber-400">View Guide →</span>
           </div>
         )}
 
@@ -475,34 +475,34 @@ export const AttractionDetail: React.FC = () => {
 
         {/* 6. VISITOR PRACTICALITIES */}
         <div className="space-y-2 pt-1">
-          <div className="flex items-center gap-1.5 font-heading font-bold text-sm text-[#1C1917]">
-            <CheckCircle2 size={16} className="text-[#059669]" />
+          <div className="flex items-center gap-1.5 font-heading font-bold text-sm text-ink">
+            <CheckCircle2 size={16} className="text-[#059669] dark:text-emerald-400" />
             <span>Visitor Practicalities</span>
           </div>
 
-          <div className="space-y-1.5 text-xs text-[#44403C]">
-            <div className="p-3 bg-[#F0FDF4] border border-[#DCFCE7] rounded-2xl flex items-center gap-2.5">
-              <Accessibility size={16} className="text-[#059669] shrink-0" />
+          <div className="space-y-1.5 text-xs text-stone">
+            <div className="p-3 bg-card border border-border rounded-2xl flex items-center gap-2.5 text-ink">
+              <Accessibility size={16} className="text-[#059669] dark:text-emerald-400 shrink-0" />
               <span>Step-free ramp to the ground museum & royal portrait suites.</span>
             </div>
 
-            <div className="p-3 bg-[#F0FDF4] border border-[#DCFCE7] rounded-2xl flex items-center gap-2.5">
-              <Lock size={16} className="text-[#059669] shrink-0" />
+            <div className="p-3 bg-card border border-border rounded-2xl flex items-center gap-2.5 text-ink">
+              <Lock size={16} className="text-[#059669] dark:text-emerald-400 shrink-0" />
               <span>Secure cloakroom & locker deposit at the northern entrance gate.</span>
             </div>
 
-            <div className="p-3 bg-[#F0FDF4] border border-[#DCFCE7] rounded-2xl flex items-center gap-2.5">
-              <Camera size={16} className="text-[#059669] shrink-0" />
+            <div className="p-3 bg-card border border-border rounded-2xl flex items-center gap-2.5 text-ink">
+              <Camera size={16} className="text-[#059669] dark:text-emerald-400 shrink-0" />
               <span>Camera / smartphone photography ticket: ₹100 per device.</span>
             </div>
 
-            <div className="p-3 bg-[#F0FDF4] border border-[#DCFCE7] rounded-2xl flex items-center gap-2.5">
-              <UserCheck size={16} className="text-[#059669] shrink-0" />
+            <div className="p-3 bg-card border border-border rounded-2xl flex items-center gap-2.5 text-ink">
+              <UserCheck size={16} className="text-[#059669] dark:text-emerald-400 shrink-0" />
               <span>Certified heritage historians available at reception desk (₹250/group).</span>
             </div>
 
             {/* Upload / Suggest Correction Card */}
-            <div className="p-3 bg-white border border-border rounded-2xl flex items-center justify-between gap-3 shadow-xs">
+            <div className="p-3 bg-card border border-border rounded-2xl flex items-center justify-between gap-3 shadow-xs">
               <div className="flex items-center gap-2">
                 <Camera size={16} className="text-primary shrink-0" />
                 <span className="text-xs font-semibold text-ink">Have a photo or location correction for this spot?</span>
@@ -519,34 +519,34 @@ export const AttractionDetail: React.FC = () => {
         </div>
 
         {/* 7. TRANSIT & COMMUTE CARD */}
-        <div className="p-3.5 rounded-3xl bg-[#F0F4FF] border border-[#DCE4FD] space-y-2.5 shadow-xs">
-          <div className="flex items-center gap-2 font-heading font-bold text-sm text-[#1E1B4B]">
+        <div className="p-3.5 rounded-3xl bg-card border border-border space-y-2.5 shadow-xs">
+          <div className="flex items-center gap-2 font-heading font-bold text-sm text-ink">
             <TaxiIcon size={18} color="#9E4A0C" />
             <span>Transit & Commute</span>
           </div>
 
-          <div className="space-y-1.5 text-xs text-[#334155]">
-            <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-[#E0E7FF]">
+          <div className="space-y-1.5 text-xs text-stone">
+            <div className="flex items-center justify-between p-2 rounded-xl bg-surface border border-border text-ink">
               <div className="flex items-center gap-2 font-medium">
                 <ExpressTrainIcon size={16} color="#085444" />
                 <span>Jammu Tawi Railway Station</span>
               </div>
-              <span className="font-extrabold text-[#DC2626]">4.5 km away</span>
+              <span className="font-extrabold text-[#DC2626] dark:text-red-400">4.5 km away</span>
             </div>
 
-            <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-[#E0E7FF]">
+            <div className="flex items-center justify-between p-2 rounded-xl bg-surface border border-border text-ink">
               <div className="flex items-center gap-2 font-medium">
                 <TaxiIcon size={16} color="#9E4A0C" />
                 <span>Prepaid Taxi / E-Rickshaw</span>
               </div>
-              <span className="font-extrabold text-[#059669]">₹150 – ₹200</span>
+              <span className="font-extrabold text-[#059669] dark:text-emerald-400">₹150 – ₹200</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* 8. STICKY BOTTOM ACTION BAR */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-border p-3">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-md border-t border-border p-3">
         <div className="max-w-md mx-auto flex items-center gap-3">
           <button
             onClick={() => navigate('/map', { state: { targetNode: attraction.nodeId } })}
@@ -558,7 +558,7 @@ export const AttractionDetail: React.FC = () => {
 
           <button
             onClick={() => navigate('/safety')}
-            className="w-12 h-12 rounded-2xl bg-[#DCFCE7] text-[#15803D] flex items-center justify-center border border-[#86EFAC] shadow-xs hover:bg-[#BBF7D0] transition-colors shrink-0"
+            className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center border border-emerald-300 dark:border-emerald-800 shadow-xs hover:bg-emerald-200 dark:hover:bg-emerald-900 transition-colors shrink-0"
             title="Help & Safety"
           >
             <MessageCircle size={20} />

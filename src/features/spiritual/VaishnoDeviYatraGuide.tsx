@@ -81,7 +81,7 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div 
-        className="bg-white rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-100 flex flex-col"
+        className="bg-card text-ink rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-border flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-labelledby="vaishno-devi-guide-title"
@@ -119,13 +119,13 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-slate-200 bg-slate-50/80 px-4 py-2 gap-1.5 overflow-x-auto text-xs font-medium sticky top-0 z-10 backdrop-blur-xs">
+        <div className="flex border-b border-border bg-surface/90 px-4 py-2 gap-1.5 overflow-x-auto text-xs font-medium sticky top-0 z-10 backdrop-blur-xs">
           <button
             onClick={() => setActiveTab('route')}
             className={`px-3 py-1.5 rounded-xl transition-all shrink-0 flex items-center gap-1.5 ${
               activeTab === 'route' 
                 ? 'bg-primary text-white shadow-xs' 
-                : 'text-slate-600 hover:bg-slate-200/70'
+                : 'text-stone hover:bg-card hover:text-ink'
             }`}
           >
             <Footprints className="w-3.5 h-3.5" />
@@ -136,7 +136,7 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
             className={`px-3 py-1.5 rounded-xl transition-all shrink-0 flex items-center gap-1.5 ${
               activeTab === 'seniors' 
                 ? 'bg-primary text-white shadow-xs' 
-                : 'text-slate-600 hover:bg-slate-200/70'
+                : 'text-stone hover:bg-card hover:text-ink'
             }`}
           >
             <Heart className="w-3.5 h-3.5" />
@@ -147,7 +147,7 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
             className={`px-3 py-1.5 rounded-xl transition-all shrink-0 flex items-center gap-1.5 ${
               activeTab === 'essentials' 
                 ? 'bg-primary text-white shadow-xs' 
-                : 'text-slate-600 hover:bg-slate-200/70'
+                : 'text-stone hover:bg-card hover:text-ink'
             }`}
           >
             <Ticket className="w-3.5 h-3.5" />
@@ -158,7 +158,7 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
             className={`px-3 py-1.5 rounded-xl transition-all shrink-0 flex items-center gap-1.5 ${
               activeTab === 'fares' 
                 ? 'bg-primary text-white shadow-xs' 
-                : 'text-slate-600 hover:bg-slate-200/70'
+                : 'text-stone hover:bg-card hover:text-ink'
             }`}
           >
             <Info className="w-3.5 h-3.5" />
@@ -178,7 +178,7 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
                 </div>
               </div>
 
-              <div className="relative pl-6 space-y-4 before:absolute before:left-2.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-200">
+              <div className="relative pl-6 space-y-4 before:absolute before:left-2.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-border">
                 {YATRA_STAGES.map((stage, idx) => (
                   <div key={idx} className="relative group">
                     {/* Step marker */}
@@ -186,10 +186,10 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
                       {idx + 1}
                     </div>
 
-                    <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 shadow-2xs hover:border-primary/40 transition-all">
+                    <div className="bg-surface border border-border rounded-2xl p-4 shadow-2xs hover:border-primary/40 transition-all">
                       <div className="flex flex-wrap items-center justify-between gap-1 mb-1">
                         <h4 className="font-serif font-bold text-ink text-sm">{stage.stage}</h4>
-                        <span className="text-[11px] px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600">
+                        <span className="text-[11px] px-2 py-0.5 rounded-md bg-card border border-border text-stone">
                           {stage.altitude}
                         </span>
                       </div>
@@ -200,18 +200,18 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
                         <span>{stage.approxTimeWalking}</span>
                       </div>
 
-                      <p className="text-xs text-slate-600 leading-relaxed mb-3">
+                      <p className="text-xs text-stone leading-relaxed mb-3">
                         {stage.highlights}
                       </p>
 
-                      <div className="p-2.5 rounded-xl bg-amber-50/60 border border-amber-200/50 text-[11px] text-amber-900 mb-2.5 flex items-start gap-1.5">
+                      <div className="p-2.5 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/50 dark:border-amber-900/40 text-[11px] text-amber-900 dark:text-amber-200 mb-2.5 flex items-start gap-1.5">
                         <Heart className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
                         <div><strong>Elder & Ease Tip:</strong> {stage.elderTip}</div>
                       </div>
 
                       <div className="flex flex-wrap gap-1.5">
                         {stage.amenities.map((amenity, i) => (
-                          <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-white border border-slate-200 text-slate-600">
+                          <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-card border border-border text-stone">
                             {amenity}
                           </span>
                         ))}
@@ -237,43 +237,43 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
               </div>
 
               <div className="grid grid-cols-1 gap-3 text-xs">
-                <div className="p-3.5 rounded-xl border border-slate-200 bg-white shadow-2xs space-y-1.5">
-                  <div className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <div className="p-3.5 rounded-xl border border-border bg-card shadow-2xs space-y-1.5">
+                  <div className="font-bold text-ink text-sm flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                     1. Battery Car Service (Ardhkuwari ➔ Bhawan)
                   </div>
-                  <p className="text-slate-600 leading-relaxed">
+                  <p className="text-stone leading-relaxed">
                     Operates on the gentle gradient Himkoti track. Priority is given to senior citizens (60+ years) and persons with medical certificates.
                   </p>
-                  <div className="text-[11px] text-slate-500 bg-slate-50 p-2 rounded-lg">
+                  <div className="text-[11px] text-stone bg-surface p-2 rounded-lg border border-border">
                     • <strong>Fare:</strong> ₹354 per person (Ardhkuwari to Bhawan) / ₹236 (Bhawan to Ardhkuwari).<br />
                     • <strong>Booking:</strong> Online at maavaishnodevi.org or offline at Ardhkuwari Battery Car counter.
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-slate-200 bg-white shadow-2xs space-y-1.5">
-                  <div className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <div className="p-3.5 rounded-xl border border-border bg-card shadow-2xs space-y-1.5">
+                  <div className="font-bold text-ink text-sm flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                     2. Bhairon Ghati Passenger Ropeway (Cable Car)
                   </div>
-                  <p className="text-slate-600 leading-relaxed">
+                  <p className="text-stone leading-relaxed">
                     Instead of a punishing 1.5 km steep climb, the Swiss-engineered ropeway transports pilgrims from Bhawan to Bhairon Temple in just 5 minutes.
                   </p>
-                  <div className="text-[11px] text-slate-500 bg-slate-50 p-2 rounded-lg">
+                  <div className="text-[11px] text-stone bg-surface p-2 rounded-lg border border-border">
                     • <strong>Fare:</strong> ₹100 per person (Return ticket included).<br />
                     • <strong>Ticket Counter:</strong> Located right above the Bhawan entrance. Highly recommended for all seniors.
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-slate-200 bg-white shadow-2xs space-y-1.5">
-                  <div className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <div className="p-3.5 rounded-xl border border-border bg-card shadow-2xs space-y-1.5">
+                  <div className="font-bold text-ink text-sm flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                     3. Palki (Sedan Chair) & Wheelchair Support
                   </div>
-                  <p className="text-slate-600 leading-relaxed">
+                  <p className="text-stone leading-relaxed">
                     Four-bearer sedan chairs (Palkis) are managed under strict rate regulation by SMVDSB. Free wheelchairs are available at Bhawan and Ardhkuwari dispensaries for emergency mobility.
                   </p>
-                  <div className="text-[11px] text-slate-500 bg-slate-50 p-2 rounded-lg">
+                  <div className="text-[11px] text-stone bg-surface p-2 rounded-lg border border-border">
                     • <strong>Official Rates:</strong> Check the official board at Banganga before hiring; ensure porter possesses a verified SMVDSB RFID card.
                   </div>
                 </div>
@@ -303,31 +303,31 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
                   What to Carry Checklist
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <div className="p-2.5 rounded-xl bg-surface border border-border flex items-center gap-2 text-ink">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     <span>Valid Original Photo ID (Aadhaar)</span>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <div className="p-2.5 rounded-xl bg-surface border border-border flex items-center gap-2 text-ink">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     <span>Comfortable walking shoes with rubber grip</span>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <div className="p-2.5 rounded-xl bg-surface border border-border flex items-center gap-2 text-ink">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     <span>Light woollen shawl / jacket (chilly nights)</span>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <div className="p-2.5 rounded-xl bg-surface border border-border flex items-center gap-2 text-ink">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     <span>Prescribed medications & knee brace</span>
                   </div>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-950 space-y-1.5">
-                <div className="font-bold flex items-center gap-1.5 text-rose-800">
+              <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900 text-xs text-rose-950 dark:text-rose-200 space-y-1.5">
+                <div className="font-bold flex items-center gap-1.5 text-rose-800 dark:text-rose-300">
                   <AlertCircle className="w-4 h-4" />
                   Items strictly prohibited inside Bhawan
                 </div>
-                <p className="text-slate-600 leading-relaxed">
+                <p className="text-stone leading-relaxed">
                   Mobile phones, cameras, leather purses, leather belts, and cigarettes/tobacco must be deposited in the <strong>Free SMVDSB Cloakrooms</strong> prior to entering the Pindies cave queue.
                 </p>
               </div>
@@ -342,61 +342,61 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                   <a 
                     href="tel:01991232075"
-                    className="p-3 rounded-xl border border-slate-200 bg-white hover:border-primary transition-all flex items-center justify-between"
+                    className="p-3 rounded-xl border border-border bg-card hover:border-primary transition-all flex items-center justify-between"
                   >
                     <div>
-                      <div className="font-semibold text-slate-800">SMVDSB Central Helpline</div>
-                      <div className="text-[11px] text-slate-500">24x7 Yatra Assistance</div>
+                      <div className="font-semibold text-ink">SMVDSB Central Helpline</div>
+                      <div className="text-[11px] text-stone">24x7 Yatra Assistance</div>
                     </div>
-                    <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                       <Phone className="w-4 h-4" />
                     </div>
                   </a>
 
                   <a 
                     href="tel:01991232010"
-                    className="p-3 rounded-xl border border-slate-200 bg-white hover:border-primary transition-all flex items-center justify-between"
+                    className="p-3 rounded-xl border border-border bg-card hover:border-primary transition-all flex items-center justify-between"
                   >
                     <div>
-                      <div className="font-semibold text-slate-800">Police Station Katra</div>
-                      <div className="text-[11px] text-slate-500">Law Enforcement & Safety</div>
+                      <div className="font-semibold text-ink">Police Station Katra</div>
+                      <div className="text-[11px] text-stone">Law Enforcement & Safety</div>
                     </div>
-                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                       <Phone className="w-4 h-4" />
                     </div>
                   </a>
 
                   <a 
                     href="tel:01991285634"
-                    className="p-3 rounded-xl border border-slate-200 bg-white hover:border-primary transition-all flex items-center justify-between"
+                    className="p-3 rounded-xl border border-border bg-card hover:border-primary transition-all flex items-center justify-between"
                   >
                     <div>
-                      <div className="font-semibold text-slate-800">Narayana Superspeciality</div>
-                      <div className="text-[11px] text-slate-500">Kakryal Trauma Center</div>
+                      <div className="font-semibold text-ink">Narayana Superspeciality</div>
+                      <div className="text-[11px] text-stone">Kakryal Trauma Center</div>
                     </div>
-                    <div className="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
                       <Phone className="w-4 h-4" />
                     </div>
                   </a>
 
                   <a 
                     href="tel:112"
-                    className="p-3 rounded-xl border border-slate-200 bg-white hover:border-primary transition-all flex items-center justify-between"
+                    className="p-3 rounded-xl border border-border bg-card hover:border-primary transition-all flex items-center justify-between"
                   >
                     <div>
-                      <div className="font-semibold text-slate-800">National Emergency</div>
-                      <div className="text-[11px] text-slate-500">Toll-Free All Services</div>
+                      <div className="font-semibold text-ink">National Emergency</div>
+                      <div className="text-[11px] text-stone">Toll-Free All Services</div>
                     </div>
-                    <div className="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-lg bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center">
                       <Phone className="w-4 h-4" />
                     </div>
                   </a>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
-                <div className="font-bold text-slate-800">Official Portal:</div>
-                <p className="text-slate-600">
+              <div className="p-3.5 rounded-2xl bg-surface border border-border text-xs space-y-1.5">
+                <div className="font-bold text-ink">Official Portal:</div>
+                <p className="text-stone">
                   Book official Shrine Board rooms, battery cars, helicopter services, and special poojas at the authorized portal:
                 </p>
                 <a 
@@ -413,8 +413,8 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
         </div>
 
         {/* Footer */}
-        <div className="p-4 bg-slate-50 border-t border-slate-100 rounded-b-3xl flex items-center justify-between">
-          <div className="text-[11px] text-slate-500">
+        <div className="p-4 bg-surface border-t border-border rounded-b-3xl flex items-center justify-between">
+          <div className="text-[11px] text-stone">
             Information verified with SMVDSB • Oct 2026
           </div>
           <button

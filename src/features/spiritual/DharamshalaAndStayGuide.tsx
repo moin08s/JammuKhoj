@@ -57,7 +57,7 @@ const VERIFIED_STAYS: StayOption[] = [
 
 export const DharamshalaAndStayGuide: React.FC = () => {
   return (
-    <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-3">
+    <div className="bg-card rounded-2xl p-4 border border-border shadow-xs space-y-3 text-ink">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center">
@@ -65,39 +65,39 @@ export const DharamshalaAndStayGuide: React.FC = () => {
           </div>
           <div>
             <h3 className="font-serif font-bold text-ink text-sm">Verified Shrine Board Dharamshalas & Stay</h3>
-            <p className="text-[11px] text-slate-500">Government & SMVDSB regulated non-commercial accommodations</p>
+            <p className="text-[11px] text-stone">Government & SMVDSB regulated non-commercial accommodations</p>
           </div>
         </div>
 
-        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold flex items-center gap-1">
-          <ShieldCheck className="w-3 h-3 text-emerald-600" />
+        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-semibold flex items-center gap-1">
+          <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
           Zero Surge
         </span>
       </div>
 
       <div className="space-y-2.5">
         {VERIFIED_STAYS.map((stay, idx) => (
-          <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
+          <div key={idx} className="p-3 rounded-xl bg-surface border border-border space-y-2 text-xs">
             <div className="flex flex-wrap items-center justify-between gap-1">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary-soft px-2 py-0.5 rounded-full">
                   {stay.category}
                 </span>
                 <h4 className="font-serif font-bold text-ink text-sm mt-1">{stay.name}</h4>
-                <div className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
+                <div className="text-[11px] text-stone flex items-center gap-1 mt-0.5">
                   <MapPin className="w-3 h-3 text-primary" />
                   <span>{stay.location}</span>
                 </div>
               </div>
 
               <div className="text-right">
-                <span className="font-bold text-emerald-700 bg-white px-2 py-1 rounded-md border border-slate-200">
+                <span className="font-bold text-emerald-700 dark:text-emerald-400 bg-card px-2 py-1 rounded-md border border-border">
                   {stay.rateRange}
                 </span>
               </div>
             </div>
 
-            <div className="text-[11px] text-slate-600 space-y-0.5 bg-white p-2 rounded-lg border border-slate-100">
+            <div className="text-[11px] text-stone space-y-0.5 bg-card p-2 rounded-lg border border-border">
               <div>• <strong>Room Types:</strong> {stay.roomTypes}</div>
               <div>• <strong>Booking:</strong> {stay.bookingMethod}</div>
             </div>
@@ -105,7 +105,7 @@ export const DharamshalaAndStayGuide: React.FC = () => {
             <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
               <div className="flex flex-wrap gap-1">
                 {stay.features.map((f, i) => (
-                  <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
+                  <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-surface text-stone border border-border">
                     {f}
                   </span>
                 ))}

@@ -39,7 +39,7 @@ const CLIMATE_ZONES: ClimateZone[] = [
 
 export const WeatherAndAltitudeAdvisory: React.FC = () => {
   return (
-    <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-3">
+    <div className="bg-card rounded-2xl p-4 border border-border shadow-xs space-y-3 text-ink">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-xl bg-blue-500 text-white flex items-center justify-center">
@@ -47,40 +47,40 @@ export const WeatherAndAltitudeAdvisory: React.FC = () => {
           </div>
           <div>
             <h3 className="font-serif font-bold text-ink text-sm">Altitude & Weather Advisory</h3>
-            <p className="text-[11px] text-slate-500">Seasonal guidelines from Jammu plains to Pir Panjal snowline</p>
+            <p className="text-[11px] text-stone">Seasonal guidelines from Jammu plains to Pir Panjal snowline</p>
           </div>
         </div>
 
-        <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200 font-semibold">
+        <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800 font-semibold">
           Autumn 2026 Season
         </span>
       </div>
 
       <div className="space-y-2.5">
         {CLIMATE_ZONES.map((zone, idx) => (
-          <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
+          <div key={idx} className="p-3 rounded-xl bg-surface border border-border space-y-2 text-xs">
             <div className="flex flex-wrap items-center justify-between gap-1">
               <div>
                 <h4 className="font-serif font-bold text-ink text-sm flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5 text-primary" />
                   <span>{zone.region}</span>
                 </h4>
-                <span className="text-[11px] text-slate-500">Altitude: {zone.altitude}</span>
+                <span className="text-[11px] text-stone">Altitude: {zone.altitude}</span>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-2 text-[11px]">
-              <div className="p-2 rounded-lg bg-white border border-slate-100">
-                <span className="text-slate-500 block">Summer:</span>
-                <span className="font-semibold text-slate-800">{zone.summerTemp}</span>
+              <div className="p-2 rounded-lg bg-card border border-border text-ink">
+                <span className="text-stone block">Summer:</span>
+                <span className="font-semibold text-ink">{zone.summerTemp}</span>
               </div>
-              <div className="p-2 rounded-lg bg-white border border-slate-100">
-                <span className="text-slate-500 block">Winter:</span>
-                <span className="font-semibold text-slate-800">{zone.winterTemp}</span>
+              <div className="p-2 rounded-lg bg-card border border-border text-ink">
+                <span className="text-stone block">Winter:</span>
+                <span className="font-semibold text-ink">{zone.winterTemp}</span>
               </div>
             </div>
 
-            <div className="p-2 rounded-lg bg-amber-50/70 border border-amber-200/60 text-[11px] text-amber-950 space-y-1">
+            <div className="p-2 rounded-lg bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40 text-[11px] text-amber-950 dark:text-amber-200 space-y-1">
               <div><strong>Advisory:</strong> {zone.currentAdvisory}</div>
               <div><strong>Recommended Packing:</strong> {zone.clothingAdvice}</div>
             </div>

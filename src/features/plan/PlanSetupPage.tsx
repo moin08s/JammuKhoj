@@ -291,16 +291,16 @@ export const PlanSetupPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => navigate(-1)}
-            className="p-1 rounded-xl text-[#1C1917] hover:bg-[#F5F5F4] transition-colors"
+            className="p-1 rounded-xl text-ink hover:bg-surface transition-colors"
             title="Back"
           >
             <ArrowLeft size={19} />
           </button>
           <div>
-            <h1 className="font-heading font-extrabold text-lg text-[#1C1917] leading-tight">
+            <h1 className="font-heading font-extrabold text-lg text-ink leading-tight">
               Trip Planner & Layover
             </h1>
-            <p className="text-[10px] text-[#78716C] font-semibold">
+            <p className="text-[10px] text-stone font-semibold">
               Jammu Division Transit Shield & Multi-Day Circuits
             </p>
           </div>
@@ -308,7 +308,7 @@ export const PlanSetupPage: React.FC = () => {
 
         <button
           onClick={() => navigate('/safety')}
-          className="p-1.5 rounded-full text-[#78716C] hover:text-[#1C1917]"
+          className="p-1.5 rounded-full text-stone hover:text-ink"
           title="Info"
         >
           <Info size={17} />
@@ -316,13 +316,13 @@ export const PlanSetupPage: React.FC = () => {
       </div>
 
       {/* 2. MODE SELECTOR TABS (Instant Curated, Layover, Previous Trips, Multi-Day) */}
-      <div className="flex items-center gap-1 bg-[#F5F5F4] p-1 rounded-2xl border border-[#E7E5E4] text-xs font-bold overflow-x-auto no-scrollbar">
+      <div className="flex items-center gap-1 bg-surface p-1 rounded-2xl border border-border text-xs font-bold overflow-x-auto no-scrollbar">
         <button
           onClick={() => setActiveMode('curated')}
           className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1 shrink-0 ${
             activeMode === 'curated'
               ? 'bg-[#9E4A0C] text-white shadow-xs'
-              : 'text-stone-600 hover:text-ink'
+              : 'text-stone hover:text-ink'
           }`}
         >
           <Sparkles size={13} />
@@ -334,7 +334,7 @@ export const PlanSetupPage: React.FC = () => {
           className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1 shrink-0 ${
             activeMode === 'layover'
               ? 'bg-[#9E4A0C] text-white shadow-xs'
-              : 'text-stone-600 hover:text-ink'
+              : 'text-stone hover:text-ink'
           }`}
         >
           <Clock size={13} />
@@ -346,7 +346,7 @@ export const PlanSetupPage: React.FC = () => {
           className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1 shrink-0 ${
             activeMode === 'previous'
               ? 'bg-[#9E4A0C] text-white shadow-xs'
-              : 'text-stone-600 hover:text-ink'
+              : 'text-stone hover:text-ink'
           }`}
         >
           <Bookmark size={13} />
@@ -358,7 +358,7 @@ export const PlanSetupPage: React.FC = () => {
           className={`flex-1 py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1 shrink-0 ${
             activeMode === 'multiday'
               ? 'bg-[#9E4A0C] text-white shadow-xs'
-              : 'text-stone-600 hover:text-ink'
+              : 'text-stone hover:text-ink'
           }`}
         >
           <Calendar size={13} />
@@ -371,16 +371,16 @@ export const PlanSetupPage: React.FC = () => {
       {/* ============================================================== */}
       {activeMode === 'curated' && (
         <div className="space-y-3.5 animate-in fade-in">
-          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-[#FFF8F2] to-[#FEF3C7] border border-[#FDE68A] flex items-center justify-between gap-3">
+          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/10 to-amber-500/20 dark:from-stone-900 dark:to-stone-850 border border-amber-500/30 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
               <span className="w-9 h-9 rounded-full bg-[#9E4A0C] text-white flex items-center justify-center shrink-0 shadow-xs font-bold text-sm">
                 ⚡
               </span>
               <div>
-                <h3 className="font-heading font-bold text-xs text-[#9E4A0C]">
+                <h3 className="font-heading font-bold text-xs text-[#9E4A0C] dark:text-amber-400">
                   One-Tap Verified Circuits (झटपट यात्रा)
                 </h3>
-                <p className="text-[11px] text-[#78350F] leading-tight">
+                <p className="text-[11px] text-stone leading-tight">
                   Pre-configured with local taxi rates, temple darshan schedules, and safety buffers.
                 </p>
               </div>
@@ -397,34 +397,34 @@ export const PlanSetupPage: React.FC = () => {
             {JAMMU_CURATED_SUGGESTIONS.map((sugg) => (
               <div
                 key={sugg.id}
-                className="bg-white border border-[#E7E5E4] rounded-2xl p-4 shadow-sm hover:border-[#9E4A0C]/50 transition-all space-y-3"
+                className="bg-card border border-border rounded-2xl p-4 shadow-sm hover:border-[#9E4A0C]/50 transition-all space-y-3 text-ink"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded-md bg-[#FFF8F2] text-[#9E4A0C] font-bold text-[10px] border border-[#FDE68A]">
+                      <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-[#9E4A0C] dark:text-amber-400 font-bold text-[10px] border border-amber-500/30">
                         {sugg.duration}
                       </span>
-                      <span className="text-[10px] text-stone-500 font-bold uppercase tracking-wider">
+                      <span className="text-[10px] text-stone font-bold uppercase tracking-wider">
                         {sugg.zone === 'city' ? 'City Core' : sugg.zone === 'day_trip' ? 'Day Excursion' : 'Scenic Highland'}
                       </span>
                     </div>
-                    <h3 className="font-heading font-bold text-sm text-[#1C1917] mt-1.5">
+                    <h3 className="font-heading font-bold text-sm text-ink mt-1.5">
                       {sugg.title}
                     </h3>
-                    <p className="text-xs text-stone-600 mt-0.5 leading-snug">
+                    <p className="text-xs text-stone mt-0.5 leading-snug">
                       {sugg.description}
                     </p>
                   </div>
                 </div>
 
                 {/* Highlights List */}
-                <div className="bg-[#F5F5F4] p-2.5 rounded-xl space-y-1">
-                  <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Key Stops Included:</span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-stone-700">
+                <div className="bg-surface border border-border p-2.5 rounded-xl space-y-1">
+                  <span className="text-[10px] font-bold text-stone uppercase tracking-wider block">Key Stops Included:</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-stone">
                     {sugg.highlights.slice(0, 3).map((h, idx) => (
                       <div key={idx} className="flex items-center gap-1.5">
-                        <Check size={11} className="text-[#059669] shrink-0" />
+                        <Check size={11} className="text-[#059669] dark:text-emerald-400 shrink-0" />
                         <span className="truncate">{h}</span>
                       </div>
                     ))}
@@ -432,7 +432,7 @@ export const PlanSetupPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center justify-between pt-1">
-                  <span className="text-[10px] text-stone-500">
+                  <span className="text-[10px] text-stone">
                     {sugg.attractionIds.length} Verified Stops • Buffer Protected
                   </span>
                   <button
@@ -487,8 +487,8 @@ export const PlanSetupPage: React.FC = () => {
                 onClick={() => setSelectedHub('station_jammu')}
                 className={`p-3 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
                   selectedHub === 'station_jammu'
-                    ? 'bg-[#FFF8F2] border-[#9E4A0C] shadow-xs'
-                    : 'bg-white border-[#E7E5E4] hover:bg-[#F5F5F4]'
+                    ? 'bg-amber-500/10 border-[#9E4A0C] dark:border-amber-400 shadow-xs'
+                    : 'bg-card border-border hover:bg-surface'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -500,8 +500,8 @@ export const PlanSetupPage: React.FC = () => {
                     {selectedHub === 'station_jammu' && <span className="w-2 h-2 rounded-full bg-[#9E4A0C]" />}
                   </div>
                   <div>
-                    <h4 className="font-bold text-xs text-[#1C1917]">Jammu Tawi Railway Station</h4>
-                    <p className="text-[10px] text-[#78716C]">Code: JAT • City Center Station</p>
+                    <h4 className="font-bold text-xs text-ink">Jammu Tawi Railway Station</h4>
+                    <p className="text-[10px] text-stone">Code: JAT • City Center Station</p>
                   </div>
                 </div>
                 <ExpressTrainIcon size={19} color={selectedHub === 'station_jammu' ? '#9E4A0C' : '#A8A29E'} />
@@ -512,8 +512,8 @@ export const PlanSetupPage: React.FC = () => {
                 onClick={() => setSelectedHub('airport_jammu')}
                 className={`p-3 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
                   selectedHub === 'airport_jammu'
-                    ? 'bg-[#FFF8F2] border-[#9E4A0C] shadow-xs'
-                    : 'bg-white border-[#E7E5E4] hover:bg-[#F5F5F4]'
+                    ? 'bg-amber-500/10 border-[#9E4A0C] dark:border-amber-400 shadow-xs'
+                    : 'bg-card border-border hover:bg-surface'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -525,8 +525,8 @@ export const PlanSetupPage: React.FC = () => {
                     {selectedHub === 'airport_jammu' && <span className="w-2 h-2 rounded-full bg-[#9E4A0C]" />}
                   </div>
                   <div>
-                    <h4 className="font-bold text-xs text-[#1C1917]">Jammu Airport</h4>
-                    <p className="text-[10px] text-[#78716C]">Code: IXJ • Civil Enclave Satwari</p>
+                    <h4 className="font-bold text-xs text-ink">Jammu Airport</h4>
+                    <p className="text-[10px] text-stone">Code: IXJ • Civil Enclave Satwari</p>
                   </div>
                 </div>
                 <Plane size={17} className={selectedHub === 'airport_jammu' ? 'text-[#9E4A0C]' : 'text-[#A8A29E]'} />
@@ -537,8 +537,8 @@ export const PlanSetupPage: React.FC = () => {
                 onClick={() => setSelectedHub('station_katra')}
                 className={`p-3 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
                   selectedHub === 'station_katra'
-                    ? 'bg-[#FFF8F2] border-[#9E4A0C] shadow-xs'
-                    : 'bg-white border-[#E7E5E4] hover:bg-[#F5F5F4]'
+                    ? 'bg-amber-500/10 border-[#9E4A0C] dark:border-amber-400 shadow-xs'
+                    : 'bg-card border-border hover:bg-surface'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -550,8 +550,8 @@ export const PlanSetupPage: React.FC = () => {
                     {selectedHub === 'station_katra' && <span className="w-2 h-2 rounded-full bg-[#9E4A0C]" />}
                   </div>
                   <div>
-                    <h4 className="font-bold text-xs text-[#1C1917]">Katra Base Station</h4>
-                    <p className="text-[10px] text-[#78716C]">Code: SVDK • Holy Shrine Hub</p>
+                    <h4 className="font-bold text-xs text-ink">Katra Base Station</h4>
+                    <p className="text-[10px] text-stone">Code: SVDK • Holy Shrine Hub</p>
                   </div>
                 </div>
                 <Compass size={17} className={selectedHub === 'station_katra' ? 'text-[#9E4A0C]' : 'text-[#A8A29E]'} />
@@ -605,9 +605,9 @@ export const PlanSetupPage: React.FC = () => {
               <span className="text-[10px] text-[#78716C] font-semibold">Sync or Input</span>
             </div>
 
-            <div className="p-3 rounded-2xl bg-white border border-[#E7E5E4] flex items-center justify-between">
+            <div className="p-3 rounded-2xl bg-card border border-border flex items-center justify-between text-ink">
               <div className="flex items-center gap-2.5">
-                <Clock size={16} className="text-[#9E4A0C]" />
+                <Clock size={16} className="text-[#9E4A0C] dark:text-amber-400" />
                 {isEditingTrain ? (
                   <input
                     type="text"
@@ -615,15 +615,15 @@ export const PlanSetupPage: React.FC = () => {
                     onChange={(e) => setTrainInfo(e.target.value)}
                     onBlur={() => setIsEditingTrain(false)}
                     autoFocus
-                    className="text-xs font-bold text-[#1C1917] border-b border-[#9E4A0C] outline-none"
+                    className="text-xs font-bold text-ink bg-transparent border-b border-[#9E4A0C] outline-none"
                   />
                 ) : (
-                  <span className="text-xs font-bold text-[#1C1917]">{trainInfo}</span>
+                  <span className="text-xs font-bold text-ink">{trainInfo}</span>
                 )}
               </div>
               <button
                 onClick={() => setIsEditingTrain(!isEditingTrain)}
-                className="text-[11px] font-bold text-[#9E4A0C] hover:underline flex items-center gap-0.5"
+                className="text-[11px] font-bold text-[#9E4A0C] dark:text-amber-400 hover:underline flex items-center gap-0.5"
               >
                 <span>Edit</span>
                 <Edit2 size={11} />
@@ -642,22 +642,22 @@ export const PlanSetupPage: React.FC = () => {
 
           {/* GENERATED SAFE CIRCUIT SECTION */}
           {showCircuit && (
-            <div className="p-4 rounded-3xl bg-white border border-[#E7E5E4] space-y-4 shadow-sm animate-in fade-in">
-              <div className="flex items-center justify-between border-b border-[#F5F5F4] pb-2">
+            <div className="p-4 rounded-3xl bg-card border border-border space-y-4 shadow-sm animate-in fade-in text-ink">
+              <div className="flex items-center justify-between border-b border-border pb-2">
                 <div>
-                  <h3 className="font-heading font-extrabold text-sm text-[#1C1917]">
+                  <h3 className="font-heading font-extrabold text-sm text-ink">
                     Generated Safe Circuit
                   </h3>
-                  <div className="flex items-center gap-2 text-[10px] text-[#78716C] font-semibold">
+                  <div className="flex items-center gap-2 text-[10px] text-stone font-semibold">
                     <span>Circuit: 2h 45m</span>
                     <span>•</span>
-                    <span className="text-[#059669] font-bold">50m Safe Margin</span>
+                    <span className="text-[#059669] dark:text-emerald-400 font-bold">50m Safe Margin</span>
                   </div>
                 </div>
 
                 <button
                   onClick={handleWhatsAppShare}
-                  className="px-2.5 py-1.5 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] text-[#059669] text-[11px] font-bold flex items-center gap-1 hover:bg-[#D1FAE5]"
+                  className="px-2.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 text-[11px] font-bold flex items-center gap-1 hover:bg-emerald-500/20"
                 >
                   <Share2 size={12} />
                   <span>Share Plan</span>
@@ -667,24 +667,24 @@ export const PlanSetupPage: React.FC = () => {
               {/* Progress Bar of Margin */}
               <div className="space-y-1">
                 <div className="flex justify-between text-[11px] font-bold">
-                  <span className="text-[#1C1917]">Safe Return Margin</span>
-                  <span className="text-[#059669]">50m buffer verified</span>
+                  <span className="text-ink">Safe Return Margin</span>
+                  <span className="text-[#059669] dark:text-emerald-400">50m buffer verified</span>
                 </div>
-                <div className="w-full h-2 rounded-full bg-[#F5F5F4] overflow-hidden">
-                  <div className="h-full bg-[#059669] rounded-full w-full"></div>
+                <div className="w-full h-2 rounded-full bg-surface border border-border overflow-hidden">
+                  <div className="h-full bg-[#059669] dark:bg-emerald-500 rounded-full w-full"></div>
                 </div>
               </div>
 
               {/* Step-by-Step Vertical Route */}
-              <div className="pl-6 relative border-l-2 border-dashed border-[#E7E5E4] space-y-4 text-xs">
+              <div className="pl-6 relative border-l-2 border-dashed border-border space-y-4 text-xs">
                 {/* Stop 1 */}
                 <div className="relative space-y-1">
                   <div className="absolute -left-7 top-0.5 w-5 h-5 rounded-full bg-[#9E4A0C] text-white flex items-center justify-center text-[10px] font-bold">
                     1
                   </div>
-                  <div className="text-[11px] font-bold text-[#9E4A0C]">14:00 • Departure from Jammu Tawi</div>
-                  <h4 className="font-bold text-xs text-[#1C1917]">Exit Platform 1 to Prepaid Taxi Stand</h4>
-                  <p className="text-[11px] text-[#78716C] leading-snug">
+                  <div className="text-[11px] font-bold text-[#9E4A0C] dark:text-amber-400">14:00 • Departure from Jammu Tawi</div>
+                  <h4 className="font-bold text-xs text-ink">Exit Platform 1 to Prepaid Taxi Stand</h4>
+                  <p className="text-[11px] text-stone leading-snug">
                     Board pre-assigned police voucher auto/taxi.
                   </p>
                 </div>
@@ -694,9 +694,9 @@ export const PlanSetupPage: React.FC = () => {
                   <div className="absolute -left-7 top-0.5 w-5 h-5 rounded-full bg-[#9E4A0C] text-white flex items-center justify-center text-[10px] font-bold">
                     2
                   </div>
-                  <div className="text-[11px] font-bold text-[#9E4A0C]">14:20 • Shri Raghunath Temple</div>
-                  <h4 className="font-bold text-xs text-[#1C1917]">Darshan at Gold Sanctum</h4>
-                  <p className="text-[11px] text-[#78716C] leading-snug">
+                  <div className="text-[11px] font-bold text-[#9E4A0C] dark:text-amber-400">14:20 • Shri Raghunath Temple</div>
+                  <h4 className="font-bold text-xs text-ink">Darshan at Gold Sanctum</h4>
+                  <p className="text-[11px] text-stone leading-snug">
                     Free mobile & shoe locker counter available at Gate 2.
                   </p>
                 </div>
@@ -706,9 +706,9 @@ export const PlanSetupPage: React.FC = () => {
                   <div className="absolute -left-7 top-0.5 w-5 h-5 rounded-full bg-[#9E4A0C] text-white flex items-center justify-center text-[10px] font-bold">
                     3
                   </div>
-                  <div className="text-[11px] font-bold text-[#9E4A0C]">15:35 • Amar Mahal Palace</div>
-                  <h4 className="font-bold text-xs text-[#1C1917]">Golden Throne & French Chateau</h4>
-                  <p className="text-[11px] text-[#78716C] leading-snug">
+                  <div className="text-[11px] font-bold text-[#9E4A0C] dark:text-amber-400">15:35 • Amar Mahal Palace</div>
+                  <h4 className="font-bold text-xs text-ink">Golden Throne & French Chateau</h4>
+                  <p className="text-[11px] text-stone leading-snug">
                     Tour the Dogra royal archives and Basohli art gallery.
                   </p>
                 </div>
@@ -718,29 +718,29 @@ export const PlanSetupPage: React.FC = () => {
                   <div className="absolute -left-7 top-0.5 w-5 h-5 rounded-full bg-[#059669] text-white flex items-center justify-center text-[10px] font-bold">
                     ✓
                   </div>
-                  <div className="text-[11px] font-bold text-[#059669]">16:45 • Safe Station Lounge Arrival</div>
-                  <h4 className="font-bold text-xs text-[#1C1917]">Platform 1 Executive Waiting Lounge</h4>
-                  <p className="text-[11px] text-[#78716C] leading-snug">
+                  <div className="text-[11px] font-bold text-[#059669] dark:text-emerald-400">16:45 • Safe Station Lounge Arrival</div>
+                  <h4 className="font-bold text-xs text-ink">Platform 1 Executive Waiting Lounge</h4>
+                  <p className="text-[11px] text-stone leading-snug">
                     Arrive 50 full minutes ahead of train boarding.
                   </p>
                 </div>
               </div>
 
               {/* Prepaid Taxi Guarantee Card */}
-              <div className="p-3 rounded-2xl bg-[#F5F5F4] border border-[#E7E5E4] flex items-center justify-between">
+              <div className="p-3 rounded-2xl bg-surface border border-border flex items-center justify-between text-ink">
                 <div className="flex items-center gap-2.5">
                   <TaxiIcon size={20} color="#9E4A0C" />
                   <div>
-                    <div className="text-xs font-bold text-[#1C1917] flex items-center gap-1">
+                    <div className="text-xs font-bold text-ink flex items-center gap-1">
                       <span>Prepaid Taxi Guarantee</span>
-                      <CheckCircle2 size={12} className="text-[#059669]" />
+                      <CheckCircle2 size={12} className="text-[#059669] dark:text-emerald-400" />
                     </div>
-                    <div className="text-[10px] text-[#78716C]">Jammu RTO verified fixed rate</div>
+                    <div className="text-[10px] text-stone">Jammu RTO verified fixed rate</div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="font-extrabold text-sm text-[#9E4A0C]">₹450</span>
-                  <div className="text-[9px] text-[#78716C]">Flat Round-Trip</div>
+                  <span className="font-extrabold text-sm text-[#9E4A0C] dark:text-amber-400">₹450</span>
+                  <div className="text-[9px] text-stone">Flat Round-Trip</div>
                 </div>
               </div>
 
@@ -756,7 +756,7 @@ export const PlanSetupPage: React.FC = () => {
 
                 <button
                   onClick={handleSaveCurrentCircuit}
-                  className="w-full py-2.5 rounded-xl border border-[#9E4A0C] text-[#9E4A0C] font-bold text-xs hover:bg-[#FFF8F2] flex items-center justify-center gap-1.5"
+                  className="w-full py-2.5 rounded-xl border border-[#9E4A0C] text-[#9E4A0C] dark:text-amber-400 font-bold text-xs hover:bg-surface flex items-center justify-center gap-1.5"
                 >
                   <Bookmark size={14} />
                   <span>Save Plan to Previous Trips</span>
@@ -795,21 +795,21 @@ export const PlanSetupPage: React.FC = () => {
               <div
                 key={plan.id}
                 onClick={() => handleOpenPlan(plan)}
-                className="p-4 bg-white border border-[#EBE4DC] rounded-2xl shadow-sm hover:border-[#9E4A0C]/40 cursor-pointer transition-all space-y-3 group"
+                className="p-4 bg-card border border-border rounded-2xl shadow-sm hover:border-[#9E4A0C]/40 cursor-pointer transition-all space-y-3 group text-ink"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="space-y-0.5">
-                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-[#FCEFE7] text-[#9E4A0C] border border-[#F3D7C5]">
+                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#9E4A0C] dark:text-amber-400 border border-amber-500/20">
                       {plan.bucket} Plan
                     </span>
-                    <h3 className="font-heading font-bold text-sm text-ink group-hover:text-[#9E4A0C] transition-colors mt-1">
+                    <h3 className="font-heading font-bold text-sm text-ink group-hover:text-[#9E4A0C] dark:group-hover:text-amber-400 transition-colors mt-1">
                       {plan.title}
                     </h3>
                   </div>
 
                   <button
                     onClick={(e) => handleDeletePlan(plan.id, e)}
-                    className="p-1.5 rounded-lg text-stone-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                    className="p-1.5 rounded-lg text-stone hover:text-red-600 hover:bg-red-500/10 transition-colors"
                     title="Delete saved plan"
                   >
                     <Trash2 size={15} />
@@ -817,22 +817,22 @@ export const PlanSetupPage: React.FC = () => {
                 </div>
 
                 {/* Timeline Route Stops Pills */}
-                <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-stone-600">
+                <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-stone">
                   {plan.timeline
                     .filter((t) => t.type === 'visit' || t.type === 'buffer')
                     .map((item, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 rounded-md bg-stone-50 border border-stone-200 text-stone-700"
+                        className="px-2 py-0.5 rounded-md bg-surface border border-border text-stone"
                       >
                         {item.label}
                       </span>
                     ))}
                 </div>
 
-                <div className="flex items-center justify-between text-xs text-stone-500 pt-2 border-t border-[#F1E9E0]">
+                <div className="flex items-center justify-between text-xs text-stone pt-2 border-t border-border">
                   <div className="flex items-center gap-2">
-                    <Clock size={13} className="text-[#9E4A0C]" />
+                    <Clock size={13} className="text-[#9E4A0C] dark:text-amber-400" />
                     <span>Return by: {plan.departureTime}</span>
                   </div>
 
@@ -851,12 +851,12 @@ export const PlanSetupPage: React.FC = () => {
       {/* MODE 3: MULTI-DAY & CUSTOM TOUR BUILDER */}
       {/* ============================================================== */}
       {activeMode === 'multiday' && (
-        <div className="bg-white border border-[#EBE4DC] rounded-3xl p-5 space-y-4 shadow-sm animate-in fade-in">
+        <div className="bg-card border border-border text-ink rounded-3xl p-5 space-y-4 shadow-sm animate-in fade-in">
           <div>
             <h3 className="font-heading font-black text-base text-ink">
               Multi-Day Tour Builder
             </h3>
-            <p className="text-xs text-stone-600">
+            <p className="text-xs text-stone">
               Generate full day-by-day itineraries tailored to your schedule and travel group.
             </p>
           </div>
@@ -877,7 +877,7 @@ export const PlanSetupPage: React.FC = () => {
                   className={`py-2 rounded-xl text-xs font-bold border transition-all ${
                     multiDays === d.val
                       ? 'bg-[#9E4A0C] text-white border-[#9E4A0C]'
-                      : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
+                      : 'bg-surface border-border text-stone hover:bg-surface/80'
                   }`}
                 >
                   {d.label}
@@ -901,8 +901,8 @@ export const PlanSetupPage: React.FC = () => {
                   onClick={() => setMultiTheme(t.key as any)}
                   className={`p-2.5 rounded-xl border text-left font-semibold transition-all ${
                     multiTheme === t.key
-                      ? 'bg-[#FCEFE7] border-[#9E4A0C] text-[#9E4A0C]'
-                      : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
+                      ? 'bg-amber-500/10 border-[#9E4A0C] dark:border-amber-500 text-[#9E4A0C] dark:text-amber-400'
+                      : 'bg-surface border-border text-stone hover:bg-surface/80'
                   }`}
                 >
                   {t.label}
@@ -912,7 +912,7 @@ export const PlanSetupPage: React.FC = () => {
           </div>
 
           {/* Travelers Count & Budget Estimate */}
-          <div className="p-3 bg-stone-50 border border-stone-200 rounded-2xl space-y-2 text-xs">
+          <div className="p-3 bg-surface border border-border rounded-2xl space-y-2 text-xs">
             <div className="flex items-center justify-between">
               <span className="font-bold text-ink">Travelers:</span>
               <div className="flex items-center gap-2">
@@ -923,7 +923,7 @@ export const PlanSetupPage: React.FC = () => {
                     className={`w-7 h-7 rounded-lg text-xs font-bold ${
                       multiTravelers === num
                         ? 'bg-[#9E4A0C] text-white'
-                        : 'bg-white border border-stone-200 text-stone-700'
+                        : 'bg-card border border-border text-ink hover:bg-surface'
                     }`}
                   >
                     {num}
@@ -932,7 +932,7 @@ export const PlanSetupPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-between border-t border-stone-200/70 pt-2 text-stone-600">
+            <div className="flex justify-between border-t border-border pt-2 text-stone">
               <span>Estimated Budget:</span>
               <strong className="text-ink">
                 ₹{parseInt(multiDays, 10) * multiTravelers * 1250} – ₹{parseInt(multiDays, 10) * multiTravelers * 1800}

@@ -68,7 +68,7 @@ export const TripChecklist: React.FC = () => {
   ];
 
   return (
-    <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-4">
+    <div className="bg-card rounded-2xl p-4 border border-border shadow-xs space-y-4 text-ink">
       {/* Header & Progress */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -77,13 +77,13 @@ export const TripChecklist: React.FC = () => {
           </div>
           <div>
             <h3 className="font-serif font-bold text-ink text-sm">Pilgrim & Yatra Checklist</h3>
-            <p className="text-[11px] text-slate-500">Check off items before leaving your home/hotel</p>
+            <p className="text-[11px] text-stone">Check off items before leaving your home/hotel</p>
           </div>
         </div>
 
         <button
           onClick={resetAll}
-          className="text-[11px] text-slate-500 hover:text-slate-800 flex items-center gap-1 font-medium"
+          className="text-[11px] text-stone hover:text-ink flex items-center gap-1 font-medium"
           title="Reset all checkboxes"
         >
           <RotateCcw className="w-3 h-3" />
@@ -93,11 +93,11 @@ export const TripChecklist: React.FC = () => {
 
       {/* Progress Bar */}
       <div className="space-y-1">
-        <div className="flex justify-between text-xs text-slate-600 font-medium">
+        <div className="flex justify-between text-xs text-stone font-medium">
           <span>Packing Readiness</span>
           <span className="font-bold text-primary">{checkedCount} of {total} ({progressPct}%)</span>
         </div>
-        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+        <div className="h-2 w-full bg-surface border border-border rounded-full overflow-hidden">
           <div 
             className="h-full bg-primary transition-all duration-300 rounded-full"
             style={{ width: `${progressPct}%` }}
@@ -111,9 +111,9 @@ export const TripChecklist: React.FC = () => {
           const items = DEFAULT_CHECKLIST.filter((i) => i.category === cat.key);
           return (
             <div key={cat.key} className="space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold text-slate-800 border-b border-slate-100 pb-1">
+              <div className="flex items-center justify-between text-xs font-bold text-ink border-b border-border pb-1">
                 <span>{cat.title}</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-normal">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface text-stone border border-border font-normal">
                   {items.filter((i) => checkedIds[i.id]).length}/{items.length}
                 </span>
               </div>
@@ -127,8 +127,8 @@ export const TripChecklist: React.FC = () => {
                       onClick={() => toggleItem(item.id)}
                       className={`p-2.5 rounded-xl border transition-all cursor-pointer flex items-start gap-2.5 text-xs select-none ${
                         isChecked
-                          ? 'bg-emerald-50/70 border-emerald-300 text-slate-800'
-                          : 'bg-slate-50/60 border-slate-200/80 hover:bg-slate-50 text-slate-700'
+                          ? 'bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-800 text-ink'
+                          : 'bg-surface border-border hover:bg-surface/80 text-ink'
                       }`}
                     >
                       <button
@@ -137,17 +137,17 @@ export const TripChecklist: React.FC = () => {
                         className="shrink-0 mt-0.5 text-primary"
                       >
                         {isChecked ? (
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 fill-emerald-100" />
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 fill-emerald-100 dark:fill-emerald-950" />
                         ) : (
-                          <Square className="w-4 h-4 text-slate-400" />
+                          <Square className="w-4 h-4 text-stone" />
                         )}
                       </button>
 
                       <div className="flex-1">
-                        <div className={`font-semibold ${isChecked ? 'line-through text-slate-500' : 'text-slate-800'}`}>
+                        <div className={`font-semibold ${isChecked ? 'line-through text-stone' : 'text-ink'}`}>
                           {item.label}
                         </div>
-                        <div className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                        <div className="text-[11px] text-stone mt-0.5 leading-relaxed">
                           {item.subtext}
                         </div>
                       </div>

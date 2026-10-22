@@ -59,9 +59,9 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in select-none">
-      <div className="bg-white border border-[#EBE4DC] rounded-3xl p-5 max-w-sm w-full space-y-4 shadow-2xl animate-in zoom-in-95">
+      <div className="bg-card border border-border rounded-3xl p-5 max-w-sm w-full space-y-4 shadow-2xl animate-in zoom-in-95 text-ink">
         {/* Google Header */}
-        <div className="flex items-center justify-between border-b border-stone-200 pb-3">
+        <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2.5">
             <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
               <path
@@ -85,27 +85,27 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
               <h3 className="font-heading font-bold text-base text-ink leading-tight">
                 Sign in with Google
               </h3>
-              <p className="text-[11px] text-stone-500">Sync trips & offline saves to Google</p>
+              <p className="text-[11px] text-stone">Sync trips & offline saves to Google</p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1 rounded-full text-stone hover:bg-stone-100 transition-colors"
+            className="p-1 rounded-full text-stone hover:bg-surface transition-colors"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Role Segmented Selector */}
-        <div className="flex bg-stone-100 p-1 rounded-xl text-xs font-bold">
+        <div className="flex bg-surface p-1 rounded-xl text-xs font-bold border border-border">
           <button
             type="button"
             onClick={() => setRole('visitor')}
             className={`flex-1 py-1.5 rounded-lg transition-all flex items-center justify-center gap-1 ${
               role === 'visitor'
-                ? 'bg-white text-[#9E4A0C] shadow-xs'
-                : 'text-stone-600 hover:text-ink'
+                ? 'bg-card text-[#9E4A0C] dark:text-amber-400 shadow-xs'
+                : 'text-stone hover:text-ink'
             }`}
           >
             <User size={13} />
@@ -117,8 +117,8 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
             onClick={() => setRole('business')}
             className={`flex-1 py-1.5 rounded-lg transition-all flex items-center justify-center gap-1 ${
               role === 'business'
-                ? 'bg-white text-[#9E4A0C] shadow-xs'
-                : 'text-stone-600 hover:text-ink'
+                ? 'bg-card text-[#9E4A0C] dark:text-amber-400 shadow-xs'
+                : 'text-stone hover:text-ink'
             }`}
           >
             <Store size={13} />
@@ -139,9 +139,9 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
               )
             }
             disabled={isSigningIn}
-            className="w-full p-2.5 rounded-2xl border border-stone-200 hover:border-[#9E4A0C]/50 hover:bg-stone-50 text-left transition-all flex items-center gap-3 active:scale-98"
+            className="w-full p-2.5 rounded-2xl border border-border bg-card hover:border-[#9E4A0C]/50 hover:bg-surface text-left transition-all flex items-center gap-3 active:scale-98"
           >
-            <div className="w-10 h-10 rounded-full bg-[#E0E7FF] text-[#3730A3] font-bold text-sm flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-full bg-[#E0E7FF] dark:bg-indigo-950 text-[#3730A3] dark:text-indigo-300 font-bold text-sm flex items-center justify-center shrink-0">
               RS
             </div>
             <div className="min-w-0 flex-1">
@@ -149,7 +149,7 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
                 <span>Rajesh Sharma</span>
                 <ShieldCheck size={13} className="text-[#15803D]" />
               </div>
-              <div className="text-[11px] text-stone-500 truncate">rajesh.sharma@gmail.com</div>
+              <div className="text-[11px] text-stone truncate">rajesh.sharma@gmail.com</div>
             </div>
           </button>
 
@@ -164,9 +164,9 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
               )
             }
             disabled={isSigningIn}
-            className="w-full p-2.5 rounded-2xl border border-stone-200 hover:border-[#9E4A0C]/50 hover:bg-stone-50 text-left transition-all flex items-center gap-3 active:scale-98"
+            className="w-full p-2.5 rounded-2xl border border-border bg-card hover:border-[#9E4A0C]/50 hover:bg-surface text-left transition-all flex items-center gap-3 active:scale-98"
           >
-            <div className="w-10 h-10 rounded-full bg-[#DCFCE7] text-[#166534] font-bold text-sm flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-full bg-[#DCFCE7] dark:bg-emerald-950 text-[#166534] dark:text-emerald-300 font-bold text-sm flex items-center justify-center shrink-0">
               MK
             </div>
             <div className="min-w-0 flex-1">
@@ -174,7 +174,7 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
                 <span>Moin Khan</span>
                 <CheckCircle2 size={13} className="text-[#15803D]" />
               </div>
-              <div className="text-[11px] text-stone-500 truncate">moin.jammu@gmail.com</div>
+              <div className="text-[11px] text-stone truncate">moin.jammu@gmail.com</div>
             </div>
           </button>
 
@@ -189,16 +189,16 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
                 )
               }
               disabled={isSigningIn}
-              className="w-full p-2.5 rounded-2xl border border-stone-200 hover:border-[#9E4A0C]/50 hover:bg-stone-50 text-left transition-all flex items-center gap-3 active:scale-98"
+              className="w-full p-2.5 rounded-2xl border border-border bg-card hover:border-[#9E4A0C]/50 hover:bg-surface text-left transition-all flex items-center gap-3 active:scale-98"
             >
-              <div className="w-10 h-10 rounded-full bg-[#FEF3C7] text-[#92400E] font-bold text-sm flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-full bg-[#FEF3C7] dark:bg-amber-950 text-[#92400E] dark:text-amber-300 font-bold text-sm flex items-center justify-center shrink-0">
                 DS
               </div>
               <div className="min-w-0 flex-1">
                 <div className="font-bold text-xs text-ink truncate">
                   Dogra Saffron & Handloom Guild
                 </div>
-                <div className="text-[11px] text-stone-500 truncate">artisan.jammu@gmail.com</div>
+                <div className="text-[11px] text-stone truncate">artisan.jammu@gmail.com</div>
               </div>
             </button>
           )}
@@ -207,7 +207,7 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
           {!showCustomInput ? (
             <button
               onClick={() => setShowCustomInput(true)}
-              className="w-full p-2.5 rounded-2xl border border-dashed border-stone-300 text-stone-600 hover:text-ink hover:border-stone-400 text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+              className="w-full p-2.5 rounded-2xl border border-dashed border-border text-stone hover:text-ink hover:border-stone-400 text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
             >
               <Plus size={14} />
               <span>Use another Google account</span>
@@ -219,7 +219,7 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
                 value={customEmail}
                 onChange={(e) => setCustomEmail(e.target.value)}
                 placeholder="Enter your Gmail address..."
-                className="w-full p-2.5 rounded-xl border border-stone-300 text-xs text-ink focus:outline-none focus:ring-2 focus:ring-[#9E4A0C]/40"
+                className="w-full p-2.5 rounded-xl border border-border bg-surface text-xs text-ink focus:outline-none focus:ring-2 focus:ring-[#9E4A0C]/40"
                 autoFocus
               />
               <button
@@ -233,7 +233,7 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
         </div>
 
         {/* Security and Google Privacy Footer */}
-        <div className="text-[10px] text-stone-500 leading-tight border-t border-stone-100 pt-3 flex items-center gap-1.5">
+        <div className="text-[10px] text-stone leading-tight border-t border-border pt-3 flex items-center gap-1.5">
           <ShieldCheck size={14} className="text-[#15803D] shrink-0" />
           <span>
             Google Play Verified • End-to-end client encryption. No passwords stored on device.

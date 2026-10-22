@@ -71,7 +71,7 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
               className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                 activeCategory === cat.key
                   ? 'bg-[#9E4A0C] text-white shadow-xs'
-                  : 'bg-white border border-[#EBE4DC] text-stone-600 hover:text-ink'
+                  : 'bg-card border border-border text-stone hover:text-ink hover:bg-surface'
               }`}
             >
               {cat.label}
@@ -86,7 +86,7 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
             onClick={() => setDietaryFilter('all')}
             className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
               dietaryFilter === 'all'
-                ? 'bg-stone-800 text-white'
+                ? 'bg-stone-800 text-white dark:bg-stone-700'
                 : 'bg-surface border border-border text-stone hover:text-ink'
             }`}
           >
@@ -122,9 +122,9 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
           <div
             key={item.id}
             onClick={() => setSelectedFood(item)}
-            className="w-64 shrink-0 bg-white border border-[#EBE4DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col group"
+            className="w-64 shrink-0 bg-card border border-border rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col group"
           >
-            <div className="relative h-32 w-full overflow-hidden bg-stone-100">
+            <div className="relative h-32 w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
               <img
                 src={item.heroImage}
                 alt={item.name}
@@ -154,13 +154,13 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
             </div>
 
             <div className="p-3 flex-1 flex flex-col justify-between space-y-2">
-              <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">
+              <p className="text-xs text-stone line-clamp-2 leading-relaxed">
                 {item.description}
               </p>
 
-              <div className="pt-2 border-t border-[#F1E9E0] flex items-center justify-between text-xs">
-                <span className="font-bold text-[#9E4A0C] text-[11px]">{item.approxPrice}</span>
-                <span className="text-[11px] font-semibold text-stone-500 flex items-center gap-0.5 group-hover:text-[#9E4A0C] transition-colors">
+              <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
+                <span className="font-bold text-[#9E4A0C] dark:text-amber-400 text-[11px]">{item.approxPrice}</span>
+                <span className="text-[11px] font-semibold text-stone flex items-center gap-0.5 group-hover:text-[#9E4A0C] dark:group-hover:text-amber-400 transition-colors">
                   <span>{item.iconicShops.length} Spots</span>
                   <ChevronRight size={13} />
                 </span>
@@ -173,7 +173,7 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
       {/* Detailed Modal */}
       {selectedFood && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-xs p-0 sm:p-4 animate-in fade-in">
-          <div className="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-2xl max-h-[88vh] flex flex-col overflow-hidden shadow-2xl animate-in slide-in-from-bottom duration-200">
+          <div className="bg-card border border-border w-full max-w-lg rounded-t-3xl sm:rounded-2xl max-h-[88vh] flex flex-col overflow-hidden shadow-2xl animate-in slide-in-from-bottom duration-200 text-ink">
             {/* Modal Header */}
             <div className="relative h-44 shrink-0 bg-stone-900">
               <img
@@ -204,28 +204,28 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
             </div>
 
             {/* Scrollable Content */}
-            <div className="p-4 overflow-y-auto space-y-4 text-xs text-stone-700">
+            <div className="p-4 overflow-y-auto space-y-4 text-xs text-ink">
               {/* Lore / Story */}
-              <div className="bg-[#FAF6F0] border border-[#F3D7C5] p-3 rounded-xl space-y-1">
-                <div className="font-bold text-[#9E4A0C] flex items-center gap-1.5 text-xs">
+              <div className="bg-surface border border-border p-3 rounded-xl space-y-1">
+                <div className="font-bold text-[#9E4A0C] dark:text-amber-400 flex items-center gap-1.5 text-xs">
                   <Sparkles size={14} />
                   <span>Heritage Background & Tradition</span>
                 </div>
-                <p className="text-stone-600 leading-relaxed text-[11px]">
+                <p className="text-stone leading-relaxed text-[11px]">
                   {selectedFood.historicalStory}
                 </p>
               </div>
 
               {/* Ingredients */}
               <div className="space-y-1.5">
-                <h4 className="font-heading font-bold text-ink text-xs uppercase tracking-wider text-stone-500">
+                <h4 className="font-heading font-bold text-ink text-xs uppercase tracking-wider text-stone">
                   Key Authentic Ingredients
                 </h4>
                 <div className="flex flex-wrap gap-1.5">
                   {selectedFood.keyIngredients.map((ing, i) => (
                     <span
                       key={i}
-                      className="px-2.5 py-1 rounded-lg bg-stone-100 border border-stone-200 text-stone-700 text-[11px] font-medium"
+                      className="px-2.5 py-1 rounded-lg bg-surface border border-border text-ink text-[11px] font-medium"
                     >
                       {ing}
                     </span>
@@ -236,24 +236,24 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
               {/* Iconic Verified Spots */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-heading font-bold text-ink text-xs uppercase tracking-wider text-stone-500">
+                  <h4 className="font-heading font-bold text-ink text-xs uppercase tracking-wider text-stone">
                     Verified Iconic Eateries in Jammu
                   </h4>
-                  <span className="text-[10px] text-stone-400">Locally vetted</span>
+                  <span className="text-[10px] text-stone">Locally vetted</span>
                 </div>
 
                 <div className="space-y-2">
                   {selectedFood.iconicShops.map((shop, idx) => (
                     <div
                       key={idx}
-                      className="p-3 rounded-xl border border-[#EBE4DC] bg-stone-50/50 hover:bg-stone-50 transition-colors space-y-2"
+                      className="p-3 rounded-xl border border-border bg-surface hover:bg-surface/80 transition-colors space-y-2"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <div className="font-bold text-ink text-xs flex items-center gap-1.5">
                             <span>{shop.shopName}</span>
-                            <span className="px-1.5 py-0.2 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-black flex items-center gap-0.5">
-                              <Star size={10} className="fill-emerald-800" />
+                            <span className="px-1.5 py-0.2 rounded-md bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-[10px] font-black flex items-center gap-0.5">
+                              <Star size={10} className="fill-emerald-800 dark:fill-emerald-300" />
                               {shop.rating}
                             </span>
                           </div>
@@ -273,12 +273,12 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
                               `${selectedFood.id}-${idx}`
                             )
                           }
-                          className="px-2 py-1 rounded-lg border border-stone-200 bg-white text-stone-600 hover:text-ink text-[10px] font-semibold flex items-center gap-1 shrink-0"
+                          className="px-2 py-1 rounded-lg border border-border bg-card text-stone hover:text-ink text-[10px] font-semibold flex items-center gap-1 shrink-0"
                         >
                           {copiedShop === `${selectedFood.id}-${idx}` ? (
                             <>
-                              <Check size={11} className="text-emerald-600" />
-                              <span className="text-emerald-600">Copied</span>
+                              <Check size={11} className="text-emerald-500" />
+                              <span className="text-emerald-500 font-bold">Copied</span>
                             </>
                           ) : (
                             <>
@@ -289,7 +289,7 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
                         </button>
                       </div>
 
-                      <div className="bg-amber-50/80 border border-amber-200/60 p-2 rounded-lg text-[11px] text-amber-900 flex items-center justify-between">
+                      <div className="bg-amber-500/10 border border-amber-500/20 p-2 rounded-lg text-[11px] text-amber-900 dark:text-amber-300 flex items-center justify-between">
                         <span>
                           <strong>What to order:</strong> {shop.recommendedOrder}
                         </span>
@@ -301,10 +301,10 @@ export const DogriFoodSection: React.FC<DogriFoodSectionProps> = ({ onSelectShop
             </div>
 
             {/* Modal Footer */}
-            <div className="p-3 bg-stone-50 border-t border-[#EBE4DC] flex items-center justify-between">
+            <div className="p-3 bg-surface border-t border-border flex items-center justify-between">
               <div className="text-xs">
-                <span className="text-stone-500">Average cost: </span>
-                <span className="font-bold text-[#9E4A0C]">{selectedFood.approxPrice}</span>
+                <span className="text-stone">Average cost: </span>
+                <span className="font-bold text-[#9E4A0C] dark:text-amber-400">{selectedFood.approxPrice}</span>
               </div>
               <button
                 onClick={() => setSelectedFood(null)}
