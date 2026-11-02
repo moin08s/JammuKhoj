@@ -33,6 +33,23 @@ export interface TempleCrowdInfo {
   specialRules: string[];
 }
 
+export interface VqcCompartment {
+  id: string;
+  name: string;
+  count: number;
+  capacity: number;
+  status: string;
+  color: string;
+  bg: string;
+}
+
+export const VQC_COMPARTMENTS: VqcCompartment[] = [
+  { id: 'shed_a', name: 'Shed A (Manokamna)', count: 480, capacity: 600, status: 'Moving to Cave', color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
+  { id: 'shed_b', name: 'Shed B (Parikrama)', count: 520, capacity: 600, status: 'Holding (12m)', color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10' },
+  { id: 'shed_c', name: 'Shed C (Atka Enclosure)', count: 210, capacity: 600, status: 'Boarding Batch', color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
+  { id: 'shed_d', name: 'Shed D (Outer Line)', count: 0, capacity: 600, status: 'Clear / Standby', color: 'text-stone', bg: 'bg-surface' },
+];
+
 export const TEMPLE_CROWD_DATA: TempleCrowdInfo[] = [
   {
     id: 'vaishno_devi',
@@ -305,6 +322,64 @@ export const TempleCrowdGuide: React.FC<TempleCrowdGuideProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Tirupati TTD-Style VQC Compartment Holding Telemetry (For Vaishno Devi & High-Surge Shrines) */}
+          {selectedTemple.id === 'vaishno_devi' && (
+            <div className="p-3.5 rounded-2xl bg-card border border-border space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                  <span className="font-heading font-bold text-xs text-ink uppercase tracking-wider">
+                    VQC Batch Compartment Queuing (TTD Model)
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                  Sanctum Flow: 2,400 Yatris / Hr
+                </span>
+              </div>
+
+              {/* 4 Holding Sheds */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                {VQC_COMPARTMENTS.map((shed) => (
+                  <div key={shed.id} className={`p-2.5 rounded-xl border border-border/80 ${shed.bg} space-y-1`}>
+                    <div className="font-bold text-[11px] text-ink truncate">{shed.name}</div>
+                    <div className="flex justify-between items-center text-[10px] font-mono">
+                      <span className="text-stone">{shed.count}/{shed.capacity}</span>
+                      <span className={`font-bold ${shed.color}`}>{shed.status}</span>
+                    </div>
+                    <div className="w-full bg-border h-1.5 rounded-full overflow-hidden">
+                      <div
+                        className="bg-primary h-full rounded-full transition-all duration-300"
+                        style={{ width: `${(shed.count / shed.capacity) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Choke Points Telemetry Strip */}
+              <div className="p-2 rounded-xl bg-surface border border-border/80 text-[11px] space-y-1">
+                <div className="font-bold text-ink text-[10px] uppercase tracking-wider flex items-center justify-between">
+                  <span>Track Choke Points Telemetry:</span>
+                  <span className="text-stone font-normal">Auto-calibrated every 5 mins</span>
+                </div>
+                <div className="grid grid-cols-3 gap-1.5 text-[10px]">
+                  <div className="p-1.5 bg-card rounded-lg border border-border text-center">
+                    <span className="text-stone block">Ban Ganga RFID:</span>
+                    <strong className="text-emerald-600 dark:text-emerald-400">Green (0 min wait)</strong>
+                  </div>
+                  <div className="p-1.5 bg-card rounded-lg border border-border text-center">
+                    <span className="text-stone block">Garbhjoon Cave:</span>
+                    <strong className="text-amber-600 dark:text-amber-400">Token Callout #42</strong>
+                  </div>
+                  <div className="p-1.5 bg-card rounded-lg border border-border text-center">
+                    <span className="text-stone block">Himkoti Battery:</span>
+                    <strong className="text-emerald-600 dark:text-emerald-400">Next Shuttle 4m</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Aarti Timings */}
           <div className="grid grid-cols-2 gap-2 text-xs">

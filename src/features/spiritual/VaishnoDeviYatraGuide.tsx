@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { 
   X, Compass, MapPin, Clock, ShieldCheck, Heart, AlertCircle, 
   ChevronRight, ArrowRight, CheckCircle2, Phone, Sparkles, 
-  Info, ExternalLink, Ticket, Footprints, Wind, Luggage
+  Info, ExternalLink, Ticket, Footprints, Wind, Luggage, Mountain
 } from 'lucide-react';
 import { JAMMU_SPOT_IMAGES } from '../../data/spotImages';
+import { TrailElevationProfile } from './TrailElevationProfile';
 
 interface YatraStep {
   stage: string;
@@ -74,7 +75,7 @@ const YATRA_STAGES: YatraStep[] = [
 ];
 
 export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
-  const [activeTab, setActiveTab] = useState<'route' | 'essentials' | 'seniors' | 'fares'>('route');
+  const [activeTab, setActiveTab] = useState<'route' | 'elevation' | 'essentials' | 'seniors' | 'fares'>('route');
 
   if (!isOpen) return null;
 
@@ -130,6 +131,17 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
           >
             <Footprints className="w-3.5 h-3.5" />
             Step-by-Step Route
+          </button>
+          <button
+            onClick={() => setActiveTab('elevation')}
+            className={`px-3 py-1.5 rounded-xl transition-all shrink-0 flex items-center gap-1.5 ${
+              activeTab === 'elevation' 
+                ? 'bg-primary text-white shadow-xs' 
+                : 'text-stone hover:bg-card hover:text-ink'
+            }`}
+          >
+            <Mountain className="w-3.5 h-3.5" />
+            Incline & Elevation Profile
           </button>
           <button
             onClick={() => setActiveTab('seniors')}
@@ -220,6 +232,13 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* TAB 1B: INCLINE & ELEVATION PROFILE */}
+          {activeTab === 'elevation' && (
+            <div className="space-y-4">
+              <TrailElevationProfile />
             </div>
           )}
 

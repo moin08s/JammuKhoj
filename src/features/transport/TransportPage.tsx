@@ -18,7 +18,10 @@ import {
   Compass,
   ArrowRight,
   ShieldAlert,
+  Ticket,
+  QrCode,
 } from 'lucide-react';
+import { DigitalYatraPassModal } from './DigitalYatraPassModal';
 import { db } from '@/data/db';
 import type { FareReference } from '@/data/types';
 import { SEED_FARES } from '@/data/seedData';
@@ -45,6 +48,7 @@ export const TransportPage: React.FC = () => {
   const [searchFilter, setSearchFilter] = useState('');
   const [vehicleFilter, setVehicleFilter] = useState<string>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [isPassModalOpen, setIsPassModalOpen] = useState(false);
 
   useEffect(() => {
     db.fareReferences.toArray().then((data) => {
@@ -108,6 +112,41 @@ export const TransportPage: React.FC = () => {
       </div>
 
       <DisclaimerNote kind="fare" />
+
+      {/* Digital Yatra Transit Pass Banner (Global Tier-1 Benchmark) */}
+      <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-4 shadow-md flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center shrink-0">
+            <QrCode className="w-5 h-5 text-blue-300" />
+          </div>
+          <div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-400/20 text-blue-200 border border-blue-300/30">
+                Offline Cryptographic Pass
+              </span>
+            </div>
+            <h3 className="font-bold text-sm text-white mt-0.5">
+              Digital Yatra Transit Pass (TfL / Singapore Standard)
+            </h3>
+            <p className="text-[11px] text-blue-200 line-clamp-1">
+              Unlimited E-Bus, Matador & Katra shuttle hops. 100% offline verifiable QR.
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setIsPassModalOpen(true)}
+          className="shrink-0 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md active:scale-95 transition-all flex items-center gap-1.5"
+        >
+          <Ticket className="w-3.5 h-3.5" />
+          Get Pass
+        </button>
+      </div>
+
+      <DigitalYatraPassModal 
+        isOpen={isPassModalOpen} 
+        onClose={() => setIsPassModalOpen(false)} 
+      />
 
       {/* Interactive Fare & Distance Calculator */}
       <FareCalculatorWidget />

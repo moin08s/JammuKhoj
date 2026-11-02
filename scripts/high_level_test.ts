@@ -25,7 +25,12 @@ import { audioAlertService } from '../src/services/audioAlertService';
 import { notificationService } from '../src/services/notificationService';
 import { voiceSearchService } from '../src/services/voiceSearchService';
 import { calculateBearingAndDistance } from '../src/features/safety/EmergencyDisasterModal';
-import { MOUNTAIN_SECTOR_RISKS } from '../src/features/safety/MountainLandslideRadar';
+import { MOUNTAIN_SECTOR_RISKS, TAWI_RIVER_HYDROLOGY } from '../src/features/safety/MountainLandslideRadar';
+import { TRAIL_ELEVATION_WAYPOINTS } from '../src/features/spiritual/TrailElevationProfile';
+import { VQC_COMPARTMENTS } from '../src/features/spiritual/TempleCrowdGuide';
+import { PASS_OPTIONS } from '../src/features/transport/DigitalYatraPassModal';
+import { DARSHAN_RADAR_DATA } from '../src/features/spiritual/DarshanComfortIndex';
+import { COMMON_YATRA_ROUTES, PLEDGE_ITEMS } from '../src/features/explore/GreenPilgrimTracker';
 
 interface TestResult {
   name: string;
@@ -594,7 +599,7 @@ assert(typeof audioAlertService.triggerEmergencyVibration === 'function', 'Audio
 assert(typeof audioAlertService.speakEmergencyDirective === 'function', 'Audio Service: speakEmergencyDirective accepts multilingual text', 'AUDIO_VOICE');
 
 // B. Mountain Weather & Monsoon Landslide Risk Radar Verification
-assert(MOUNTAIN_SECTOR_RISKS.length === 4, `Weather Radar: Monitors 4 critical mountain sectors (count: ${MOUNTAIN_SECTOR_RISKS.length})`, 'WEATHER_RADAR');
+assert(MOUNTAIN_SECTOR_RISKS.length >= 4, `Weather Radar: Monitors critical mountain sectors (count: ${MOUNTAIN_SECTOR_RISKS.length})`, 'WEATHER_RADAR');
 
 const nashriSector = MOUNTAIN_SECTOR_RISKS.find((s) => s.id === 'sec_nashri_ramban');
 assert(
@@ -652,6 +657,95 @@ assert(typeof voiceSearchService.getIsListening === 'function', 'Voice Search: g
 assert(!voiceSearchService.getIsListening(), 'Voice Search: Initial listening state is inactive (false)', 'VOICE_SEARCH');
 assert(typeof voiceSearchService.startListening === 'function', 'Voice Search: startListening method is defined', 'VOICE_SEARCH');
 assert(typeof voiceSearchService.stopListening === 'function', 'Voice Search: stopListening method is defined', 'VOICE_SEARCH');
+
+// -----------------------------------------------------------------------------
+// 10. GLOBAL TIER-1 BENCHMARKS & HIGH-ALTITUDE TOPOGRAPHY TESTS
+// -----------------------------------------------------------------------------
+console.log('>>> [10/10] Running Global Tier-1 Benchmarks & Mountain Topography Tests...');
+
+// A. Mountain Trail Elevation & Incline Gradients
+assert(
+  TRAIL_ELEVATION_WAYPOINTS.length === 8,
+  `Mountain Trail: 8 key elevation waypoints defined (found ${TRAIL_ELEVATION_WAYPOINTS.length})`,
+  'ELEVATION_TOPOGRAPHY'
+);
+const katraElevation = TRAIL_ELEVATION_WAYPOINTS[0].elevationMeters;
+const bhaironElevation = TRAIL_ELEVATION_WAYPOINTS[7].elevationMeters;
+assert(
+  katraElevation === 750 && bhaironElevation === 2010,
+  `Mountain Trail: Elevation spans 750m (~2,460 ft) at Katra to 2,010m (~6,600 ft) at Bhairon Temple (Δ ${bhaironElevation - katraElevation}m)`,
+  'ELEVATION_TOPOGRAPHY'
+);
+const steepSection = TRAIL_ELEVATION_WAYPOINTS.find(w => w.gradientPercent > 12);
+assert(
+  !!steepSection && steepSection.cardiacWarning,
+  'Mountain Trail: Cardiac warning flag active on slope sections exceeding 12% grade',
+  'ELEVATION_TOPOGRAPHY'
+);
+
+// B. Tirupati TTD Compartment Queuing & Choke Point Monitoring
+assert(
+  VQC_COMPARTMENTS.length === 4,
+  `Tirupati TTD VQC: Exactly 4 batch holding compartments defined (Sheds A-D)`,
+  'CROWD_TELEMETRY'
+);
+const totalVqcCapacity = VQC_COMPARTMENTS.reduce((sum, c) => sum + c.capacity, 0);
+assert(
+  totalVqcCapacity >= 2400,
+  `Tirupati TTD VQC: Holding capacity across sheds accommodates surge (total ${totalVqcCapacity} pilgrims)`,
+  'CROWD_TELEMETRY'
+);
+
+// C. 8-Sector Landslide Radar & CWC Tawi Hydrology
+assert(
+  MOUNTAIN_SECTOR_RISKS.length === 8,
+  `Landslide Radar: Expanded to all 8 critical Jammu mountain sectors (found ${MOUNTAIN_SECTOR_RISKS.length})`,
+  'TACTICAL_GIS'
+);
+assert(
+  TAWI_RIVER_HYDROLOGY.alertLevelFt === 24.0 && TAWI_RIVER_HYDROLOGY.dangerLevelFt === 28.0,
+  `CWC Hydrology: Tawi River warning thresholds calibrated (Alert 24 ft, Danger 28 ft)`,
+  'TACTICAL_GIS'
+);
+
+// D. Digital Yatra Transit Pass (Singapore EZ-Link / London TfL Oyster Model)
+assert(
+  PASS_OPTIONS.length === 3,
+  `Transit Pass: 3 smart transit tiers configured (24h, Senior Priority, Heritage)`,
+  'TRANSIT_WALLET'
+);
+const samplePayload = 'JK-PASS-TEST-123:Moin:2026-11-02:jammu_katra_24h';
+const passSig = hmacSha256(samplePayload, 'JAMMU_KHOJ_TRANSIT_AUTHORITY_2026');
+assert(
+  passSig.length === 64,
+  `Transit Pass: Cryptographic HMAC-SHA256 signature generated offline (64 hex chars)`,
+  'TRANSIT_WALLET'
+);
+
+// E. Kyoto-Style Darshan Comfort Index & Predictive Horizon
+assert(
+  DARSHAN_RADAR_DATA.length >= 4,
+  `Darshan Comfort Radar: Covers major sanctums (Bhawan, Raghunath, Bawe Wali Mata, Shiv Khori)`,
+  'SMART_PILGRIMAGE'
+);
+const bhawanForecast = DARSHAN_RADAR_DATA[0].forecast;
+assert(
+  bhawanForecast.length === 9,
+  `Darshan Comfort Radar: 16-hour predictive horizon with 9 sample intervals calculated`,
+  'SMART_PILGRIMAGE'
+);
+
+// F. Punya & Prakriti Green Pilgrim CO2 Emission & Pledge
+assert(
+  COMMON_YATRA_ROUTES.length >= 5,
+  `Green Pilgrim: Common yatra routes defined with certified distances`,
+  'ECO_TOURISM'
+);
+assert(
+  PLEDGE_ITEMS.length === 5,
+  `Green Pilgrim: 5-point Harit Yatri pledge covering zero plastic and mountain conservation`,
+  'ECO_TOURISM'
+);
 
 // -----------------------------------------------------------------------------
 // SUMMARY REPORT

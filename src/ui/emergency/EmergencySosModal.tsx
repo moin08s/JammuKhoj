@@ -47,6 +47,10 @@ export const EmergencySosModal: React.FC<EmergencySosModalProps> = ({ isOpen, on
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(sosMessage)}`, '_blank');
   };
 
+  const handleSmsFallback = () => {
+    window.location.href = `sms:112?body=${encodeURIComponent(sosMessage)}`;
+  };
+
   return (
     <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in select-none">
       <div className="bg-card border-2 border-red-500 rounded-3xl p-5 max-w-sm w-full space-y-4 shadow-2xl animate-in zoom-in-95 text-ink">
@@ -109,7 +113,16 @@ export const EmergencySosModal: React.FC<EmergencySosModalProps> = ({ isOpen, on
             <span>Call 112 ERSS Police Central</span>
           </a>
 
-          {/* Share via WhatsApp / SMS */}
+          {/* Offline GSM SMS SOS Fallback */}
+          <button
+            onClick={handleSmsFallback}
+            className="w-full py-2.5 px-4 rounded-2xl bg-amber-600 text-white font-bold text-xs shadow-md shadow-amber-600/25 hover:bg-amber-700 flex items-center justify-center gap-2 transition-all active:scale-98"
+          >
+            <Share2 size={15} />
+            <span>Offline GSM SMS SOS (2G Towers / Zero Data)</span>
+          </button>
+
+          {/* Share via WhatsApp */}
           <button
             onClick={handleShareWhatsApp}
             className="w-full py-2.5 px-4 rounded-2xl bg-emerald-600 text-white font-bold text-xs shadow-md shadow-emerald-600/25 hover:bg-emerald-700 flex items-center justify-center gap-2 transition-all active:scale-98"

@@ -30,6 +30,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,json}'],
+        globIgnores: ['**/deck_assets/**', '**/demo_video/**', 'presentation.html', 'demo.html'],
         runtimeCaching: [
           {
             urlPattern: /\.pmtiles$/,
@@ -44,12 +45,26 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /^https:\/\/tile\.openstreetmap\.org\/.*/i,
+            urlPattern: /^https:\/\/([abc]\.basemaps\.cartocdn\.com|tile\.openstreetmap\.org|tile\.opentopomap\.org)\/.*/i,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'osm-raster-tiles',
+              cacheName: 'multi-provider-map-tiles',
               expiration: {
-                maxEntries: 500,
+                maxEntries: 2500,
+                maxAgeSeconds: 90 * 24 * 60 * 60,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/server\.arcgisonline\.com\/ArcGIS\/rest\/services\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'arcgis-satellite-tiles',
+              expiration: {
+                maxEntries: 1000,
                 maxAgeSeconds: 60 * 24 * 60 * 60,
               },
               cacheableResponse: {

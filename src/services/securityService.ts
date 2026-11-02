@@ -17,7 +17,14 @@ function rightRotate(value: number, amount: number): number {
   return (value >>> amount) | (value << (32 - amount));
 }
 
-export function sha256(ascii: string): string {
+export function sha256(rawInput: string): string {
+  // Safely normalize full Unicode/Devanagari/Dogri text into UTF-8 byte stream
+  let ascii: string;
+  try {
+    ascii = unescape(encodeURIComponent(rawInput));
+  } catch {
+    ascii = rawInput;
+  }
   const mathPow = Math.pow;
   const maxWord = mathPow(2, 32);
   let i = 0, j = 0;

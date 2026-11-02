@@ -82,7 +82,25 @@ export const useAudioStore = create<AudioStoreState>((set, get) => ({
     const rate = get().playbackRate;
     const hasTts = speakTranscript(track, rate, () => {
       set({ isPlaying: false, progressSeconds: track.durationSeconds });
+      if (typeof navigator !== 'undefined' && 'mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = 'none';
+      }
     });
+
+    if (typeof navigator !== 'undefined' && 'mediaSession' in navigator) {
+      try {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: track.title,
+          artist: `${track.spotName} • JammuKhoj Audio Lore`,
+          album: 'Jammu & Kashmir Heritage Chronicles',
+          artwork: track.heroImage ? [{ src: track.heroImage, sizes: '512x512', type: 'image/jpeg' }] : [],
+        });
+        navigator.mediaSession.playbackState = 'playing';
+        navigator.mediaSession.setActionHandler('play', () => get().resumeTrack());
+        navigator.mediaSession.setActionHandler('pause', () => get().pauseTrack());
+        navigator.mediaSession.setActionHandler('stop', () => get().stopTrack());
+      } catch {}
+    }
 
     set({
       currentTrack: track,
@@ -98,6 +116,9 @@ export const useAudioStore = create<AudioStoreState>((set, get) => ({
         window.speechSynthesis.pause();
       } catch {}
     }
+    if (typeof navigator !== 'undefined' && 'mediaSession' in navigator) {
+      navigator.mediaSession.playbackState = 'paused';
+    }
     set({ isPlaying: false });
   },
 
@@ -110,15 +131,24 @@ export const useAudioStore = create<AudioStoreState>((set, get) => ({
           const track = get().currentTrack!;
           speakTranscript(track, get().playbackRate, () => {
             set({ isPlaying: false, progressSeconds: track.durationSeconds });
+            if (typeof navigator !== 'undefined' && 'mediaSession' in navigator) {
+              navigator.mediaSession.playbackState = 'none';
+            }
           });
         }
       } catch {}
+    }
+    if (typeof navigator !== 'undefined' && 'mediaSession' in navigator) {
+      navigator.mediaSession.playbackState = 'playing';
     }
     set({ isPlaying: true });
   },
 
   stopTrack: () => {
     stopTts();
+    if (typeof navigator !== 'undefined' && 'mediaSession' in navigator) {
+      navigator.mediaSession.playbackState = 'none';
+    }
     set({ currentTrack: null, isPlaying: false, progressSeconds: 0, isNarratingViaTts: false });
   },
 

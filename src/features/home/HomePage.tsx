@@ -46,6 +46,10 @@ import {
   Camera,
   Zap,
   Mic,
+  Ticket,
+  Leaf,
+  Activity,
+  QrCode,
 } from 'lucide-react';
 import { usePlanStore } from '@/stores/planStore';
 import { useAppStore } from '@/stores/appStore';
@@ -804,6 +808,71 @@ export const HomePage: React.FC = () => {
             <span className="text-[11px] text-amber-200">100% Offline Guide</span>
           </div>
         </div>
+      </section>
+
+      {/* =================================================================== */}
+      {/* 2.6 GLOBAL BENCHMARK SMART TOURISM SUITE (Kyoto, TfL, Switzerland) */}
+      {/* =================================================================== */}
+      <section aria-label="Global Benchmark Smart Tourism Suite" className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <button
+          onClick={() => navigate('/transit-pass')}
+          className="p-3.5 rounded-2xl bg-gradient-to-br from-blue-900 to-indigo-950 text-white text-left shadow-sm hover:shadow-md apple-press transition-all border border-blue-800/40 relative overflow-hidden group"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="p-1.5 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-400/30">
+              <Ticket size={16} />
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-blue-300 bg-blue-900/60 px-2 py-0.5 rounded-full">
+              TfL / SG Model
+            </span>
+          </div>
+          <h4 className="font-bold text-sm text-white group-hover:text-blue-200 transition-colors">
+            Digital Yatra Transit Pass
+          </h4>
+          <p className="text-[11px] text-blue-200/80 mt-1 line-clamp-2">
+            Offline cryptographic QR wallet for E-Buses, Matadors & Katra Shuttles.
+          </p>
+        </button>
+
+        <button
+          onClick={() => navigate('/crowd-radar')}
+          className="p-3.5 rounded-2xl bg-gradient-to-br from-teal-900 to-emerald-950 text-white text-left shadow-sm hover:shadow-md apple-press transition-all border border-teal-800/40 relative overflow-hidden group"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="p-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+              <Activity size={16} />
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-300 bg-emerald-900/60 px-2 py-0.5 rounded-full">
+              Kyoto Radar
+            </span>
+          </div>
+          <h4 className="font-bold text-sm text-white group-hover:text-emerald-200 transition-colors">
+            Darshan Comfort Index
+          </h4>
+          <p className="text-[11px] text-emerald-200/80 mt-1 line-clamp-2">
+            16-hr predictive sanctum flow & wait times to avoid crowd congestion.
+          </p>
+        </button>
+
+        <button
+          onClick={() => navigate('/green-yatra')}
+          className="p-3.5 rounded-2xl bg-gradient-to-br from-emerald-900 to-slate-950 text-white text-left shadow-sm hover:shadow-md apple-press transition-all border border-emerald-800/40 relative overflow-hidden group"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="p-1.5 rounded-xl bg-teal-500/20 text-teal-300 border border-teal-400/30">
+              <Leaf size={16} />
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-teal-300 bg-teal-900/60 px-2 py-0.5 rounded-full">
+              Green Pilgrim
+            </span>
+          </div>
+          <h4 className="font-bold text-sm text-white group-hover:text-teal-200 transition-colors">
+            Punya & Prakriti CO₂ Tracker
+          </h4>
+          <p className="text-[11px] text-teal-200/80 mt-1 line-clamp-2">
+            Zero-plastic pledge & carbon footprint calculator with verified certificates.
+          </p>
+        </button>
       </section>
 
       {/* =================================================================== */}

@@ -11,6 +11,8 @@ class AudioAlertService {
   private audioCtx: AudioContext | null = null;
   private sirenInterval: any = null;
   private isSirenActive = false;
+  private activeOscillator: OscillatorNode | null = null;
+  private activeGain: GainNode | null = null;
 
   private getAudioContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
@@ -41,6 +43,9 @@ class AudioAlertService {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
+      this.activeOscillator = osc;
+      this.activeGain = gain;
+
       osc.type = 'sawtooth';
       gain.gain.setValueAtTime(0.2, startTime);
 
@@ -61,9 +66,13 @@ class AudioAlertService {
 
       osc.onended = () => {
         this.isSirenActive = false;
+        this.activeOscillator = null;
+        this.activeGain = null;
       };
     } catch {
       this.isSirenActive = false;
+      this.activeOscillator = null;
+      this.activeGain = null;
     }
 
     // Trigger haptic vibration on mobile devices
@@ -71,9 +80,17 @@ class AudioAlertService {
   }
 
   /**
-   * Stops any currently playing audio siren
+   * Stops any currently playing audio siren immediately
    */
   public stopEmergencySiren(): void {
+    if (this.activeOscillator) {
+      try {
+        this.activeOscillator.stop();
+        this.activeOscillator.disconnect();
+      } catch {}
+      this.activeOscillator = null;
+      this.activeGain = null;
+    }
     if (this.sirenInterval) {
       clearInterval(this.sirenInterval);
       this.sirenInterval = null;
