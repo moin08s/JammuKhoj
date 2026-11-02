@@ -245,14 +245,28 @@ export const VaishnoDeviYatraGuide: React.FC<{ isOpen: boolean; onClose: () => v
           {/* TAB 2: SENIORS */}
           {activeTab === 'seniors' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-2">
+              <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200 space-y-2">
                 <div className="flex items-center gap-2 font-bold text-sm">
-                  <Heart className="w-4 h-4 text-emerald-600" />
+                  <Heart className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   Senior Citizen Priority Facilities (Shrine Board)
                 </div>
-                <p className="text-xs leading-relaxed text-emerald-950/80">
+                <p className="text-xs leading-relaxed text-emerald-950/80 dark:text-emerald-200/80">
                   The Shri Mata Vaishno Devi Shrine Board (SMVDSB) provides dedicated facilities to make the sacred pilgrimage accessible for elderly yatris, pregnant women, and differently-abled devotees.
                 </p>
+                <div className="pt-1 flex flex-wrap gap-2">
+                  <a
+                    href="tel:01991232029"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs shadow-xs"
+                  >
+                    📞 Shrine Board Helpline: 01991-232029
+                  </a>
+                  <a
+                    href="tel:112"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow-xs"
+                  >
+                    🚨 Medical Emergency: 112
+                  </a>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 gap-3 text-xs">

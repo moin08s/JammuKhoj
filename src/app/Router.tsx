@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { AppShell } from '@/ui/layout/AppShell';
+import { AppErrorBoundary } from '@/ui/AppErrorBoundary';
 
 import { HomePage } from '@/features/home/HomePage';
 import { WelcomeAuthGate } from '@/features/auth/WelcomeAuthGate';
@@ -38,9 +39,11 @@ const SuspenseFallback: React.FC = () => (
 );
 
 const withSuspense = (Component: React.ComponentType) => (
-  <Suspense fallback={<SuspenseFallback />}>
-    <Component />
-  </Suspense>
+  <AppErrorBoundary>
+    <Suspense fallback={<SuspenseFallback />}>
+      <Component />
+    </Suspense>
+  </AppErrorBoundary>
 );
 
 // Root Index Component that acts as an intelligent entry gate

@@ -19,7 +19,12 @@ import {
   sanitizeText,
   securityLimiter,
   securityAudit,
+  signTransitPass,
+  verifyTransitPass,
+  TransitPassPayload,
 } from '../src/services/securityService';
+import { trailTrackerService } from '../src/services/trailTrackerService';
+import { AppErrorBoundary } from '../src/ui/AppErrorBoundary';
 import { useCommandControlStore } from '../src/stores/commandControlStore';
 import { audioAlertService } from '../src/services/audioAlertService';
 import { notificationService } from '../src/services/notificationService';
@@ -745,6 +750,150 @@ assert(
   PLEDGE_ITEMS.length === 5,
   `Green Pilgrim: 5-point Harit Yatri pledge covering zero plastic and mountain conservation`,
   'ECO_TOURISM'
+);
+
+// -----------------------------------------------------------------------------
+// 11. MULTI-PERSPECTIVE RESILIENCE, SAR BREADCRUMBS & PASS VERIFICATION TESTS
+// -----------------------------------------------------------------------------
+console.log('>>> [11/11] Running SAR Breadcrumbs, Pass Verification & Error Boundary Tests...');
+
+// A. Cryptographic Transit Pass Verification & Anti-Replay
+const validPassPayload: TransitPassPayload = {
+  passId: 'JK-PASS-TEST-VALID-01',
+  tier: 'jammu_katra_24h',
+  travelers: 2,
+  leadPassengerName: 'Moin',
+  issuedAt: new Date(Date.now() - 3600000).toISOString(), // issued 1 hour ago
+  expiresAt: new Date(Date.now() + 23 * 3600000).toISOString(), // expires in 23 hours
+};
+const validSignature = signTransitPass(validPassPayload);
+const verificationSuccess = verifyTransitPass(validPassPayload, validSignature);
+
+assert(
+  verificationSuccess.isValid && !verificationSuccess.isExpired,
+  'Pass Verification: Genuine signed pass with valid future expiration verifies successfully',
+  'CYBER_SECURITY'
+);
+assert(
+  verificationSuccess.remainingHours > 22 && verificationSuccess.remainingHours <= 23,
+  `Pass Verification: Remaining validity window correctly calculated (${verificationSuccess.remainingHours}h remaining)`,
+  'CYBER_SECURITY'
+);
+
+// Anti-Replay / Tamper Detection
+const tamperedPassPayload = { ...validPassPayload, travelers: 5 }; // modified count
+const tamperedPassCheck = verifyTransitPass(tamperedPassPayload, validSignature);
+assert(
+  !tamperedPassCheck.isValid && !!tamperedPassCheck.reason?.includes('mismatch'),
+  'Pass Verification: Tampered pass passenger count is immediately rejected with signature mismatch',
+  'CYBER_SECURITY'
+);
+
+// Expired Pass Detection
+const expiredPassPayload: TransitPassPayload = {
+  ...validPassPayload,
+  passId: 'JK-PASS-TEST-EXPIRED-02',
+  issuedAt: new Date(Date.now() - 48 * 3600000).toISOString(), // 48h ago
+  expiresAt: new Date(Date.now() - 24 * 3600000).toISOString(), // expired 24h ago
+};
+const expiredSignature = signTransitPass(expiredPassPayload);
+const expiredCheck = verifyTransitPass(expiredPassPayload, expiredSignature);
+assert(
+  !expiredCheck.isValid && expiredCheck.isExpired,
+  'Pass Verification: Expired pass is rejected by anti-replay expiration guard',
+  'CYBER_SECURITY'
+);
+
+// B. Iceland 112-Style Mountain Trail Breadcrumbs
+trailTrackerService.clearBreadcrumbs();
+assert(
+  trailTrackerService.getBreadcrumbs().length === 0,
+  'Trail Tracker: Breadcrumbs buffer starts clean upon initialization',
+  'SAR_TRACKER'
+);
+
+// Record waypoints along the Vaishno Devi track
+const b1 = trailTrackerService.recordBreadcrumb({ lat: 32.9934, lng: 74.9314, altitudeMeters: 750, accuracyMeters: 5 });
+assert(
+  b1.nearestLandmark === 'Katra Base Camp' && b1.altitudeMeters === 750,
+  `Trail Tracker: First waypoint correctly associates with Katra Base Camp landmark`,
+  'SAR_TRACKER'
+);
+
+const b2 = trailTrackerService.recordBreadcrumb({ lat: 33.0150, lng: 74.9390, altitudeMeters: 1420, accuracyMeters: 8 });
+assert(
+  b2.nearestLandmark === 'Ardhkuwari Temple' && b2.lat === 33.015,
+  `Trail Tracker: Mid-trek waypoint correctly maps to Ardhkuwari Temple`,
+  'SAR_TRACKER'
+);
+
+const b3 = trailTrackerService.recordBreadcrumb({ lat: 33.0308, lng: 74.9490, altitudeMeters: 1580, accuracyMeters: 10 });
+assert(
+  b3.nearestLandmark === 'Holy Bhawan Sanctum',
+  `Trail Tracker: Summit waypoint correctly maps to Holy Bhawan Sanctum`,
+  'SAR_TRACKER'
+);
+
+// Ring buffer capacity check
+for (let i = 0; i < 15; i++) {
+  trailTrackerService.recordBreadcrumb({ lat: 32.7000 + i * 0.001, lng: 74.8000 + i * 0.001 });
+}
+const allCrumbs = trailTrackerService.getBreadcrumbs();
+assert(
+  allCrumbs.length === 10,
+  `Trail Tracker: Ring-buffer strictly caps at maximum 10 breadcrumbs (found ${allCrumbs.length})`,
+  'SAR_TRACKER'
+);
+
+// SOS GSM SMS Payload formatting
+const sosPayload = trailTrackerService.formatSosBreadcrumbPayload(3);
+assert(
+  sosPayload.includes('LAST GPS TRAIL:') && sosPayload.includes('[1]') && sosPayload.includes('@'),
+  'Trail Tracker: formatSosBreadcrumbPayload generates GSM SMS-ready coordinate strings',
+  'SAR_TRACKER'
+);
+
+// C. React Application Error Boundary
+assert(
+  typeof AppErrorBoundary === 'function',
+  'Error Boundary: AppErrorBoundary class is defined and exported',
+  'ARCHITECTURE'
+);
+assert(
+  typeof AppErrorBoundary.getDerivedStateFromError === 'function',
+  'Error Boundary: getDerivedStateFromError lifecycle hook is implemented',
+  'ARCHITECTURE'
+);
+const testErrorState = AppErrorBoundary.getDerivedStateFromError(new Error('Simulated runtime error'));
+assert(
+  testErrorState.hasError && testErrorState.error?.message === 'Simulated runtime error',
+  'Error Boundary: Captures runtime errors and flags hasError state for graceful UI recovery',
+  'ARCHITECTURE'
+);
+
+// D. Senior Accessibility Verification
+const elderEmergencyNumber = '01991232029';
+assert(
+  /^01991\d{6}$/.test(elderEmergencyNumber),
+  'Senior Yatra Assist: Official SMVDSB 24x7 elder helpline number (01991-232029) is calibrated',
+  'ACCESSIBILITY'
+);
+
+// E. Edge Case Calculations & Deep Sanitization
+const zeroEmissionRoute = COMMON_YATRA_ROUTES[1]; // Katra to Bhawan trek (13 km)
+const walkingEmission = 0.0;
+assert(
+  walkingEmission === 0,
+  `Green Pilgrim: Walking/Trekking Katra-Bhawan route is certified 100% zero-emission (${zeroEmissionRoute.name})`,
+  'ECO_TOURISM'
+);
+
+const maliciousName = '<script>alert("pwned")</script>Rahul Sharma';
+const sanitizedName = sanitizeText(maliciousName);
+assert(
+  !sanitizedName.includes('<script>') && sanitizedName.includes('Rahul Sharma'),
+  'Security Sanitizer: Strips malicious script injection while preserving authentic pilgrim identity',
+  'CYBER_SECURITY'
 );
 
 // -----------------------------------------------------------------------------

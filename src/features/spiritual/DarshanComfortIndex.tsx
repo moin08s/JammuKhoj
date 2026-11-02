@@ -224,21 +224,21 @@ export const DarshanComfortIndex: React.FC = () => {
               className={`p-3.5 rounded-xl border text-left transition-all relative overflow-hidden ${
                 isSelected 
                   ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' 
-                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                  : 'bg-card border-border hover:border-primary/40'
               }`}
             >
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                <span className="text-xs font-bold text-stone flex items-center gap-1">
                   <MapPin className="w-3 h-3" />
                   {temple.location.split(',')[0]}
                 </span>
                 <span className={`w-2.5 h-2.5 rounded-full ${status.dot}`} />
               </div>
-              <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100 line-clamp-1">
+              <h3 className="font-bold text-sm text-ink line-clamp-1">
                 {temple.name}
               </h3>
-              <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 dark:border-slate-800/80">
-                <span className="text-xs text-slate-500 dark:text-slate-400">Comfort:</span>
+              <div className="flex items-center justify-between mt-2 pt-2 border-t border-border">
+                <span className="text-xs text-stone">Comfort:</span>
                 <span className={`text-xs font-black px-1.5 py-0.5 rounded ${
                   temple.currentComfortScore >= 80 ? 'text-emerald-700 dark:text-emerald-300 bg-emerald-100/60 dark:bg-emerald-950/60' :
                   temple.currentComfortScore >= 60 ? 'text-sky-700 dark:text-sky-300 bg-sky-100/60 dark:bg-sky-950/60' :
@@ -254,9 +254,9 @@ export const DarshanComfortIndex: React.FC = () => {
       </div>
 
       {/* Main Focus Card for Active Temple */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
         {/* Active Header & Live Metrics */}
-        <div className="p-6 border-b border-slate-100 dark:border-slate-800">
+        <div className="p-6 border-b border-border">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
@@ -264,11 +264,11 @@ export const DarshanComfortIndex: React.FC = () => {
                   <span className={`w-2 h-2 rounded-full ${getStatusBadge(activeTemple.status).dot}`} />
                   {getStatusBadge(activeTemple.status).label}
                 </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-slate-400" /> {activeTemple.location}
+                <span className="text-xs text-stone flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5 text-stone/80" /> {activeTemple.location}
                 </span>
               </div>
-              <h2 className="text-2xl font-black text-slate-900 dark:text-slate-50">
+              <h2 className="text-2xl font-black text-ink">
                 {activeTemple.name}
               </h2>
             </div>
@@ -278,7 +278,7 @@ export const DarshanComfortIndex: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 border transition-all ${
                 notifSubscribed[activeTemple.id]
                   ? 'bg-emerald-600 text-white border-emerald-700 shadow-sm'
-                  : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/60'
+                  : 'bg-surface text-ink border-border hover:bg-surface/80'
               }`}
             >
               <Bell className="w-4 h-4" />
@@ -288,20 +288,20 @@ export const DarshanComfortIndex: React.FC = () => {
 
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
-            <div className="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-xl border border-slate-200/70 dark:border-slate-700/60">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Current Wait</span>
-              <p className="text-lg font-black text-slate-900 dark:text-slate-100 mt-0.5">
+            <div className="bg-surface p-3.5 rounded-xl border border-border">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-stone">Current Wait</span>
+              <p className="text-lg font-black text-ink mt-0.5">
                 ~{activeTemple.avgDarshanWaitMins} mins
               </p>
-              <span className="text-[10px] text-slate-500">From queue head to sanctum</span>
+              <span className="text-[10px] text-stone">From queue head to sanctum</span>
             </div>
 
-            <div className="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-xl border border-slate-200/70 dark:border-slate-700/60">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Sanctum Pacing</span>
-              <p className="text-sm font-bold text-slate-800 dark:text-slate-200 mt-1 line-clamp-1">
+            <div className="bg-surface p-3.5 rounded-xl border border-border">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-stone">Sanctum Pacing</span>
+              <p className="text-sm font-bold text-ink mt-1 line-clamp-1">
                 {activeTemple.sanctumPacing.split('(')[0]}
               </p>
-              <span className="text-[10px] text-slate-500">Regulated batch throughput</span>
+              <span className="text-[10px] text-stone">Regulated batch throughput</span>
             </div>
 
             <div className="bg-emerald-50/60 dark:bg-emerald-950/30 p-3.5 rounded-xl border border-emerald-200/60 dark:border-emerald-800/40">

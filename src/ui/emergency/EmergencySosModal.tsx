@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldAlert, PhoneCall, Share2, MapPin, Copy, Check, X, AlertTriangle } from 'lucide-react';
+import { ShieldAlert, PhoneCall, Share2, MapPin, Copy, Check, X, AlertTriangle, Compass } from 'lucide-react';
+import { trailTrackerService } from '@/services/trailTrackerService';
 
 interface EmergencySosModalProps {
   isOpen: boolean;
@@ -9,22 +10,37 @@ interface EmergencySosModalProps {
 export const EmergencySosModal: React.FC<EmergencySosModalProps> = ({ isOpen, onClose }) => {
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [copied, setCopied] = useState(false);
+  const [breadcrumbCount, setBreadcrumbCount] = useState<number>(0);
 
   useEffect(() => {
     if (isOpen) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (pos) => {
-            setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+            const current = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            setCoords(current);
+            trailTrackerService.recordBreadcrumb({
+              lat: current.lat,
+              lng: current.lng,
+              altitudeMeters: pos.coords.altitude || undefined,
+              accuracyMeters: pos.coords.accuracy,
+            });
+            setBreadcrumbCount(trailTrackerService.getBreadcrumbs().length);
           },
           () => {
             // Default Jammu city coordinates fallback
-            setCoords({ lat: 32.7266, lng: 74.8643 });
+            const defaultPos = { lat: 32.7266, lng: 74.8643 };
+            setCoords(defaultPos);
+            trailTrackerService.recordBreadcrumb(defaultPos);
+            setBreadcrumbCount(trailTrackerService.getBreadcrumbs().length);
           },
           { enableHighAccuracy: true, timeout: 5000 }
         );
       } else {
-        setCoords({ lat: 32.7266, lng: 74.8643 });
+        const defaultPos = { lat: 32.7266, lng: 74.8643 };
+        setCoords(defaultPos);
+        trailTrackerService.recordBreadcrumb(defaultPos);
+        setBreadcrumbCount(trailTrackerService.getBreadcrumbs().length);
       }
     }
   }, [isOpen]);
@@ -34,8 +50,9 @@ export const EmergencySosModal: React.FC<EmergencySosModalProps> = ({ isOpen, on
   const latStr = coords ? coords.lat.toFixed(5) : '32.72660';
   const lngStr = coords ? coords.lng.toFixed(5) : '74.86430';
   const mapsLink = `https://maps.google.com/?q=${latStr},${lngStr}`;
+  const trailSuffix = trailTrackerService.formatSosBreadcrumbPayload(3);
 
-  const sosMessage = `🚨 EMERGENCY SOS (JammuKhoj Pilgrim Alert):\nI need immediate assistance in Jammu Division.\nMy GPS Location: ${latStr}, ${lngStr}\nLive Map Link: ${mapsLink}\nTimestamp: ${new Date().toLocaleTimeString()}`;
+  const sosMessage = `🚨 EMERGENCY SOS (JammuKhoj Pilgrim Alert):\nI need immediate assistance in Jammu Division.\nMy GPS Location: ${latStr}, ${lngStr}\nLive Map Link: ${mapsLink}${trailSuffix}\nTimestamp: ${new Date().toLocaleTimeString()}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(sosMessage);
@@ -100,6 +117,10 @@ export const EmergencySosModal: React.FC<EmergencySosModalProps> = ({ isOpen, on
           <p className="text-[10px] text-stone leading-tight">
             Nearest Landmark: Jammu Tawi Central Corridor (Zone 1)
           </p>
+          <div className="flex items-center justify-between text-[10px] text-stone pt-0.5 border-t border-red-500/10">
+            <span>SAR Trail Breadcrumbs: <strong className="text-ink">{breadcrumbCount} logged</strong></span>
+            <span className="text-emerald-700 dark:text-emerald-400 font-semibold">Iceland 112 Standard</span>
+          </div>
         </div>
 
         {/* Primary SOS Action Buttons */}

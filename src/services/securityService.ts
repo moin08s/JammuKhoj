@@ -391,3 +391,82 @@ export const securityAudit = {
     return entry;
   },
 };
+
+// ============================================================================
+// 6. DIGITAL TRANSIT PASS CRYPTOGRAPHIC VERIFICATION & ANTI-REPLAY ENGINE
+// ============================================================================
+
+export const TRANSIT_AUTHORITY_SECRET_KEY = 'JK_TRANSIT_AUTHORITY_OFFLINE_SECRET_2026';
+
+export interface TransitPassPayload {
+  passId: string;
+  tier: string;
+  travelers: number;
+  leadPassengerName: string;
+  issuedAt: string;
+  expiresAt: string;
+}
+
+export interface TransitPassVerificationResult {
+  isValid: boolean;
+  isExpired: boolean;
+  remainingHours: number;
+  reason?: string;
+}
+
+export function signTransitPass(payload: TransitPassPayload): string {
+  const canonicalString = `${payload.passId}|${payload.tier}|${payload.travelers}|${payload.leadPassengerName.trim()}|${payload.issuedAt}|${payload.expiresAt}`;
+  return hmacSha256(TRANSIT_AUTHORITY_SECRET_KEY, canonicalString);
+}
+
+export function verifyTransitPass(
+  payload: TransitPassPayload,
+  signature: string
+): TransitPassVerificationResult {
+  const expectedSig = signTransitPass(payload);
+  
+  // Constant-time string equality check to prevent side-channel timing attacks
+  let diff = expectedSig.length ^ signature.length;
+  for (let i = 0; i < expectedSig.length && i < signature.length; i++) {
+    diff |= expectedSig.charCodeAt(i) ^ signature.charCodeAt(i);
+  }
+
+  if (diff !== 0) {
+    return {
+      isValid: false,
+      isExpired: false,
+      remainingHours: 0,
+      reason: 'Cryptographic signature mismatch: pass tampered or counterfeit',
+    };
+  }
+
+  const now = Date.now();
+  const expiryTime = new Date(payload.expiresAt).getTime();
+  const issueTime = new Date(payload.issuedAt).getTime();
+
+  if (isNaN(expiryTime) || isNaN(issueTime)) {
+    return {
+      isValid: false,
+      isExpired: true,
+      remainingHours: 0,
+      reason: 'Malformed pass timestamp',
+    };
+  }
+
+  if (now > expiryTime) {
+    return {
+      isValid: false,
+      isExpired: true,
+      remainingHours: 0,
+      reason: `Pass expired on ${new Date(expiryTime).toLocaleString()}`,
+    };
+  }
+
+  const remainingHours = Math.max(0, Number(((expiryTime - now) / (1000 * 60 * 60)).toFixed(1)));
+
+  return {
+    isValid: true,
+    isExpired: false,
+    remainingHours,
+  };
+}

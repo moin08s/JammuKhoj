@@ -107,21 +107,21 @@ export const GreenPilgrimTracker: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: CO2 Calculator */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2 mb-4">
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-ink flex items-center gap-2 mb-4">
               <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               1. Pilgrimage Route & Transport Calculator
             </h2>
 
             {/* Select Route */}
             <div className="space-y-2 mb-4">
-              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
+              <label className="text-xs font-semibold text-stone uppercase tracking-wider block">
                 Select Pilgrim Corridor:
               </label>
               <select
                 value={selectedRouteId}
                 onChange={e => setSelectedRouteId(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
               >
                 {COMMON_YATRA_ROUTES.map(route => (
                   <option key={route.id} value={route.id}>
@@ -244,12 +244,12 @@ export const GreenPilgrimTracker: React.FC = () => {
           </div>
 
           {/* 5-Point Harit Yatri Pledge */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2 mb-2">
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-ink flex items-center gap-2 mb-2">
               <ShieldCheck className="w-5 h-5 text-teal-600 dark:text-teal-400" />
               2. Holy Harit Yatri (Green Pilgrim) Pledge
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
+            <p className="text-xs text-stone mb-4">
               Tick your environmental commitments for the duration of your stay in the sacred land of Jammu:
             </p>
 
@@ -280,18 +280,18 @@ export const GreenPilgrimTracker: React.FC = () => {
 
         {/* Right Column: Certificate Issuance & Preview */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2 mb-2">
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-ink flex items-center gap-2 mb-2">
               <Award className="w-5 h-5 text-amber-500" />
               3. Claim Your Digital Green Yatri Certificate
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
+            <p className="text-xs text-stone mb-4">
               Enter your name to generate an official digital badge recognized across Jammu Khoj eco-initiatives.
             </p>
 
             <form onSubmit={handleGenerateCertificate} className="space-y-4">
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
+                <label className="text-xs font-semibold text-stone uppercase tracking-wider block mb-1.5">
                   Pilgrim Name (As on ID):
                 </label>
                 <input
@@ -300,7 +300,7 @@ export const GreenPilgrimTracker: React.FC = () => {
                   placeholder="e.g. Rahul Sharma"
                   value={yatriName}
                   onChange={e => setYatriName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                 />
               </div>
 

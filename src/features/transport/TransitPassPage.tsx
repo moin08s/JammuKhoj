@@ -40,24 +40,24 @@ export const TransitPassPage: React.FC = () => {
         {PASS_OPTIONS.map(opt => (
           <div 
             key={opt.id}
-            className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between"
+            className="p-5 rounded-2xl bg-card border border-border shadow-sm flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                   {opt.badge}
                 </span>
-                <span className="text-lg font-black text-slate-900 dark:text-slate-100">
+                <span className="text-lg font-black text-ink">
                   ₹{opt.priceInr}
                 </span>
               </div>
-              <h3 className="font-bold text-base text-slate-900 dark:text-slate-100">
+              <h3 className="font-bold text-base text-ink">
                 {opt.title}
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-3">
+              <p className="text-xs text-stone mt-1 mb-3">
                 {opt.subtitle}
               </p>
-              <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1.5 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <ul className="text-xs text-stone space-y-1.5 border-t border-border pt-3">
                 {opt.includes.map((inc, i) => (
                   <li key={i} className="flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
@@ -69,7 +69,7 @@ export const TransitPassPage: React.FC = () => {
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="mt-4 w-full py-2.5 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 text-blue-700 dark:text-blue-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
+              className="mt-4 w-full py-2.5 px-3 rounded-xl bg-surface border border-border hover:border-primary/40 text-primary font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
             >
               Select & Generate Pass <ArrowRight className="w-3.5 h-3.5" />
             </button>

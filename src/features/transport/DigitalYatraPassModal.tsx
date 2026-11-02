@@ -3,7 +3,7 @@ import {
   QrCode, Ticket, CheckCircle2, ShieldCheck, Clock, Users, 
   MapPin, X, Download, Share2, Sparkles, AlertCircle 
 } from 'lucide-react';
-import { hmacSha256 } from '@/services/securityService';
+import { signTransitPass, verifyTransitPass, type TransitPassPayload } from '@/services/securityService';
 
 interface DigitalYatraPassModalProps {
   isOpen: boolean;
@@ -50,6 +50,7 @@ export const DigitalYatraPassModal: React.FC<DigitalYatraPassModalProps> = ({ is
   const [passId, setPassId] = useState<string>('');
   const [passSignature, setPassSignature] = useState<string>('');
   const [issuedTimestamp, setIssuedTimestamp] = useState<string>('');
+  const [expiresTimestamp, setExpiresTimestamp] = useState<string>('');
 
   if (!isOpen) return null;
 
@@ -58,12 +59,25 @@ export const DigitalYatraPassModal: React.FC<DigitalYatraPassModalProps> = ({ is
 
   const handleGeneratePass = () => {
     const id = `JK-PASS-${Date.now().toString(36).toUpperCase()}`;
-    const timestamp = new Date().toISOString();
-    const payload = `${id}|${selectedTier}|${travelers}|${leadPassengerName.trim()}|${timestamp}`;
-    const sig = hmacSha256('JK_TRANSIT_AUTHORITY_OFFLINE_SECRET_2026', payload);
+    const nowMs = Date.now();
+    const expiresMs = nowMs + activePass.validHours * 60 * 60 * 1000;
+    const issueIso = new Date(nowMs).toISOString();
+    const expireIso = new Date(expiresMs).toISOString();
+
+    const payload: TransitPassPayload = {
+      passId: id,
+      tier: selectedTier,
+      travelers,
+      leadPassengerName: leadPassengerName.trim() || 'Pilgrim',
+      issuedAt: issueIso,
+      expiresAt: expireIso,
+    };
+
+    const sig = signTransitPass(payload);
 
     setPassId(id);
-    setIssuedTimestamp(timestamp);
+    setIssuedTimestamp(issueIso);
+    setExpiresTimestamp(expireIso);
     setPassSignature(sig.substring(0, 24).toUpperCase());
     setPassGenerated(true);
   };
@@ -238,7 +252,7 @@ export const DigitalYatraPassModal: React.FC<DigitalYatraPassModalProps> = ({ is
                 </div>
                 <div className="truncate text-white/80">{passSignature}</div>
                 <div className="text-[9px] text-white/60">
-                  Issued: {new Date(issuedTimestamp).toLocaleTimeString()} • Valid on J&K Smart City Transit
+                  Issued: {new Date(issuedTimestamp).toLocaleTimeString()} • Valid until: {expiresTimestamp ? new Date(expiresTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }) : `${activePass.validHours}h`}
                 </div>
               </div>
             </div>
